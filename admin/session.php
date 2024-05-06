@@ -55,12 +55,12 @@ $result = $db->readData($sql);
                <div class="row">
                   <div class="col-xl-12">
                      <div class="card">
-                        <div class="card-body">
+                        <!-- <div class="card-body">
                            <h4 class="box-title">Financial Years </h4>
-                        </div>
+                        </div> -->
                         <div class="card-body--">
                            <div class="table-stats order-table ov-h">
-                           <table border="1" class="table">
+                              <!-- <table border="1" class="table">
                                  <thead>
                                     <tr>
                                        <th>Year from</th>
@@ -82,9 +82,38 @@ $result = $db->readData($sql);
                                     </tr>   
                                     </form>
                                  </tbody>
-                              </table>
+                              </table> -->
+
+                              <!-- Add popup form -->
+                              <div class="form-popup" id="myForm">
+                                 <form action="" method="post" class="form-container">
+                                    <h3>Finencial Year</h3>
+                                       <div class="form-group">
+                                          <label for="yearFrom"><b>Year From</b></label>
+                                          <input class="form-control" type="number" min="1900" max="2100" step="1" placeholder="From Year" id="year_from" name="year_from" width="200%" required>
+                                       </div>
+                                       <div class="form-group">
+                                          <label for="yearTo"><b>Year to</b></label>
+                                          <input class="yearlimit form-control" type="number" min="1900" max="2100" step="1" placeholder="Year To" id="year_to" name="year_to"  readonly tabindex="-1" required>
+                                       </div>
+                                    <div class="form-group">
+                                    <label for="Status"><b>Status</b></label>
+                                       <select class="form-control" name="status" id="status">
+                                          <option value="1">Active</option>
+                                          <option value="0">Inactive</option>
+                                       </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" id="btnSave">Submit</button>
+                                    <button type="button" class="btn btn-danger" onclick="closeForm()">Close</button>
+                                 </form>
+                              </div>
+                              <!-- End popup form -->
+
                               <div>
-                                 <button class="save btn btn-success" id="btnSave">Insert</button>
+                                 <!-- <button class="save btn btn-success" id="btnSave">Insert</button> -->
+                                 
+                                 <button class="open-button btn btn-success" onclick="openForm()">Open Form</button>
+
                               </div>
                               <table class="table">
                                  <thead>
@@ -135,6 +164,16 @@ $result = $db->readData($sql);
          require('template/footer.php');
          ?>
       </div>
+      <script>
+         function openForm() {
+         document.getElementById("myForm").style.display = "block";
+         }
+
+         function closeForm() {
+         document.getElementById("myForm").style.display = "none";
+         }
+
+      </script>
       <script src="assets/js/vendor/jquery-2.1.4.min.js" type="text/javascript"></script>
       <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
       <script src="assets/js/popper.min.js" type="text/javascript"></script>

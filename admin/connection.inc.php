@@ -1,7 +1,7 @@
 <?php
 class dbConnector{
   private  $servername = 'localhost';
-  private  $dbname = 'kishanghar';
+  private  $dbname = 'rkindustries';
   private  $username = 'root';
   private  $password = '';
   private $conn;
@@ -12,7 +12,7 @@ class dbConnector{
   public function connect(){
     $db = new PDO("mysql:host=$this->servername;dbname=$this->dbname",$this->username,$this->password);
     $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-    session_start();
+    // session_start();
     return $db;
   }
   /**
