@@ -15,7 +15,7 @@ if(isset($_GET['type']) && !empty($_GET['type'])){
    }
 }
 
-$sql = "select * from financial_years";
+$sql = "select * from financial_years order by year_from desc";
 $result = $db->readData($sql);
 ?>
 
@@ -55,9 +55,15 @@ $result = $db->readData($sql);
                <div class="row">
                   <div class="col-xl-12">
                      <div class="card">
-                        <!-- <div class="card-body">
+                        <div class="card-body" style="border-bottom: double">
                            <h4 class="box-title">Financial Years </h4>
-                        </div> -->
+                        </div>
+                        <div class="card-body--">
+                                 <!-- <button class="save btn btn-success" id="btnSave">Insert</button> -->
+                                 
+                           <button class="open-button btn btn-success" style="margin:20px;" onclick="openForm()">Create New</button>
+
+                        </div>
                         <div class="card-body--">
                            <div class="table-stats order-table ov-h">
                               <!-- <table border="1" class="table">
@@ -90,7 +96,7 @@ $result = $db->readData($sql);
                                     <h3>Finencial Year</h3>
                                        <div class="form-group">
                                           <label for="yearFrom"><b>Year From</b></label>
-                                          <input class="form-control" type="number" min="1900" max="2100" step="1" placeholder="From Year" id="year_from" name="year_from" width="200%" required>
+                                          <input class="form-control yearlimit" type="number" min="1900" max="2100" step="1" placeholder="From Year" id="year_from" name="year_from" width="200%" required>
                                        </div>
                                        <div class="form-group">
                                           <label for="yearTo"><b>Year to</b></label>
@@ -109,18 +115,13 @@ $result = $db->readData($sql);
                               </div>
                               <!-- End popup form -->
 
-                              <div>
-                                 <!-- <button class="save btn btn-success" id="btnSave">Insert</button> -->
-                                 
-                                 <button class="open-button btn btn-success" onclick="openForm()">Open Form</button>
-
-                              </div>
+                              
                               <table class="table">
                                  <thead>
                                     
                                     <tr>
                                        <th class="serial">#</th>
-                                       <th>ID</th>
+                                       <th style="display:none;">ID</th>
                                        <th>Year from</th>
                                        <th>Year to</th>
                                        <th>Status</th>
@@ -129,10 +130,11 @@ $result = $db->readData($sql);
                                  </thead>
                                  <tbody class="tableContents" id="tableContents">
                                  <?php
+                                    $count = 1;
                                     foreach ($result as $row) { ?>
                                        <tr>
-                                          <td class="serial">1.</td>
-                                          <td> <?php echo $row["id"]?> </td>
+                                          <td class="serial"> <?php echo $count++."."?></td>
+                                          <td style="display:none;"> <?php echo $row["id"]?> </td>
                                           <td > <span class="name"><?php echo $row["year_from"]?></span> </td>
                                           <td > <span class="product"><?php echo $row["year_to"]?></span> </td>
                                           <td ><span class="name">

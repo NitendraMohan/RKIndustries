@@ -12,9 +12,8 @@ if(isset($_POST['submit'])){
       $userExists = $db->isDataExists($sql,$params);
       // $stmt= $db->prepare($sql);
       // $stmt->execute(["username"=>$username,"password"=>$password]);
-      echo $userExists; 
       if($userExists === true){
-         echo ' login successful';
+         session_start();
          $_SESSION['username'] = $username;
          $_SESSION['islogin'] = true;
          print_r($_SESSION);
