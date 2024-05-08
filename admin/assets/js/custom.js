@@ -11,12 +11,12 @@ $(document).ready(function () {
         if(value < $(this).attr("min")){
             $(this).val($(this).prop("min"));
         }
-    })
+    });
     $("#year_from").on("blur",function(){
         var value= $(this).val();
         value = Number.parseInt(value)+1;
         $("#year_to").val(value);
-    })
+    });
     // function limitYearInput(input){
     //     if(input.value.length >4){
     //         input.value = input.value.slice(0,4);
@@ -66,6 +66,7 @@ $(document).ready(function () {
         if($("#status").val()!=''){
             params+="&"+$("#status").attr('id')+"="+$("#status").val();
         }
+        params+="&action=create";
         if(params != ""){
             console.log(params);
             $.ajax({
@@ -75,6 +76,33 @@ $(document).ready(function () {
                 success: function(response){
                     $("#tableContents").append(response);
                     $(".yearlimit").val("");
+                }
+
+            })
+        }
+    });
+    $("#tblContents").on("click",".del", function(){
+        var el = this;
+        var delid = $(this).data['id'];
+        var confirmalert = confirm("Are you sure?");
+        if(confirmalert == true){
+            $.ajax({
+                url: "sessionController.php",
+                type: "POST",
+                data: {
+                    id: delid,
+                    action: "del"
+                },
+                success: function(response){
+                    if(response == true){
+                        $(el).closest('tr').css('background','tomato');
+                        $(el).closest('tr').fadeOut(800, function(){
+                            $(this).remove();
+                        })
+                    }
+                    else{
+                        alert('record not deleted');
+                    }
                 }
 
             })

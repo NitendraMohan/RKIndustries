@@ -116,7 +116,7 @@ $result = $db->readData($sql);
                               <!-- End popup form -->
 
                               
-                              <table class="table">
+                              <table id="tblContents" class="table">
                                  <thead>
                                     
                                     <tr>
@@ -146,7 +146,7 @@ $result = $db->readData($sql);
                                              <button class="edit btn btn-success"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                                              <button class="save btn btn-success" style="display:none;"><i class="fa fa-check" aria-hidden="true"></i></button>
                                              <button class="cancel btn btn-danger" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i></button>
-                                             <button class="delete btn btn-warning"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                             <button class="del btn btn-warning" data-id="<?php echo $row['id'] ?>"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                           </td>
                                        </tr>   
                                     <?php
