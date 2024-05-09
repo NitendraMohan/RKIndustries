@@ -3,6 +3,9 @@ require_once '../admin/connection.inc.php';
 require_once '../admin/utility/sessions.php';
 $db = new dbConnector();
 $username = checkUserSession();
+$editRecord = [];
+
+
 if(isset($_GET['type']) && !empty($_GET['type'])){
    $type = $_GET['type'];
    $operation = $_GET['operation'];
@@ -61,7 +64,7 @@ $result = $db->readData($sql);
                         <div class="card-body--">
                            <div class="table-stats order-table ov-h">
                               <div class="container">
-                              <button type="button" class="btn btn-primary" style="margin:20px;" data-toggle="modal" data-target="#myModal">
+                              <button type="button" class="btn btn-primary" style="margin:20px;" data-toggle="modal" data-target="#myModal" onclick="setModelValues('')">
                                  Create New
                                  </button>
                                  <!-- The Modal -->
@@ -72,22 +75,23 @@ $result = $db->readData($sql);
                                        <!-- Modal Header -->
                                        <div class="modal-header">
                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                          <h4 class="modal-title">Finencial Year</h4>
+                                          <h4 class="modal-title">Add Financial Year</h4>
                                        </div>
                                        <!-- Modal body -->
                                        <div class="modal-body">
                                           <form action="" method="post" >
+                                             <input type="hidden" id="modalid" name="id" value="" />
                                              <div class="form-group">
                                                 <label for="yearFrom">Year From</label>
-                                                <input class="form-control yearlimit" type="number" min="1900" max="2100" step="1" placeholder="From Year" id="year_from" name="year_from" width="200%" required>
+                                                <input class="form-control yearlimit modalyearfrom" type="number" min="1900" max="2100" step="1" placeholder="From Year" id="year_from" name="year_from" width="200%" value="" required>
                                              </div>
                                              <div class="form-group">
                                                 <label for="yearTo">Year to</label>
-                                                <input class="yearlimit form-control" type="number" min="1900" max="2100" step="1" placeholder="Year To" id="year_to" name="year_to"  readonly tabindex="-1" required>
+                                                <input class="yearlimit form-control modalyearto" type="number" min="1900" max="2100" step="1" placeholder="Year To" id="year_to" name="year_to" value="" readonly tabindex="-1" required>
                                              </div>
                                              <div class="form-group">
                                              <label for="Status">Status</label>
-                                                <select class="form-control" name="status" id="status">
+                                                <select class="form-control modalyearstatus" name="status" id="status">
                                                    <option value="1">Active</option>
                                                    <option value="0">Inactive</option>
                                                 </select>
@@ -95,9 +99,10 @@ $result = $db->readData($sql);
                                           </form>
                                        <!-- Modal footer -->
                                        <div class="modal-footer">
-                                       <button type="submit" class="btn btn-primary" id="btnSave">Submit</button>
+                                       <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save">Submit</button>
                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                       </div>
+                                       <div class="alert alert-success" id="hmsg"></div>   
+                                    </div>
         
       </div>
     </div>
@@ -120,21 +125,23 @@ $result = $db->readData($sql);
                                  <tbody class="tableContents" id="tableContents">
                                  <?php
                                     $count = 1;
-                                    foreach ($result as $row) { ?>
+                              
+                                    foreach ($result as $row) {
+                                       $jsonArray = json_encode(($row)); ?>
                                        <tr>
-                                          <td class="serial"> <?php echo $count++."."?></td>
-                                          <td style="display:none;"> <?php echo $row["id"]?> </td>
-                                          <td > <span class="name"><?php echo $row["year_from"]?></span> </td>
-                                          <td > <span class="product"><?php echo $row["year_to"]?></span> </td>
-                                          <td ><span class="name">
+                                          <td class="serial" data-id> <?php echo $count++."."?></td>
+                                          <td class="id" style="display:none;"> <?php echo $row["id"]?> </td>
+                                          <td class="year_from"> <span class="name"><?php echo $row["year_from"]?></span> </td>
+                                          <td class="year_to"> <span class="product"><?php echo $row["year_to"]?></span> </td>
+                                          <td class="status"><span class="name">
                                              <?php echo $row["status"]==1
                                              ?"<a href='?type=status&operation=deactive&id=".$row['id']."'>Active</a>"
                                              :"<a href='?type=status&operation=active&id=".$row['id']."'>Inactive</a>"
                                              ?></span></td>
                                           <td>
-                                             <button class="edit btn btn-success"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                             <button class="save btn btn-success" style="display:none;"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                             <button class="cancel btn btn-danger" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                             <button class="edit btn btn-success"  data-toggle="modal" data-target="#myModal" onclick=setModelValues('<?php echo $jsonArray;?>')><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                             <!-- <button class="save btn btn-success" style="display:none;"><i class="fa fa-check" aria-hidden="true"></i></button> -->
+                                             <!-- <button class="cancel btn btn-danger" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i></button> -->
                                              <button class="del btn btn-warning" data-id="<?php echo $row['id'] ?>"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                           </td>
                                        </tr>   
@@ -155,21 +162,33 @@ $result = $db->readData($sql);
          require('template/footer.php');
          ?>
       </div>
-      <script>
-         function openForm() {
-         document.getElementById("myForm").style.display = "block";
-         }
-
-         function closeForm() {
-         document.getElementById("myForm").style.display = "none";
-         }
-
-      </script>
       <script src="assets/js/vendor/jquery-2.1.4.min.js" type="text/javascript"></script>
       <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
       <script src="assets/js/popper.min.js" type="text/javascript"></script>
       <script src="assets/js/plugins.js" type="text/javascript"></script>
       <script src="assets/js/main.js" type="text/javascript"></script>
       <script src="assets/js/custom.js" type="text/javascript"></script>
+      <script>
+         function setModelValues(row=''){
+            if(row!=''){
+               var jsArray = JSON.parse(row);
+               $('.modalyearfrom').val(jsArray['year_from']);
+               $('.modalyearto').val(jsArray['year_to']);
+               $('.modalyearstatus').val(jsArray['status']);
+               $('#modalid').val(jsArray['id']);
+               $(".modal-title").text("Update Financial Year");
+               $(".modalsubmit").attr("data-id","update");
+            }
+            else{
+               $('.modalyearfrom').val('');
+               $('.modalyearto').val('');
+               $('.modalyearstatus').val('1');
+               $('#modalid').val('');
+               $(".modal-title").text("Add Financial Year");
+               $(".modalsubmit").attr("data-id","save");
+               // $(".modalsubmit").attr("id","btnSave");
+            }
+         }
+      </script>
    </body>
 </html>

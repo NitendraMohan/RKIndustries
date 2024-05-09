@@ -21,7 +21,7 @@ class dbConnector{
   public function readSingleRecord($qry, $params = []){
     $stmt = $this->conn->prepare($qry);
     $stmt->execute($params);
-    $result = $stmt->fetch();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if($stmt->rowCount()>0){
         return $result;
     }
@@ -32,7 +32,7 @@ class dbConnector{
   public function readData($qry, $params = []){
     $stmt = $this->conn->prepare($qry);
     $stmt->execute($params);
-    $result = $stmt->fetchAll();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if($stmt->rowCount()>0){
         return $result;
     }
@@ -60,8 +60,17 @@ class dbConnector{
   public function ManageData($qry, $params = []){
     $stmt = $this->conn->prepare($qry);
     $stmt->execute($params);
-    $result = $stmt->fetchAll();
+    // $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $stmt->rowCount();
+  }
+  /**
+   * function to get total count of rows in table
+   */
+  public function CountData($qry, $params = []){
+    $stmt = $this->conn->prepare($qry);
+    $stmt->execute($params);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['total_records'];
   }
 }
 
