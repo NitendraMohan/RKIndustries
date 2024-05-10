@@ -83,26 +83,28 @@ $result = $db->readData($sql);
                                              <input type="hidden" id="modalid" name="id" value="" />
                                              <div class="form-group">
                                                 <label for="yearFrom">Year From</label>
-                                                <input class="form-control yearlimit modalyearfrom" type="number" min="1900" max="2100" step="1" placeholder="From Year" id="year_from" name="year_from" width="200%" value="" required>
+                                                <input class="form-control yearlimit modalyearfrom" type="number" min="1900" max="2100" step="1" placeholder="From Year" id="year_from" name="year_from" width="200%" required>
                                              </div>
                                              <div class="form-group">
                                                 <label for="yearTo">Year to</label>
-                                                <input class="yearlimit form-control modalyearto" type="number" min="1900" max="2100" step="1" placeholder="Year To" id="year_to" name="year_to" value="" readonly tabindex="-1" required>
+                                                <input class="yearlimit form-control modalyearto" type="number" min="1900" max="2100" step="1" placeholder="Year To" id="year_to" name="year_to" readonly tabindex="-1" required>
                                              </div>
                                              <div class="form-group">
                                              <label for="Status">Status</label>
                                                 <select class="form-control modalyearstatus" name="status" id="status">
+                                                   <option value="" selected>Select</option>   
                                                    <option value="1">Active</option>
                                                    <option value="0">Inactive</option>
                                                 </select>
                                              </div>
-                                          </form>
+                                          
                                        <!-- Modal footer -->
                                        <div class="modal-footer">
                                        <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save">Submit</button>
                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                        <div class="alert alert-success" id="hmsg"></div>   
                                     </div>
+                                    </form>
         
       </div>
     </div>
@@ -182,7 +184,7 @@ $result = $db->readData($sql);
             else{
                $('.modalyearfrom').val('');
                $('.modalyearto').val('');
-               $('.modalyearstatus').val('1');
+               $('.modalyearstatus').val('');
                $('#modalid').val('');
                $(".modal-title").text("Add Financial Year");
                $(".modalsubmit").attr("data-id","save");

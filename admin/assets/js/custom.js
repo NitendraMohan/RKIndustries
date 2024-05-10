@@ -39,7 +39,6 @@ $(document).ready(function () {
     //     })
     // })
 
-    params="";
     $("#btnSave").on("click",function(e){
         $("#modalid").val() == ''? save() : update();
         // $(".modalsubmit").data('id') == 'save'? save() : update();
@@ -47,6 +46,7 @@ $(document).ready(function () {
     });
 
     function save(){
+        params="";
         let isDuplicateFound = false;
         $('#tableContents tr').each(function(){
             var year_from = $(this).find('td:eq(2)').text();
@@ -72,8 +72,8 @@ $(document).ready(function () {
         if($("#status").val()!=''){
             params+="&"+$("#status").attr('id')+"="+$("#status").val();
         }
-        params+="&action=create";
         if(params != ""){
+            params+="&action=create";
             console.log(params);
             $.ajax({
                 url: "sessionController.php",
@@ -91,6 +91,7 @@ $(document).ready(function () {
         }
     }
     function update(){
+        params="";
         let isDuplicateFound = false;
         $('#tableContents tr').each(function(){
             var year_from = $(this).find('td:eq(2)').text();
@@ -120,8 +121,8 @@ $(document).ready(function () {
         if($("#status").val()!=''){
             params+="&"+$("#status").attr('id')+"="+$("#status").val();
         }
-        params+="&action=update";
         if(params != ""){
+            params+="&action=update";
             console.log(params);
             $.ajax({
                 url: "sessionController.php",
