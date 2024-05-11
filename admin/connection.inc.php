@@ -35,6 +35,8 @@ class dbConnector{
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if($stmt->rowCount()>0){
         return $result;
+    } else {
+      return(NULL);
     }
   }
   /**

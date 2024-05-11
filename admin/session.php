@@ -61,12 +61,14 @@ $result = $db->readData($sql);
                         <div class="card-body" style="border-bottom: double">
                            <h4 class="box-title">Financial Years </h4>
                         </div>
+                       
                         <div class="card-body--">
                            <div class="table-stats order-table ov-h">
                               <div class="container">
                               <button type="button" class="btn btn-primary" style="margin:20px;" data-toggle="modal" data-target="#myModal" onclick="setModelValues('')">
                                  Create New
                                  </button>
+                                
                                  <!-- The Modal -->
                                  <div class="modal fade" id="myModal">
                                     <div class="modal-dialog modal-dialog-centered">
@@ -78,8 +80,9 @@ $result = $db->readData($sql);
                                           <h4 class="modal-title">Add Financial Year</h4>
                                        </div>
                                        <!-- Modal body -->
-                                       <div class="modal-body">
-                                          <form action="" method="post" >
+                                        <form action="" method="post" >
+                                             <div class="modal-body">
+                                         
                                              <input type="hidden" id="modalid" name="id" value="" />
                                              <div class="form-group">
                                                 <label for="yearFrom">Year From</label>
@@ -97,16 +100,16 @@ $result = $db->readData($sql);
                                                    <option value="0">Inactive</option>
                                                 </select>
                                              </div>
-                                          
+                                            
+                                             </div> 
+                                          </form>
                                        <!-- Modal footer -->
                                        <div class="modal-footer">
                                        <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save">Submit</button>
-                                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                       <div class="alert alert-success" id="hmsg"></div>   
+                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
-                                    </form>
-        
-      </div>
+                                    <div class="alert alert-dark" id="hmsg" style="display:none;"></div> 
+                                 </div>
     </div>
   </div>
   
@@ -127,9 +130,11 @@ $result = $db->readData($sql);
                                  <tbody class="tableContents" id="tableContents">
                                  <?php
                                     $count = 1;
-                              
+                                    if(isset($result)){
                                     foreach ($result as $row) {
-                                       $jsonArray = json_encode(($row)); ?>
+                                       $jsonArray = json_encode(($row)); 
+                                       // }
+                                       ?>
                                        <tr>
                                           <td class="serial" data-id> <?php echo $count++."."?></td>
                                           <td class="id" style="display:none;"> <?php echo $row["id"]?> </td>
@@ -148,7 +153,7 @@ $result = $db->readData($sql);
                                           </td>
                                        </tr>   
                                     <?php
-                                    }
+                                    }}
                                     ?>
                                  </tbody>
                               </table>
@@ -171,26 +176,26 @@ $result = $db->readData($sql);
       <script src="assets/js/main.js" type="text/javascript"></script>
       <script src="assets/js/custom.js" type="text/javascript"></script>
       <script>
-         function setModelValues(row=''){
-            if(row!=''){
-               var jsArray = JSON.parse(row);
-               $('.modalyearfrom').val(jsArray['year_from']);
-               $('.modalyearto').val(jsArray['year_to']);
-               $('.modalyearstatus').val(jsArray['status']);
-               $('#modalid').val(jsArray['id']);
-               $(".modal-title").text("Update Financial Year");
-               $(".modalsubmit").attr("data-id","update");
-            }
-            else{
-               $('.modalyearfrom').val('');
-               $('.modalyearto').val('');
-               $('.modalyearstatus').val('');
-               $('#modalid').val('');
-               $(".modal-title").text("Add Financial Year");
-               $(".modalsubmit").attr("data-id","save");
-               // $(".modalsubmit").attr("id","btnSave");
-            }
-         }
+         // function setModelValues(row=''){
+         //    if(row!=''){
+         //       var jsArray = JSON.parse(row);
+         //       $('.modalyearfrom').val(jsArray['year_from']);
+         //       $('.modalyearto').val(jsArray['year_to']);
+         //       $('.modalyearstatus').val(jsArray['status']);
+         //       $('#modalid').val(jsArray['id']);
+         //       $(".modal-title").text("Update Financial Year");
+         //       $(".modalsubmit").attr("data-id","update");
+         //    }
+         //    else{
+         //       $('.modalyearfrom').val('');
+         //       $('.modalyearto').val('');
+         //       $('.modalyearstatus').val('');
+         //       $('#modalid').val('');
+         //       $(".modal-title").text("Add Financial Year");
+         //       $(".modalsubmit").attr("data-id","save");
+         //       // $(".modalsubmit").attr("id","btnSave");
+         //    }
+         // }
       </script>
    </body>
 </html>

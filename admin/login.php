@@ -1,6 +1,7 @@
 <?php
 require_once '../admin/connection.inc.php';
 $db = new dbConnector();
+$msg = "";
 // echo $_POST['submit'];
 if(isset($_POST['submit'])){
    $username = $_POST['username'];
