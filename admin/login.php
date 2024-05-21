@@ -2,10 +2,14 @@
 require_once '../admin/connection.inc.php';
 $db = new dbConnector();
 $msg = "";
+$username="";
+$password="";
 // echo $_POST['submit'];
 if(isset($_POST['submit'])){
    $username = $_POST['username'];
    $password = $_POST['password'];
+   
+  
    if(!empty($username) && !empty($password)){
     try{
       $sql = "select * from login where user_name=:username and password=:password";
@@ -17,8 +21,8 @@ if(isset($_POST['submit'])){
          session_start();
          $_SESSION['username'] = $username;
          $_SESSION['islogin'] = true;
-         print_r($_SESSION);
-         header("location:index.php");
+         // print_r($_SESSION);
+         header("location:view/index.php");
       }
       else{
          $msg = 'login failed! Enter valid username and password';
@@ -59,7 +63,7 @@ if(isset($_POST['submit'])){
                   <form method="post">
                      <div class="form-group">
                         <label>User Name</label>
-                        <input type="text" name ="username" class="form-control" placeholder="User Name">
+                        <input type="text" name ="username" class="form-control" placeholder="User Name" value='<?php echo $username;?>'>
                      </div>
                      <div class="form-group">
                         <label>Password</label>

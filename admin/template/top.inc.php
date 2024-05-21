@@ -1,3 +1,6 @@
+<?php
+
+?>
 <!doctype html>
 <html class="no-js" lang="">
    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
@@ -7,14 +10,14 @@
       <title>Dashboard Page</title>
       <title>Financial Year</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="assets/css/normalize.css">
-      <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-      <link rel="stylesheet" href="assets/css/font-awesome.min.css">
-      <link rel="stylesheet" hrSession Pageef="assets/css/themify-icons.css">
-      <link rel="stylesheet" href="assets/css/pe-icon-7-filled.css">
-      <link rel="stylesheet" href="assets/css/flag-icon.min.css">
-      <link rel="stylesheet" href="assets/css/cs-skin-elastic.css">
-      <link rel="stylesheet" href="assets/css/style.css">
+      <link rel="stylesheet" href="../assets/css/normalize.css">
+      <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+      <link rel="stylesheet" href="../assets/css/font-awesome.min.css">
+      <link rel="stylesheet" hrSession Pageef="..//assets/css/themify-icons.css">
+      <link rel="stylesheet" href="../assets/css/pe-icon-7-filled.css">
+      <link rel="stylesheet" href="../assets/css/flag-icon.min.css">
+      <link rel="stylesheet" href="../assets/css/cs-skin-elastic.css">
+      <link rel="stylesheet" href="../assets/css/style.css">
       <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
       <style>
         td.placeholder1{
@@ -29,7 +32,7 @@
                <ul class="nav navbar-nav">
                   <li class="menu-title">Menu</li>
                   <li class="menu-item-has-children dropdown">
-                     <a href="../admin/sessionmaster.php"> Session Master</a>
+                     <a href="../sessionmaster.php"> Session Master</a>
                   </li>
                   <li class="menu-item-has-children dropdown">
                      <a href="#" > Company Master</a>
@@ -41,13 +44,22 @@
                      <a href="usermaster.php" > User Master</a>
                   </li>
                   <li class="menu-item-has-children dropdown">
-                     <a href="#" > Unit Master</a>
+                     <a href="../view/unitView.php">Unit Master</a>
                   </li>
 				      <li class="menu-item-has-children dropdown">
                      <a href="#" > Vendor Master</a>
                   </li>
                   <li class="menu-item-has-children dropdown">
                      <a href="#" > Vendor Master</a>
+                  </li>
+                  <li class="menu-item-has-children dropdown">
+                     <a href="taxmaster.php" >Tax Master</a>
+                  </li>
+                  <li class="menu-item-has-children dropdown">
+                     <a href="categorymaster.php" >Category Master</a>
+                  </li>
+                  <li class="menu-item-has-children dropdown">
+                     <a href="limitmaster.php" >Limit Master</a>
                   </li>
                </ul>
             </div>
@@ -57,8 +69,8 @@
          <header id="header" class="header">
             <div class="top-left">
                <div class="navbar-header">
-                  <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="Logo"></a>
-                  <a class="navbar-brand hidden" href="index.html"><img src="images/logo2.png" alt="Logo"></a>
+                  <a class="navbar-brand" href="index.html"><img src="../images/logo.png" alt="Logo"></a>
+                  <a class="navbar-brand hidden" href="index.html"><img src="../images/logo2.png" alt="Logo"></a>
                   <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                </div>
             </div>

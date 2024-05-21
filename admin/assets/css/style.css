@@ -3382,3 +3382,20 @@ footer.site-footer .footer-inner a {
   .form-container .btn:hover, .open-button:hover {
     opacity: 1;
   }
+
+  .error-msg{
+    background: #f2defd;
+    color: #9c4150;
+    border: 1px solid #e7ced1;
+  }
+  .sucess-msg{
+    background: #e0efda;
+    color: #407a4a;
+    border: 1px solid #c6dfb2;
+  }
+  .process-msg{
+    background: #d9edf6;
+    color: #377084;
+    border: 1px solid #c8dce5;
+  }
+

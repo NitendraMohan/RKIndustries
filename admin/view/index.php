@@ -1,10 +1,10 @@
 <?php
-require_once '../admin/connection.inc.php';
-require_once '../admin/utility/sessions.php';
+require_once '../connection.inc.php';
+require_once '../utility/sessions.php';
 $username = checkUserSession();
 ?>
          <?php
-         require('../admin/template/top.inc.php');
+         require("../template/top.inc.php");
          ?>
         <div class="content pb-0">
             <div class="orders">
@@ -115,6 +115,6 @@ $username = checkUserSession();
 		  </div>
         
          <?php
-         require('template/footer.php');?>
+         require('../template/footer.php');?>
    </body>
 </html>

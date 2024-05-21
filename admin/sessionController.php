@@ -2,9 +2,6 @@
 require_once '../admin/connection.inc.php';
 require_once '../admin/utility/sessions.php';
 $username = checkUserSession();
-// echo $username;
-// print_r($_POST);
-// die();
 if(isset($username)){
     $db = new dbConnector();
     if($_POST['action'] =="create"){

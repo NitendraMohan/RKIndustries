@@ -7,7 +7,7 @@ require('../admin/template/top.inc.php');
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="font-weight-bold">USER REGISTRATION</h3>
+                        <h3 class="font-weight-bold">LIMIT MASTER</h3>
                     </div>
                     <button type="button" class="btn btn-primary" style="margin:20px;" data-toggle="modal" data-target="#myModal" onclick="setModelValues('')">
                         Create New
@@ -22,43 +22,28 @@ require('../admin/template/top.inc.php');
                                         <!-- Modal Header -->
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">User Registration</h4>
+                                            <h4 class="modal-title">Add Limit</h4>
                                         </div>
                                         <!-- Modal body -->
                                         <form action="" method="post">
                                             <div class="modal-body">
+
                                                 <input type="hidden" id="modalid" name="id" value="" />
                                                 <div class="form-group">
-                                                    <label for="userid">Employee Id</label>
-                                                    <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter name" id="uname" name="uname" required>
+                                                    <label for="categoryname">Category Name</label>
+                                                    <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Category" id="categoryname" name="categoryname" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="User Role">Role</label>
-                                                    <select class="form-control" name="userrole" id="userrole">
-                                                        <option value="">Select Role</option>
-                                                        <option value="admin">Admin</option>
-                                                        <option value="user">Employee</option>
-                                                    </select>
+                                                    <label for="categoryname">Product Name</label>
+                                                    <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Procuct" id="productname" name="productname" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="userfirstname">First Name</label>
-                                                    <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter First name" id="ufname" name="ufname" required>
+                                                    <label for="maxlimt">Max Limit</label>
+                                                    <input class="form-control" type="number" placeholder="Enter Max Limit" id="maxlimit" name="maxlimit" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="UserName">Last Name</label>
-                                                    <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Last name" id="ulname" name="ulname" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="mobileno">Mobile No</label>
-                                                    <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Mobile No" id="mobileno" name="mobileno" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="email">Email</label>
-                                                    <input type="email" class="form-control" name="uemail" id="uemail">
-                                                </div>
-                                                <div class="iamge">
-                                                    <label for="email">Image</label>
-                                                    <input type="file" class="form-control" name="uemail" id="uemail">
+                                                    <label for="minlimt">Min Limit</label>
+                                                    <input class="form-control" type="number" placeholder="Enter Min Limit" id="minlimit" name="minlimit" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="Status">Status</label>
@@ -68,31 +53,29 @@ require('../admin/template/top.inc.php');
                                                         <option value="0">Inactive</option>
                                                     </select>
                                                 </div>
-
                                             </div>
                                         </form>
                                         <!-- Modal footer -->
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary" id="btnSave" data-id="save">Submit</button>
+                                            <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save">Submit</button>
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         </div>
                                         <div class="alert alert-dark" id="hmsg" style="display:none;"></div>
                                     </div>
                                 </div>
                             </div>
+
+
                             <table class="table ">
                                 <thead>
                                     <tr>
                                         <th class="serial">#</th>
                                         <th style="display:none;">ID</th>
-                                        <th>AVATAR</th>
-                                        <th>EMP ID</th>
-                                        <th>Role</th>
-                                        <th>FIRST NAME</th>
-                                        <th>LAST NAME</th>
-                                        <th>MOBILE NO</th>
+                                        <th>CATEGORY</th>
+                                        <th>PRODUCT</th>
+                                        <th>MAX LIMIT</th>
+                                        <th>MIN LIMIT</th>
                                         <th>STATUS</th>
-                                        
                                         <th>Action</th>
                                     </tr>
                                 </thead>
