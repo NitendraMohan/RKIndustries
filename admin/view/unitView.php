@@ -1,12 +1,6 @@
 <?php
-require_once '../utility/sessions.php';
-// $username = checkUserSession();
-// if(!isset($username)){
-//     header('location:../login.php');
-//     // die();
-// }else{
-    require("../template/top.inc.php");
-// }
+// require_once '../utility/sessions.php';
+require("../template/top.inc.php");
 ?>
 <div class="content pb-0">
     <div class="orders">

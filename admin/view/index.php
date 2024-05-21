@@ -1,8 +1,4 @@
-<?php
-require_once '../connection.inc.php';
-require_once '../utility/sessions.php';
-$username = checkUserSession();
-?>
+
          <?php
          require("../template/top.inc.php");
          ?>
@@ -33,7 +29,7 @@ $username = checkUserSession();
                                        <td class="serial">1.</td>
                                        <td class="avatar">
                                           <div class="round-img">
-                                             <a href="#"><img class="rounded-circle" src="images/avatar/1.jpg" alt=""></a>
+                                             <a href="#"><img class="rounded-circle" src="../images/avatar/1.jpg" alt=""></a>
                                           </div>
                                        </td>
                                        <td> #5469 </td>
@@ -48,7 +44,7 @@ $username = checkUserSession();
                                        <td class="serial">2.</td>
                                        <td class="avatar">
                                           <div class="round-img">
-                                             <a href="#"><img class="rounded-circle" src="images/avatar/2.jpg" alt=""></a>
+                                             <a href="#"><img class="rounded-circle" src="../images/avatar/2.jpg" alt=""></a>
                                           </div>
                                        </td>
                                        <td> #5468 </td>
@@ -63,7 +59,7 @@ $username = checkUserSession();
                                        <td class="serial">3.</td>
                                        <td class="avatar">
                                           <div class="round-img">
-                                             <a href="#"><img class="rounded-circle" src="images/avatar/3.jpg" alt=""></a>
+                                             <a href="#"><img class="rounded-circle" src="../images/avatar/3.jpg" alt=""></a>
                                           </div>
                                        </td>
                                        <td> #5467 </td>
@@ -78,7 +74,7 @@ $username = checkUserSession();
                                        <td class="serial">4.</td>
                                        <td class="avatar">
                                           <div class="round-img">
-                                             <a href="#"><img class="rounded-circle" src="images/avatar/4.jpg" alt=""></a>
+                                             <a href="#"><img class="rounded-circle" src="../images/avatar/4.jpg" alt=""></a>
                                           </div>
                                        </td>
                                        <td> #5466 </td>
@@ -93,7 +89,7 @@ $username = checkUserSession();
                                        <td class="serial">5.</td>
                                        <td class="avatar pb-0">
                                           <div class="round-img">
-                                             <a href="#"><img class="rounded-circle" src="images/avatar/6.jpg" alt=""></a>
+                                             <a href="#"><img class="rounded-circle" src="../images/avatar/6.jpg" alt=""></a>
                                           </div>
                                        </td>
                                        <td> #5465 </td>
@@ -114,7 +110,10 @@ $username = checkUserSession();
             </div>
 		  </div>
         
-         <?php
-         require('../template/footer.php');?>
-   </body>
+        
+
+
+<?php require('../template/footer.inc.php') ?>
+<script src="../assets/js/unitmaster.js" type="text/javascript"></script>
+</body>
 </html>
