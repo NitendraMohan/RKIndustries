@@ -25,6 +25,7 @@ class dbConnector{
     if($stmt->rowCount()>0){
         return $result;
     }
+    return null;
   }
   /**
    * function to select data from table
@@ -74,18 +75,25 @@ class dbConnector{
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['total_records'];
   }
+  /**
+   * function to get record id
+   */
+  public function getID($qry, $params = []){
+    $stmt = $this->conn->prepare($qry);
+    $stmt->execute($params);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['id'];
+  }
+  /**
+   * function to log user actions
+   */
+  public function log_user_action($user_id, $action, $table_name, $record_id, $details = null, $previous_data = null) {
+    $db = $this->connect();
+    $qry = "INSERT INTO user_actions_log (user_id, action, table_name, record_id, details, previous_data) VALUES (:user_id, :action, :table_name, :record_id, :details, :previous_data)";
+    $params = ["user_id"=>$user_id, "action" => $action,"table_name"=>$table_name,"record_id"=>$record_id, "details"=> $details, "previous_data"=>$previous_data];
+    $lastInsertedId = $this->insertData($qry, $params);  
+  }
+
+
 }
-
-
-// try {
-//     // echo $dsn;
-//     $db = new PDO($dsn, $username, $password);
-//     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//     session_start();
-
-// } catch (PDOException $e) {
-//     echo 'Connection Failed!'.$e->getMessage();
-//     //throw $th;
-// }
-
 ?>

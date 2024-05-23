@@ -1,4 +1,5 @@
 <?php
+require_once (dirname(__FILE__) . '/../../config.php');
 require_once '../utility/sessions.php';
 $username = checkUserSession();
 if(!isset($username)){
@@ -14,14 +15,14 @@ if(!isset($username)){
       <title>Dashboard Page</title>
       <title>Financial Year</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="../assets/css/normalize.css">
-      <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-      <link rel="stylesheet" href="../assets/css/font-awesome.min.css">
-      <link rel="stylesheet" hrSession Pageef="..//assets/css/themify-icons.css">
-      <link rel="stylesheet" href="../assets/css/pe-icon-7-filled.css">
-      <link rel="stylesheet" href="../assets/css/flag-icon.min.css">
-      <link rel="stylesheet" href="../assets/css/cs-skin-elastic.css">
-      <link rel="stylesheet" href="../assets/css/style.css">
+      <link rel="stylesheet" href="<?php echo CSS_DEFAULT_NORMALIZE;?>">
+      <link rel="stylesheet" href="<?php echo CSS_DEFAULT_BOOSTRAPMIN;?>">
+      <link rel="stylesheet" href="<?php echo CSS_DEFAULT_FONTAWSOMEMIN;?>">
+      <link rel="stylesheet" href="<?php echo CSS_DEFAULT_THEMIFYICONS;?>">
+      <link rel="stylesheet" href="<?php echo CSS_DEFAULT_PEICONFILLED;?>">
+      <link rel="stylesheet" href="<?php echo CSS_DEFAULT_FLAGICONMIN;?>">
+      <link rel="stylesheet" href="<?php echo CSS_DEFAULT_SKINELASTIC;?>">
+      <link rel="stylesheet" href="<?php echo CSS_DEFAULT_STYLE;?>">
       <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
       <style>
         td.placeholder1{
@@ -36,7 +37,7 @@ if(!isset($username)){
                <ul class="nav navbar-nav">
                   <li class="menu-title">Menu</li>
                   <li class="menu-item-has-children dropdown">
-                     <a href="../sessionmaster.php"> Session Master</a>
+                     <a href="../view/sessionView.php"> Session Master</a>
                   </li>
                   <li class="menu-item-has-children dropdown">
                      <a href="#" > Company Master</a>
@@ -64,6 +65,9 @@ if(!isset($username)){
                   </li>
                   <li class="menu-item-has-children dropdown">
                      <a href="limitmaster.php" >Limit Master</a>
+                  </li>
+                  <li class="menu-item-has-children dropdown">
+                     <a href="../view/usersLogView.php" >User Log</a>
                   </li>
                </ul>
             </div>

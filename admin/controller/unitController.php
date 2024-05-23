@@ -1,23 +1,20 @@
 <?php
 require_once '../connection.inc.php';
 require_once '../utility/sessions.php';
+require_once 'usersLogController.php';
 //lodar record inside table
+$db = new dbConnector();
 $username = checkUserSession();
 // if(!isset($username)){
 //     return;
 // }
-$dsn = "mysql:host=localhost;dbname=rkindustries;";
-$username = "root";
-$password = "";
-$output = "";
+
 if ($_POST['action'] == "load") {
     try {
-        $conn = new PDO($dsn, $username, $password);
         $sql = "SELECT * FROM tbl_unit";
-        $result = $conn->query($sql);
+        $result = $db->readData($sql);
         $sr = 1;
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-
+        foreach ($result as $row) {
             $output .= "<tr>
                         <td>{$sr}</td>
                         <td>{$row["id"]}</td>
@@ -28,6 +25,10 @@ if ($_POST['action'] == "load") {
                         </tr>";
             $sr++;
         }
+        // while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+
+            
+        // }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
@@ -38,20 +39,19 @@ if ($_POST['action'] == "load") {
 //Insert data into database
 if ($_POST['action'] == "insert") {
     try {
-        $unit = $_POST['unitname'].CASE_UPPER;
+        $unit = strtoupper($_POST['unitname']);
         $ustatus = $_POST['status'];
-        $conn = new PDO($dsn, $username, $password);
-        $sql = "select * from tbl_unit where unit = ':unit'";
-
-        $result = $conn->query($sql);
-       
-       
-       
-        if ($result->rowCount() > 0) {
+        $sql = "select * from tbl_unit where unit=:unit";
+        $params = ['unit'=>$unit];
+        $result = $db->readSingleRecord($sql, $params);
+        if ( isset($result) && $result->rowCount() > 0) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "insert into tbl_unit(unit,status) values('{$unit}','{$ustatus}')";
-            if ($conn->query($sql)) {
+            $sql = "insert into tbl_unit(unit,status) values(:unit,:status)";
+            $params = ['unit'=>$unit, 'status'=> $ustatus];
+            $newRecordId = $db->insertData($sql, $params);
+            if ($newRecordId) {
+                log_user_action($_SESSION['userid'], 'create', "tbl_unit", $newRecordId, $_SESSION["username"]);
                 echo json_encode(array('success' => true));
             } else {
                 echo json_encode(array('success' => false));
@@ -67,9 +67,15 @@ if ($_POST['action'] == "insert") {
 if ($_POST['action'] == "delete") {
     try {
         $id = $_POST['id'];
-        $conn = new PDO($dsn, $username, $password);
-        $sql = "delete from tbl_unit where id = '{$id}'";
-        if ($conn->query($sql)) {
+        //get old record for user log
+        $sql = "select unit,status from tbl_unit where id=:id";
+        $params = ["id"=>$_POST["id"]];
+        $oldRecord = $db->readSingleRecord($sql, $params);
+        $sql = "delete from tbl_unit where id =:id";
+        $params = ['id'=>$id];
+        $recordId = $db->ManageData($sql, $params);
+        if ($recordId) {
+            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_unit", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
             echo 1;
         } else {
             echo 0;
@@ -84,9 +90,8 @@ if ($_POST['action'] == "delete") {
 if ($_POST['action'] == "edit") {
     try {
         $id = $_POST['id'];
-        $conn = new PDO($dsn, $username, $password);
         $sql = "select * from tbl_unit where id  = {$id}";
-        $result = $conn->query($sql);
+        $row = $db->readSingleRecord($sql);
         $output = " <div class='modal-dialog modal-dialog-centered'>
         <div class='modal-content'>
         <div class='modal-header'>
@@ -94,7 +99,7 @@ if ($_POST['action'] == "edit") {
                 <h4 class='modal-title'>Update Unit</h4>
             </div>
             <form action='' method='post' id='unitFormUpdata'>";
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        // while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $output .= "<div class='modal-body'>
             <input type='hidden' id='unitId' name='id' value='{$row['id']}' />
             <div class='form-group'>
@@ -110,7 +115,7 @@ if ($_POST['action'] == "edit") {
                 </select>
             </div>
         </div>";
-        }
+        // }
         $output .= "</form>
         <!-- Modal footer -->
         <div class='modal-footer'>
@@ -131,9 +136,16 @@ if ($_POST['action'] == "edit") {
 if ($_POST['action'] == "update") {
     try {
         $id = $_POST['id'];
-        $conn = new PDO($dsn, $username, $password);
-        $sql = "update tbl_unit set unit = '{$_POST['unit']}', status='{$_POST['status']}' where id  = {$id}";
-        if ($conn->query($sql)) {
+        //get old record for user log
+        $sql = "select unit,status from tbl_unit where id=:id";
+        $params = ["id"=>$_POST["id"]];
+        $oldRecord = $db->readSingleRecord($sql, $params);
+
+        $sql = "update tbl_unit set unit =:unit, status=:status where id  =:id";
+        $params = ['unit'=>$_POST['unit'],'status'=>$_POST['status'],'id'=>$id];
+        $recordId = $db->ManageData($sql, $params);
+        if ($recordId) {
+            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_unit", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
             echo 1;
         } else {
             echo 0;

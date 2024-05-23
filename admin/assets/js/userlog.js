@@ -5,12 +5,12 @@ jQuery(document).ready(function ($) {
  */
     function load_table() {
         $.ajax({
-            url: "../controller/unitController.php",
+            url: "../controller/usersLogController.php",
             type: "POST",
-            data: { action: "load" },
+            data: { action: "loadUserLogs" },
             success: function (result) {
                 // Assuming the result returned by controller/unitController.php is the HTML table content
-                $("#unitTableContents").html(result);
+                $("#userLogTableContents").html(result);
             },
             error: function (xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -19,53 +19,13 @@ jQuery(document).ready(function ($) {
     }
     load_table();
 
-    /**
-     * Code for submit model form data
-     */
-        $(document).on("click", ".modalsubmit", function (e) {
-        e.preventDefault();
-        var unitname = $("#unitname").val();
-        var unitstatus = $("#status").val();
-        if (unitname == "" || unitstatus == "") {
-            $("#msg").fadeIn();
-            $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
-            setTimeout(function () {
-                $("#msg").fadeOut("slow");
-            }, 2000);
-        } else {
-            var formData = $('#unitForm').serialize() + '&action=insert';
-            console.log(formData);
-            $.ajax({
-                url: "../controller/unitController.php",
-                type: "POST",
-                data: formData,
-                dataType: 'json',
-                success: function (response) {
-                    console.log(response);
-                    if (response.duplicate) {
-                        $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
-                    } else if (response.success) {
-                        $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html("Save successful: Your record has been successfully saved.");
-                        load_table(); // Assuming this function loads the table data
-                    } else {
-                        $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Save Failed: Record Not Saved.");
-                    }
-                    setTimeout(function () {
-                        $("#msg").fadeOut("slow");
-                        $("#unitForm").trigger("reset");
-                    }, 2000);
-                }
-            });
-        }
-    });
-
     //Code delete record from table
     $(document).on("click", ".unitDelete", function () {
         var uid = $(this).data("id");
-        var uaction = "delete";
+        var uaction = "undo";
         var element = this;
         $.ajax({
-            url: "../controller/unitController.php",
+            url: "../controller/usersLogController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
