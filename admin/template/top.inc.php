@@ -40,7 +40,7 @@ if(!isset($username)){
                      <a href="../view/sessionView.php"> Session Master</a>
                   </li>
                   <li class="menu-item-has-children dropdown">
-                     <a href="#" > Company Master</a>
+                     <a href="../view/companyView.php" > Company Master</a>
                   </li>
 				      <li class="menu-item-has-children dropdown">
                      <a href="#" > Department Master</a>
