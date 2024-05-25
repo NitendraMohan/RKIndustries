@@ -32,8 +32,6 @@ jQuery(document).ready(function ($) {
      */
         $(document).on("click", ".modalsubmit", function (e) {
         e.preventDefault();
-        
-        
         if (company_name == "" || gst_no == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
@@ -41,13 +39,19 @@ jQuery(document).ready(function ($) {
                 $("#msg").fadeOut("slow");
             }, 2000);
         } else {
+            var logo = $('#logo')[0].files[0];
+            console.log(logo);
             var formData = $('#companyForm').serialize() + '&action=submit';
+            // formData.append(logo);
             console.log(formData);
             $.ajax({
                 url: "../controller/companyController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
                 success: function (response) {
                     console.log(response);
                     if (response.duplicate) {

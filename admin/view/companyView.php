@@ -15,7 +15,7 @@ require("../template/top.inc.php");
 
 
                             <!-- Modal body -->
-                            <form action="" method="post" id="companyForm" enctype="multipart/form-data">
+                            <form action="" method="post" id="companyForm">
                                 <div class="modal-body">
 
                                     <input type="hidden" id="modalid" name="id" value="" />
@@ -63,6 +63,7 @@ require("../template/top.inc.php");
 </div>
 <?php require('../template/footer.inc.php') ?>
 <script src="../assets/js/companymaster.js" type="text/javascript"></script>
+<script type="text/javascript" src="jquery-3.2.1.min.js"></script>
 </body>
 
 </html>

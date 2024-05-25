@@ -39,13 +39,15 @@ if ($_POST['action'] == "load") {
 
 //Insert data into database
 if ($_POST['action'] == "submit") {
+    // echo json_encode($_POST);
+    // die();
+    // print_r(basename($_FILES["logo"]["name"])) ;
+    // die();
     try {
         $targetDir = "";
         if (isset($_FILES["logo"])) {
             $targetDir = "images/";
             $targetFile = $targetDir . basename($_FILES["logo"]["name"]);
-            echo $targetFile;
-            die();
             $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
             
@@ -59,7 +61,7 @@ if ($_POST['action'] == "submit") {
             $params = ['id'=>$result['id'],'company_name'=>$_POST['company_name'],'gst_no'=>$_POST['gst_no'],'address'=>$_POST['address'],'contact_number'=>$_POST['contact_number'],'email'=>$_POST['mail_id'],'logo'=>$targetDir];
             $recordId = $db->ManageData($sql,$params);
             if($recordId){
-               if($targetDir!=="") {move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile) ;}
+               if($targetDir!=="") {move_uploaded_file($_FILES["logo"]["tmp_name"], $targetFile) ;}
                 log_user_action($_SESSION['userid'], $_POST['action'], "company_master", $_POST['id'], $_SESSION["username"], json_encode($result));
                 echo json_encode(array('success' => true));
             }else {
@@ -71,7 +73,7 @@ if ($_POST['action'] == "submit") {
             $params = ['company_name'=>$_POST['company_name'],'gst_no'=>$_POST['gst_no'],'address'=>$_POST['address'],'contact_number'=>$_POST['contact_number'],'email'=>$_POST['mail_id'],'logo'=>$targetDir];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
-                if($targetDir!=="") {move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile) ;}
+                if($targetDir!=="") {move_uploaded_file($_FILES["logo"]["tmp_name"], $targetFile) ;}
                 log_user_action($_SESSION['userid'], 'create', "company_master", $newRecordId, $_SESSION["username"]);
                 echo json_encode(array('success' => true));
             } else {
