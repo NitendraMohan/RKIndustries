@@ -41,17 +41,15 @@ jQuery(document).ready(function ($) {
         } else {
             var logo = $('#logo')[0].files[0];
             console.log(logo);
-            var formData = $('#companyForm').serialize() + '&action=submit';
-            // formData.append(logo);
+            var formData = $('#companyForm').serialize() + '&action=submit&file='+logo;
+            // formData.append('file', logo);
             console.log(formData);
             $.ajax({
                 url: "../controller/companyController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
-                cache: false,
-                contentType: false,
-                processData: false,
+                // contentType: false,
                 success: function (response) {
                     console.log(response);
                     if (response.duplicate) {

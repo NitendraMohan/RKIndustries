@@ -63,7 +63,7 @@ require("../template/top.inc.php");
 </div>
 <?php require('../template/footer.inc.php') ?>
 <script src="../assets/js/companymaster.js" type="text/javascript"></script>
-<script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+<!-- <script type="text/javascript" src="jquery-3.2.1.min.js"></script> -->
 </body>
 
 </html>
