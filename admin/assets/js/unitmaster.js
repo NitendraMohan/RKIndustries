@@ -40,6 +40,7 @@ jQuery(document).ready(function ($) {
                 data: formData,
                 dataType: 'json',
                 success: function (response) {
+                    
                     console.log(response);
                     if (response.duplicate) {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
@@ -114,6 +115,22 @@ jQuery(document).ready(function ($) {
                     alert("not saved");
                 }
             }
+        });
+    });
+
+    /**
+     * Live Search
+     */
+    $("#search").on("keyup",function(){
+        var search_term = $(this).val();
+        var eventaction = "search";
+        $.ajax({
+            url: "../controller/unitController.php",
+        type: "POST",
+        data: { action: eventaction, search : search_term },
+        success : function(data){
+            $("#unitTableContents").html(data);
+        }
         });
     });
 });
