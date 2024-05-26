@@ -47,3 +47,36 @@ ALTER TABLE `company_master`
 ALTER TABLE `company_master`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
+-- --------------------------------------------------------
+-- date: 26-May-2024 -4:00 PM
+--
+-- Table structure for table `user_actions_log`
+--
+
+CREATE TABLE `user_actions_log` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `action` varchar(50) NOT NULL,
+  `table_name` varchar(100) NOT NULL,
+  `record_id` int(11) NOT NULL,
+  `action_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `details` text DEFAULT NULL,
+  `previous_data` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for table `user_actions_log`
+--
+ALTER TABLE `user_actions_log`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `user_actions_log`
+--
+ALTER TABLE `user_actions_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+COMMIT;
