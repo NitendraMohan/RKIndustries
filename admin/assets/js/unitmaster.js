@@ -41,7 +41,7 @@ jQuery(document).ready(function ($) {
                 data: formData,
                 dataType: 'json',
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
                     if (response.duplicate) {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
                     } else if (response.success) {
@@ -97,38 +97,30 @@ jQuery(document).ready(function ($) {
     //End
 
     //Update model form record
-    $(document).on("click", ".btnUpdate", function () {
+    $(document).on("click", ".btnUpdate", function (e) {
+        e.preventDefault();
         var uid = $("#unitId").val();
         var editUnit = $("#editunitname").val();
         var editStatus = $("#editstatus").val();;
         var uaction = "update";
         $.ajax({
-            url: "../controller/unitController.php",
-            type: "POST",
-            
+            url: '../controller/unitController.php',
+            type: 'POST',
             data: { action: uaction, id: uid, unit: editUnit, status: editStatus },
-            dataType:"json",
+            dataType: 'json',
             success: function (response) {
-                // console.log(response);
                 if (response.duplicate) {
                     $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
                 } else if (response.success) {
-                    $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
+                    $("#msg1").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
+                    load_table(); // Assuming this function loads the table data
                 } else {
-                    $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
+                    $("#msg1").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
                 }
                 setTimeout(function () {
-                    $("#msg").fadeOut("slow");
-                    load_table(); // Assuming this function loads the table data
-                    // $("#unitForm").trigger("reset");
+                    $("#msg1").fadeOut("slow");
+                    $("#myModalUpdate").hide("reset");
                 }, 2000);
-                // $("#myModalUpdate").modal('hide');
-                // if (result == 1) {
-                //     load_table();
-                //     $("#unitForm").trigger("reset");
-                // } else {
-                //     alert("not saved");
-                // }
             }
         });
     });

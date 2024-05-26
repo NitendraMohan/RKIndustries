@@ -41,41 +41,41 @@ jQuery(document).ready(function ($) {
     //End
 
     //Edit record from table
-    $(document).on("click", ".unitEdit", function () {
-        var uid = $(this).data("id");
-        var uaction = "edit";
-        $.ajax({
-            url: "../controller/unitController.php",
-            type: "POST",
-            data: { action: uaction, id: uid },
-            success: function (result) {
-                $("#myModalUpdate").html(result);
-                $("#myModalUpdate").modal('show');
-            }
-        });
-    });
+    // $(document).on("click", ".unitEdit", function () {
+    //     var uid = $(this).data("id");
+    //     var uaction = "edit";
+    //     $.ajax({
+    //         url: "../controller/unitController.php",
+    //         type: "POST",
+    //         data: { action: uaction, id: uid },
+    //         success: function (result) {
+    //             $("#myModalUpdate").html(result);
+    //             $("#myModalUpdate").modal('show');
+    //         }
+    //     });
+    // });
     //End
 
     //Update model form record
-    $(document).on("click", ".btnUpdate", function () {
-        var uid = $("#unitId").val();
-        var editUnit = $("#editunitname").val();
-        var editStatus = $("#editstatus").val();;
-        var uaction = "update";
-        $.ajax({
-            url: "../controller/unitController.php",
-            type: "POST",
-            data: { action: uaction, id: uid, unit: editUnit, status: editStatus },
-            success: function (result) {
-                $("#myModalUpdate").modal('hide');
-                if (result == 1) {
-                    load_table();
-                    $("#unitForm").trigger("reset");
-                } else {
-                    alert("not saved");
-                }
-            }
-        });
-    });
+//     $(document).on("click", ".btnUpdate", function () {
+//         var uid = $("#unitId").val();
+//         var editUnit = $("#editunitname").val();
+//         var editStatus = $("#editstatus").val();;
+//         var uaction = "update";
+//         $.ajax({
+//             url: "../controller/unitController.php",
+//             type: "POST",
+//             data: { action: uaction, id: uid, unit: editUnit, status: editStatus },
+//             success: function (result) {
+//                 // $("#myModalUpdate").modal('hide');
+//                 if (result == 1) {
+//                     load_table();
+//                     $("#unitForm").trigger("reset");
+//                 } else {
+//                     alert("not saved");
+//                 }
+//             }
+//         });
+//     });
 });
 //End
