@@ -119,7 +119,7 @@ jQuery(document).ready(function ($) {
                 }
                 setTimeout(function () {
                     $("#msg1").fadeOut("slow");
-                    $("#myModalUpdate").hide("reset");
+                    $("#myModalUpdate").modal("hide");
                 }, 2000);
             }
         });
