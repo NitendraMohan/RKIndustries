@@ -23,9 +23,9 @@ require("../template/top.inc.php");
                             
                             
                             
-                            
+                        <div class="table-container"> 
                             <table class="table">
-                                <thead>
+                                <thead class="sticky-top">
                                     <tr>
                                         <th class="serial">#</th>
                                         <th>ID</th>
@@ -39,6 +39,7 @@ require("../template/top.inc.php");
                                     
                                 </tbody>
                             </table>
+                        </div>
                         </div>
                     </div>
                 </div>

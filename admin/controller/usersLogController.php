@@ -14,7 +14,7 @@ if ($_POST['action'] == "loadUserLogs") {
                     <td>{$row["user_name"]}</td>
                     <td>{$row["action"]} in {$row["table_name"]}</td>
                     <td>{$row["action_time"]}</td>
-                    <td><button class='btn btn-danger unitDelete' data-id={$row["id"]}>Undo</button>
+                    <td><button class='btn btn-info unitDelete' data-id={$row["id"]}><i class='fa fa-undo' aria-hidden='true'></i></button>
                     </tr>";
             $sr++;
         }

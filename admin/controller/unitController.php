@@ -20,8 +20,11 @@ if ($_POST['action'] == "load") {
                         <td>{$row["id"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
-                        <td><button class='btn btn-danger unitDelete' data-id={$row["id"]}>Delete</button>
-                            <button class='btn btn-info unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} >Edit</button></td>
+                        <td>
+                            <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                            <button class='btn btn-warning unitDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                            </td>
+
                         </tr>";
             $sr++;
         }
@@ -94,37 +97,35 @@ if ($_POST['action'] == "edit") {
         $row = $db->readSingleRecord($sql);
         $output = " <div class='modal-dialog modal-dialog-centered'>
         <div class='modal-content'>
-        <div class='modal-header'>
+            <div class='modal-header'>
                 <button type='button' class='close' data-dismiss='modal'>&times;</button>
                 <h4 class='modal-title'>Update Unit</h4>
             </div>
-            <form action='' method='post' id='unitFormUpdata'>";
-        // while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $output .= "<div class='modal-body'>
-            <input type='hidden' id='unitId' name='id' value='{$row['id']}' />
-            <div class='form-group'>
-                <label for='unitname'>Unit</label>
-                <input class='form-control type='text' id='editunitname' name='unitname' value='{$row['unit']}' placeholder='Enter Unit' required>
-            </div>
-            <div class='form-group'>
-                <label for='Status'>Status</label>
-                <select class='form-control' name='status' id='editstatus' value='{$row['status']}>
-                    <option value='' selected>Select</option>
-                    <option value='1'>Active</option>
-                    <option value='0'>Inactive</option>
-                </select>
-            </div>
-        </div>";
-        // }
-        $output .= "</form>
+            <form action='' method='post' id='unitFormUpdata'>
+                <div class='modal-body'>
+                    <input type='hidden' id='unitId' name='id' value='{$row['id']}' />
+                    <div class='form-group'>
+                        <label for='unitname'>Unit</label>
+                        <input class='form-control type='text' id='editunitname' name='unitname' value='{$row['unit']}' placeholder='Enter Unit' required>
+                     </div>
+                    <div class='form-group'>
+                        <label for='Status'>Status</label>
+                        <select class='form-control' name='status' id='editstatus' value='{$row['status']}>
+                        <option value='' selected>Select</option>
+                        <option value='1'>Active</option>
+                        <option value='0'>Inactive</option>
+                        </select>
+                    </div>
+                </div>
         <!-- Modal footer -->
-        <div class='modal-footer'>
-            <button type='submit' class='btn btn-primary btnUpdate' id='btnUpdate' data-id='update'>Update</button>
-            <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+                <div class='modal-footer'>
+                    <button type='submit' class='btn btn-primary btnUpdate' id='btnUpdate' data-id='update'>Update</button>
+                    <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+                </div>
+            </form>
+            <div id='msg'></div>
         </div>
-        <div class='alert alert-dark' id='hmsg' style='display:none;'></div>
-    </div>
-</div>";
+    </div>";
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
@@ -136,43 +137,52 @@ if ($_POST['action'] == "edit") {
 if ($_POST['action'] == "update") {
     try {
         $id = $_POST['id'];
-        $conn = new PDO($dsn, $username, $password);
-        $sql = "update tbl_unit set unit = '{$_POST['unit']}', status='{$_POST['status']}' where id  = {$id}";
-        if ($conn->query($sql)) {
-            echo 1;
+        //get old record for user log
+        $sql = "select unit,status from tbl_unit where id=:id";
+        $params = ["id"=>$_POST["id"]];
+        $oldRecord = $db->readSingleRecord($sql, $params);
+
+        $sql = "update tbl_unit set unit =:unit, status=:status where id=:id";
+        $params = ['unit'=>$_POST['unit'],'status'=>$_POST['status'],'id'=>$id];
+        $recordId = $db->ManageData($sql, $params);
+        // echo json_encode(array("success"=>true,"msg"=>$recordId));
+        // exit;
+        if ($recordId) {
+            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_unit", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
+            echo json_encode(array("success"=>true,"msg"=>"Record updated successfully"));
         } else {
-            echo 0;
+            echo json_encode(array("success"=>false,"msg"=>"Error! Record not updated"));
+        }
+    } catch (PDOException $e) {
+        echo "Connection failed: " . $e->getMessage();
+    }
+}
+//End
+if ($_POST['action'] == "search") {
+    try {
+        $output ="";
+        $search_value = $_POST['search'];
+        // $conn = new PDO($this->dsn, $this->username, $this->password);
+        $sql = "SELECT * FROM tbl_unit where unit like '%{$search_value}%'";
+        $result = $db->readData($sql);
+        print_r($result);
+        // $result = $conn->query($sql);
+        $sr = 1;
+        foreach ($result as $row) {
+            $output .= "<tr>
+                        <td>{$sr}</td>
+                        <td>{$row["id"]}</td>
+                        <td>{$row["unit"]}</td>
+                        <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
+                        <td>
+                        <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                        <button class='btn btn-warning unitDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                        </td>
+                        </tr>";
+                $sr++;
         }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
     echo $output;
-}
-//End
-if ($_POST['action'] == "search") {
-    try {
-        $search_value = $_POST['search'];
-        $conn = new PDO($this->dsn, $this->username, $this->password);
-        $sql = "SELECT * FROM tbl_unit where unit like '%{$search_value}%'";
-        $result = $conn->query($sql);
-        if ($result->rowCount() > 0) {
-            $sr = 1;
-            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                $this->output .= "<tr>
-                        <td>{$sr}</td>
-                        <td>{$row["id"]}</td>
-                        <td>{$row["unit"]}</td>
-                        <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
-                        <td><button class='btn btn-danger unitDelete' data-id={$row["id"]}>Delete</button>
-                            <button class='btn btn-info unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} >Edit</button></td>
-                        </tr>";
-                $sr++;
-            }
-        } else {
-            echo "Record not found";
-        }
-    } catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-    }
-    echo $this->output;
 }
