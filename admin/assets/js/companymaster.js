@@ -9,13 +9,16 @@ jQuery(document).ready(function ($) {
             type: "POST",
             data: { action: "load" },
             success: function (result) {
+                console.log(result);
                 if(result!=null){
                     data = JSON.parse(result);
+                    imagepath = data['logo']!="" ? data['logo'] : "../images/info.png"
                     $('#company_name').val(data['company_name'])
                     $('#gst_no').val(data['gst_no'])
                     $('#address').val(data['address'])
                     $('#mail_id').val(data['email'])
                     $('#contact_number').val(data['contact_number'])
+                    $('#logo_image').attr("src", imagepath);
                     // $("#unitTableContents").html(result);
 
                 }
@@ -30,7 +33,8 @@ jQuery(document).ready(function ($) {
     /**
      * Code for submit model form data
      */
-        $(document).on("click", ".modalsubmit", function (e) {
+        // $(document).on("click", ".modalsubmit", function (e) {
+        $("#companyForm").on("submit",function(e) {
         e.preventDefault();
         if (company_name == "" || gst_no == "") {
             $("#msg").fadeIn();
@@ -40,25 +44,27 @@ jQuery(document).ready(function ($) {
             }, 2000);
         } else {
             var logo = $('#logo')[0].files[0];
-            console.log(logo);
-            var formData = $('#companyForm').serialize() + '&action=submit&file='+logo;
-            // formData.append('file', logo);
-            console.log(formData);
+            var formData = new FormData(this);
+            // var formData = $('#companyForm').serialize() + '&action=submit&file='+logo;
+            formData.append('action', "submit");
             $.ajax({
                 url: "../controller/companyController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
-                // contentType: false,
+                contentType: false,
+                cache:false,
+                processData:false,
                 success: function (response) {
+                    load_table();
                     console.log(response);
                     if (response.duplicate) {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
                     } else if (response.success) {
-                        $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html("Save successful: Your record has been successfully saved.");
+                        $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
                         load_table(); // Assuming this function loads the table data
                     } else {
-                        $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Save Failed: Record Not Saved.");
+                        $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
                     }
                     setTimeout(function () {
                         $("#msg").fadeOut("slow");

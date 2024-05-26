@@ -44,7 +44,7 @@ if ($_POST['action'] == "insert") {
         $sql = "select * from tbl_unit where unit=:unit";
         $params = ['unit'=>$unit];
         $result = $db->readSingleRecord($sql, $params);
-        if ( isset($result) && $result->rowCount() > 0) {
+        if ( isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_unit(unit,status) values(:unit,:status)";

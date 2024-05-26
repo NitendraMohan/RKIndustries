@@ -22,7 +22,11 @@ require("../template/top.inc.php");
                                     <div class="form-group">
                                     <label for="logo">Select Logo Image</label>    
                                     <input class="form-control" type="file" name="logo" id="logo">
-                                    </div>
+                                    
+                                </div>
+                                <div>
+                                <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/info.png'" height="20%" width="20%"/>    
+                                </div>
                                     <div class="form-group">
                                         <label for="company_name">Company Name*</label>
                                         <input class="form-control modalyearfrom" type="text" placeholder="Enter Company Name" id="company_name" name="company_name" required>
@@ -44,11 +48,12 @@ require("../template/top.inc.php");
                                         <input class="form-control modalyearfrom" type="tel" placeholder="Enter Contact Number" id="contact_number" name="contact_number">
                                     </div>
                                 </div>
-                            </form>
+                            
                             <!-- Modal footer -->
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save">Submit</button>
                             </div>
+                            </form>
                             <!-- <div class="alert alert-dark" id="hmsg" style="display:none;"></div> -->
                             <div id="msg"></div>
 

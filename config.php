@@ -1,4 +1,7 @@
 <?php
+if(!defined('UPLOAD_IMAGE_PATH')){ 
+    define ('UPLOAD_IMAGE_PATH', dirname(__FILE__).'/admin/images/');
+}
 if(!defined('CSS_DEFAULT_NORMALIZE')){ 
     define ('CSS_DEFAULT_NORMALIZE', '/'.basename(dirname(__FILE__)).'/admin/assets/css/normalize.css');
 }

@@ -16,7 +16,7 @@ CREATE TABLE `company_master` (
   `contact_number` varchar(10) NOT NULL,
   `email` varchar(255) NOT NULL,
   `logo` varchar(255) NOT NULL,
-  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `createdat` timestamp NOT NULL D0EFAULT current_timestamp(),
   `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
