@@ -34,13 +34,13 @@ jQuery(document).ready(function ($) {
             }, 2000);
         } else {
             var formData = $('#unitForm').serialize() + '&action=insert';
+            console.log(formData);
             $.ajax({
                 url: "../controller/unitController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
                 success: function (response) {
-                    
                     console.log(response);
                     if (response.duplicate) {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
@@ -105,15 +105,30 @@ jQuery(document).ready(function ($) {
         $.ajax({
             url: "../controller/unitController.php",
             type: "POST",
+            
             data: { action: uaction, id: uid, unit: editUnit, status: editStatus },
-            success: function (result) {
-                $("#myModalUpdate").modal('hide');
-                if (result == 1) {
-                    load_table();
-                    $("#unitForm").trigger("reset");
+            dataType:"json",
+            success: function (response) {
+                // console.log(response);
+                if (response.duplicate) {
+                    $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
+                } else if (response.success) {
+                    $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
                 } else {
-                    alert("not saved");
+                    $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
                 }
+                setTimeout(function () {
+                    $("#msg").fadeOut("slow");
+                    load_table(); // Assuming this function loads the table data
+                    // $("#unitForm").trigger("reset");
+                }, 2000);
+                // $("#myModalUpdate").modal('hide');
+                // if (result == 1) {
+                //     load_table();
+                //     $("#unitForm").trigger("reset");
+                // } else {
+                //     alert("not saved");
+                // }
             }
         });
     });
@@ -122,6 +137,7 @@ jQuery(document).ready(function ($) {
      * Live Search
      */
     $("#search").on("keyup",function(){
+        console.log("searching...");
         var search_term = $(this).val();
         var eventaction = "search";
         $.ajax({

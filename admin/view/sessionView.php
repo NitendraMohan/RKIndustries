@@ -1,6 +1,6 @@
 <?php
-require_once '../admin/connection.inc.php';
-require_once '../admin/utility/sessions.php';
+require_once '../connection.inc.php';
+require_once '../utility/sessions.php';
 $db = new dbConnector();
 $username = checkUserSession();
 $editRecord = [];
@@ -22,7 +22,7 @@ $sql = "select * from financial_years order by year_from desc";
 $result = $db->readData($sql);
 ?>
 <?php
-require('../admin/template/top.inc.php');
+require('../template/top.inc.php');
 ?>
 <div class="content pb-0">
     <div class="orders">
@@ -131,7 +131,8 @@ require('../admin/template/top.inc.php');
         </div>
     </div>
 </div>
-<?php require('../admin/template/footer.inc.php') ?>
-<script src="assets/js/financialyear.js" type="text/javascript"></script>
+<?php require('../template/footer.inc.php') ?>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="../assets/js/financialyear.js" type="text/javascript"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function ()  {
     $(".yearlimit").on("input", function () {
         var value = $(this).val();
         if (value.length > 4) {
@@ -80,7 +80,7 @@ $(document).ready(function () {
             params += "&action=create";
             console.log(params);
             $.ajax({
-                url: "sessionController.php",
+                url: "../controller/sessionController.php",
                 type: "POST",
                 data: params,
                 success: function (response) {
@@ -132,7 +132,7 @@ $(document).ready(function () {
             params += "&action=update";
             console.log(params);
             $.ajax({
-                url: "sessionController.php",
+                url: "../controller/sessionController.php",
                 type: "POST",
                 data: params,
                 success: function (response) {
@@ -146,15 +146,15 @@ $(document).ready(function () {
         }
     }
    
-    $("#tblContents").on("click", ".del", function () {
+    $(".table").on("click", ".del", function () {
         var el = this;
         var delid = $(this).data('id');
         var confirmalert = confirm("Are you sure?");
         if (confirmalert == true) {
             $.ajax({
-                url: "sessionController.php",
+                url: "../controller/sessionController.php",
                 type: "POST",
-                data: { id: delid, action: "del" },
+                data: { id: delid, action: "delete" },
                 success: function (response) {
                     if (response == true) {
                         $(el).closest('tr').css('background', 'tomato');
@@ -189,7 +189,7 @@ $(document).ready(function () {
             // }
         });
         $.ajax({
-            url: "sessionmaster.php",
+            url: "../controller/sessionmaster.php",
             type: "GET",
             data: {
                 datatd: JSON.stringify(tddata),

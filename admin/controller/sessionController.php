@@ -1,14 +1,17 @@
 <?php
-require_once '../admin/connection.inc.php';
-require_once '../admin/utility/sessions.php';
+require_once '../connection.inc.php';
+require_once '../utility/sessions.php';
+require_once 'usersLogController.php';
 $username = checkUserSession();
 if(isset($username)){
+    // $userLog = new usersLog();
     $db = new dbConnector();
     if($_POST['action'] =="create"){
     $sql = "insert into financial_years(year_from,year_to,status) values(:year_from,:year_to,:status)";
     $params = ["year_from"=>$_POST["year_from"],"year_to"=>$_POST["year_to"],"status"=>$_POST["status"]];
     $newRecordId = $db->insertData($sql,$params);
     if(!empty($newRecordId)){
+        log_user_action($_SESSION['userid'], $_POST['action'], "financial_years", $newRecordId, $_SESSION["username"]);
         $sql = "select * from financial_years where id=$newRecordId";
         $row = $db->readSingleRecord($sql);
     }
@@ -36,18 +39,30 @@ if(isset($username)){
    <?php } 
    } 
 //    print_r($_POST);die();
-   if($_POST['action'] =="del"){
-    // echo 'delete action received';die();
+   if($_POST['action'] =="delete"){
+    //get old record for user log
+    $sql = "select year_from, year_to,status from financial_years where id=:id";
+    $params = ["id"=>$_POST["id"]];
+    $oldRecord = $db->readSingleRecord($sql, $params);
+    //delete old record
     $sql = "delete from financial_years where id=:id";
     $params = ["id"=>$_POST["id"]];
     $RecordId = $db->ManageData($sql,$params);
+    //add change log
+    log_user_action($_SESSION['userid'], $_POST['action'], "financial_years", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
     echo $RecordId;
    }
    if($_POST['action'] =="update"){
-    // echo 'delete action received';die();
+    //get old record for user log
+    $sql = "select year_from, year_to,status from financial_years where id=:id";
+    $params = ["id"=>$_POST["id"]];
+    $oldRecord = $db->readSingleRecord($sql, $params);
+    //apply changes
     $sql = "update financial_years set year_from=:year_from,year_to=:year_to,status=:status where id=:id";
     $params = ["id"=>$_POST["id"],"year_from"=>$_POST["year_from"],"year_to"=>$_POST["year_to"],"status"=>$_POST["status"]];
     $RecordId = $db->ManageData($sql,$params);
+    //add change log
+    log_user_action($_SESSION['userid'], $_POST['action'], "financial_years", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
     echo $RecordId;
    } ?> 
 <?php } ?>
