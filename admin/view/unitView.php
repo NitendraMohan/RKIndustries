@@ -59,12 +59,13 @@ require("../template/top.inc.php");
                                                     </select>
                                                 </div>
                                             </div>
-                                        </form>
+                                       
                                         <!-- Modal footer -->
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save">Submit</button>
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         </div>
+                                        </form>
                                         <!-- <div class="alert alert-dark" id="hmsg" style="display:none;"></div> -->
                                         <div id="msg"></div>
                                     </div>

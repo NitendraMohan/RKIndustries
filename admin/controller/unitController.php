@@ -45,8 +45,8 @@ class UnitController {
             try {
                 $unit = $_POST['unitname'];
                 $ustatus = $_POST['status'];
-                echo json_encode($_POST);
-                die();
+                // echo json_encode($_POST);
+                // die();
                 // $conn = new PDO($this->dsn, $this->username, $this->password);
                 $db = new dbConnector();
                 $sql = "select * from tbl_unit where unit = :unit";
