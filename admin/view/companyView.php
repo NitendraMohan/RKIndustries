@@ -23,7 +23,7 @@ require("../template/top.inc.php");
                                     <label for="logo">Select Logo Image</label>    
                                     <input class="form-control" type="file" name="logo" id="logo">
                                     
-                                </div>
+                                    </div>
                                 <div>
                                 <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/info.png'" height="20%" width="20%"/>    
                                 </div>

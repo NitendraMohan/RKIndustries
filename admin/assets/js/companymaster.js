@@ -43,9 +43,7 @@ jQuery(document).ready(function ($) {
                 $("#msg").fadeOut("slow");
             }, 2000);
         } else {
-            var logo = $('#logo')[0].files[0];
             var formData = new FormData(this);
-            // var formData = $('#companyForm').serialize() + '&action=submit&file='+logo;
             formData.append('action', "submit");
             $.ajax({
                 url: "../controller/companyController.php",

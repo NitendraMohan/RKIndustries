@@ -46,7 +46,7 @@ if(!isset($username)){
                      <a href="#" > Department Master</a>
                   </li>
                   <li class="menu-item-has-children dropdown">
-                     <a href="usermaster.php" > User Master</a>
+                     <a href="../view/usersView.php" > User Master</a>
                   </li>
                   <li class="menu-item-has-children dropdown">
                      <a href="../view/unitView.php">Unit Master</a>
