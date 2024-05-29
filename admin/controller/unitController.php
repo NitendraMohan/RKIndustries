@@ -15,19 +15,24 @@ if ($_POST['action'] == "load") {
         $result = $db->readData($sql);
         $sr = 1;
         $output = "";
-        foreach ($result as $row) {
-            $output .= "<tr>
+        if ($result) {
+            foreach ($result as $row) {
+                $output .= "<tr>
                         <td>{$sr}</td>
                         <td>{$row["id"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
                         <td>
-                            <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
-                            <button class='btn btn-warning unitDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                            <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                            <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                            
                             </td>
 
                         </tr>";
-            $sr++;
+                $sr++;
+            }
+        } else {
+            echo "No record found";
         }
         // while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
@@ -113,22 +118,22 @@ if ($_POST['action'] == "edit") {
                      <div class='form-group'>
                         <label for='Status'>Status</label>
                         <select class='form-control' name='status' id='editstatus'>";
-                        $options = array('', '0', '1');
-                        $values = array('Select', 'Inactive', 'Active');
-                        for ($i = 0; $i < count($options); $i++) {
-                            $output1 .= '<option ' . ($row['status'] == $options[$i] ? 'selected="selected"' : '') . '>' . $values[$i] . '</option>';
-                        }
-                        $output1 .= " </select></div>
+        $options = array('', '0', '1');
+        $values = array('Select', 'Inactive', 'Active');
+        for ($i = 0; $i < count($options); $i++) {
+            $output1 .= '<option ' . ($row['status'] == $options[$i] ? 'selected="selected"' : '') . '>' . $values[$i] . '</option>';
+        }
+        $output1 .= " </select></div>
             <!-- Modal footer -->
                 <div class='modal-footer'>
                     <button type='submit' class='btn btn-primary btnUpdate' id='btnUpdate' data-id='update'>Update</button>
                     <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
                 </div>
             </form>
-            <div id='msg1'></div>
+            <div id='msg-update'></div>
         </div>
     </div>
-    </div>";
+    ";
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
@@ -140,25 +145,30 @@ if ($_POST['action'] == "edit") {
 if ($_POST['action'] == "update") {
     try {
         $id = $_POST['id'];
-        $_POST['status'];
-
         $status = $_POST['status'] == 'Active' ?? 'Active' ?? 'Inactive';
         //get old record for user log
         $sql = "select unit,status from tbl_unit where id=:id";
         $params = ["id" => $_POST["id"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
 
-        $sql = "update tbl_unit set unit =:unit, status=:status where id=:id";
-        $params = ['unit' => $_POST['unit'], 'status' =>  $status, 'id' => $id];
-        $recordId = $db->ManageData($sql, $params);
-        // echo json_encode(array("success"=>true,"msg"=>$recordId));
-        // exit;
-        if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_unit", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
-            // echo json_encode(array('success' => true));
-            echo json_encode(array("success" => true, "msg" => "Update successful: Your record has been successfully updated."));
+        $sql = "select * from tbl_unit where unit=:unit";
+        $params = ['unit' => $_POST['unit']];
+        $result = $db->readSingleRecord($sql, $params);
+        if (isset($result)) {
+            echo json_encode(array('duplicate' => true));
         } else {
-            echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
+            $sql = "update tbl_unit set unit =:unit, status=:status where id=:id";
+            $params = ['unit' => $_POST['unit'], 'status' =>  $status, 'id' => $id];
+            $recordId = $db->ManageData($sql, $params);
+            // echo json_encode(array("success"=>true,"msg"=>$recordId));
+            // exit;
+            if ($recordId) {
+                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_unit", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
+                // echo json_encode(array('success' => true));
+                echo json_encode(array("success" => true, "msg" => "Update successful: Your record has been successfully updated."));
+            } else {
+                echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
+            }
         }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();

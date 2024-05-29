@@ -1,8 +1,8 @@
 jQuery.noConflict();
 jQuery(document).ready(function ($) {
-/**
- * Function for loading complete data of units
- */
+    /**
+     * Function for loading complete data of units
+     */
     function load_table() {
         $.ajax({
             url: "../controller/unitController.php",
@@ -22,7 +22,7 @@ jQuery(document).ready(function ($) {
     /**
      * Code for submit model form data
      */
-        $(document).on("click", ".modalsubmit", function (e) {
+    $(document).on("click", ".modalsubmit", function (e) {
         e.preventDefault();
         var unitname = $("#unitname").val();
         var unitstatus = $("#status").val();
@@ -41,7 +41,6 @@ jQuery(document).ready(function ($) {
                 data: formData,
                 dataType: 'json',
                 success: function (response) {
-                    // console.log(response);
                     if (response.duplicate) {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
                     } else if (response.success) {
@@ -110,16 +109,20 @@ jQuery(document).ready(function ($) {
             dataType: 'json',
             success: function (response) {
                 if (response.duplicate) {
-                    $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
+                    $("#msg-update").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
+                    $("#editunitname").val('');
+                    $("#editstatus").val('');
                 } else if (response.success) {
-                    $("#msg1").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
+                    $("#msg-update").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
                     load_table(); // Assuming this function loads the table data
                 } else {
-                    $("#msg1").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
+                    $("#msg-update").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
                 }
                 setTimeout(function () {
-                    $("#msg1").fadeOut("slow");
-                    $("#myModalUpdate").modal("hide");
+                    $("#msg-update").fadeOut("slow");
+                    if (!response.duplicate) {
+                        $("#myModalUpdate").modal("hide");
+                    }
                 }, 2000);
             }
         });
@@ -128,17 +131,17 @@ jQuery(document).ready(function ($) {
     /**
      * Live Search
      */
-    $("#search").on("keyup",function(){
+    $("#search").on("keyup", function () {
         console.log("searching...");
         var search_term = $(this).val();
         var eventaction = "search";
         $.ajax({
             url: "../controller/unitController.php",
-        type: "POST",
-        data: { action: eventaction, search : search_term },
-        success : function(data){
-            $("#unitTableContents").html(data);
-        }
+            type: "POST",
+            data: { action: eventaction, search: search_term },
+            success: function (data) {
+                $("#unitTableContents").html(data);
+            }
         });
     });
 });
