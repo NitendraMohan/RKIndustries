@@ -109,10 +109,6 @@
                </div>
             </div>
 		  </div>
-        
-        
-
-
 <?php require('../template/footer.inc.php') ?>
 <script src="../assets/js/unitmaster.js" type="text/javascript"></script>
 </body>
