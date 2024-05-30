@@ -255,20 +255,37 @@ if ($_POST['action'] == "search") {
     try {
         $output = "";
         $search_value = $_POST['search'];
+        $statusSearch = '';
+        if($search_value == 'active'){
+            $statusSearch = 1;
+        }
+        elseif( $search_value == 'inactive' ){
+            $statusSearch = 0;
+        }
         // $conn = new PDO($this->dsn, $this->username, $this->password);
-        $sql = "SELECT * FROM tbl_unit where unit like '%{$search_value}%'";
+        $sql = "SELECT * FROM tbl_users where username like '%{$search_value}%' or role like '%{$search_value}%' or gender like '%{$search_value}%' or mobile like '%{$search_value}%' or address like '%{$search_value}%' or email like '%{$search_value}%'";
+        if($statusSearch!=''){
+            $sql.="or status={$statusSearch}";
+        }
         $result = $db->readData($sql);
-        print_r($result);
+        // print_r($result);
         // $result = $conn->query($sql);
         $sr = 1;
         foreach ($result as $row) {
             $output .= "<tr>
                         <td>{$sr}</td>
                         <td>{$row["id"]}</td>
-                        <td>{$row["unit"]}</td>
+                        <td>{$row["username"]}</td>
+                        <td>{$row["role"]}</td>
+                        <td>{$row["gender"]}</td>
+                        <td>{$row["dob"]}</td>
+                        <td>{$row["mobile"]}</td>
+                        <td>{$row["email"]}</td>
+                        <td>{$row["address"]}</td>
+                        <td><img src='{$row["image"]}'/></td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
                         <td>
-                        <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                        <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
                         <button class='btn btn-warning unitDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>
                         </td>
                         </tr>";
