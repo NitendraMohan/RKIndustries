@@ -10,36 +10,32 @@ require("../template/top.inc.php");
 
                     <div class="row">
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                            <div class="card-body">
+                            <!-- <div class="card-body"> -->
                                 <h4 class="box-title">UNIT MASTER </h4>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
-                            </div>
+                            <!-- </div> -->
                         </div>
-                       
-
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
-                        <div class="card-body">
-                        <button type="button" class="btn btn-sm btn-primary add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal">
-                        Create New
-                    </button>
+                            <!-- <div class="card-body"> -->
+                                <button type="button" class="btn btn-sm btn-primary add-button" data-toggle="modal" data-target="#myModal">
+                                    Create New
+                                </button>
+                            <!-- </div> -->
                         </div>
-                        </div>
-                   
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
-                        <div class="card-body">
-                            <div class="search-bar " id="search-bar">
-                                <!-- <label for="search">Search :</label> -->
-                                <input type="text" placeholder="Search here" id="search" autocomplete="off">
-                                <!-- <button type="submit">Search</button> -->
-                                <img src="../images/icon/search.png" alt="Lance Icon" style="height: 5%; width:5%;">
-                            </div>
+                            <!-- <div class="card-body"> -->
+                                <div class="search-bar " id="search-bar">
+                                    <!-- <label for="search">Search :</label> -->
+                                    <input type="text" placeholder="Search here" id="search" autocomplete="off">
+                                    <!-- <button type="submit">Search</button> -->
+                                    <img src="../images/icon/search.png" alt="Lance Icon" style="height: 5%; width:5%; margin-right: 10px;">
+                                </div>
+                            <!-- </div> -->
                         </div>
-                        </div>
-                   
                     </div>
 
 
-                   
+
                     <div class="modal fade" id="myModal">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">

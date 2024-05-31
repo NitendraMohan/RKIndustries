@@ -13,7 +13,9 @@ if ($_POST['action'] == "load") {
     try {
         $sql = "SELECT * FROM tbl_users";
         $result = $db->readData($sql);
+        if (isset($result)) {
         $rowCounts = count($result);
+        
         $sr = 1;
         $output = "";
         foreach ($result as $row) {
@@ -26,16 +28,17 @@ if ($_POST['action'] == "load") {
                         <td>{$row["mobile"]}</td>
                         <td>{$row["email"]}</td>
                         <td>{$row["address"]}</td>
-                        <td><img src='{$row["image"]}' height='60px' width='100px' /></td>
+                        <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
                         <td>
-                            <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
-                            <button class='btn btn-warning unitDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                            <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                            <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>
                             </td>
 
                         </tr>";
             $sr++;
         }
+    }
         // while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
 

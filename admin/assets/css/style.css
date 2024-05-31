@@ -1190,7 +1190,7 @@ aside.left-panel:hover {
 }
 
 .right-panel .navbar-header>a {
-    display: inline-block
+    display: inline
 }
 
 .right-panel .navbar-brand {
@@ -1227,7 +1227,7 @@ header.fixed-top {
     line-height: 40px;
     width: 40px;
     display: block;
-    text-align: right
+    text-align: left
 }
 
 .search-trigger {
@@ -1625,7 +1625,7 @@ header .form-inline .search-form.close {
 
 .card .box-title {
     font-weight: 600;
-    font-size: 1em;
+    font-size: 1.5em;
     padding: 5px 0
 }
 
@@ -3408,7 +3408,7 @@ footer.site-footer .footer-inner a {
     border: 2px solid #ccc;
     border-radius: 20px;
     overflow: hidden;
-    margin-top: 3%;
+    /* margin-top: 3%; */
     margin-right: 20px;
 }
 
@@ -3434,7 +3434,7 @@ footer.site-footer .footer-inner a {
     height: 10%;
   }
   .table-container {
-    max-height:400px; /* Adjust to your preference */
+    max-height:490px; /* Adjust to your preference */
     overflow-y: auto;
   }
 
@@ -3476,7 +3476,8 @@ footer.site-footer .footer-inner a {
 
 @media (min-width: 992px) {
     .add-button{
-        width: 50%;
+        width: 60%;
+        /* margin-right: 50px; */
     }
     /* .table{
         font-size: 13px;
