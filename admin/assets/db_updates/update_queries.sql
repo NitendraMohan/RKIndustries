@@ -80,3 +80,48 @@ ALTER TABLE `user_actions_log`
 ALTER TABLE `user_actions_log`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 COMMIT;
+
+-- Date: 27-May-2024 03:00 PM
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_users`
+--
+
+CREATE TABLE `tbl_users` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `role` varchar(6) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `gender` varchar(255) DEFAULT NULL,
+  `dob` date DEFAULT NULL,
+  `mobile` varchar(10) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `image` varchar(255) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_users`
+--
+ALTER TABLE `tbl_users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_users`
+--
+ALTER TABLE `tbl_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
