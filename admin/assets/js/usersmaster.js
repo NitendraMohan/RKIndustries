@@ -10,6 +10,9 @@ jQuery(document).ready(function ($) {
             data: { action: "load" },
             success: function (result) {
                 $("#usersTableContents").html(result);
+                var total_records = $("#usersTableContents tr").length;
+                $('#total_records').html("Total Records: "+total_records);
+                
             },
             error: function (xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -136,6 +139,8 @@ jQuery(document).ready(function ($) {
         data: { action: eventaction, search : search_term },
         success : function(data){
             $("#usersTableContents").html(data);
+            var total_records = $("#usersTableContents tr").length;
+            $('#total_records').html("Total Records: "+total_records);
         }
         });
     });

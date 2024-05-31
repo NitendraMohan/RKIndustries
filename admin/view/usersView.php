@@ -11,15 +11,15 @@ require("../template/top.inc.php");
                     <div class="row">
                         <div class="col-xl-6">
                             <div class="card-body">
-                                <h3 class="box-title">USERS MASTER</h3>
+                                <h1 class="box-title">USERS MASTER</h1>
                             </div>
                         </div>
                         <div class="col-xl-6">
                             <div class="search-bar " id="search-bar">
                                 <!-- <label for="search">Search :</label> -->
-                                <input type="text" placeholder="Search here" id="search" autocomplete="off">
+                                <input type="text" placeholder="Search..." id="search" autocomplete="off">
                                 <!-- <button type="submit">Search</button> -->
-                                <img src="../images/icon/search.png" alt="Lance Icon" style="height: 5%; width:5%;">
+                                <img src="../images/icon/search.png" alt="Lance Icon" style="height: 5%; width:6%; margin-right:10px">
                             </div>
 
                         </div>
@@ -120,17 +120,16 @@ require("../template/top.inc.php");
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>ID</th>
                                         <th>USER NAME</th>
                                         <th>ROLE</th>
                                         <th>GENDER</th>
-                                        <th>DOB</th>
+                                        <th NOWRAP>DATE OF BIRTH</th>
                                         <th>MOBILE</th>
                                         <th>EMAIL</th>
-                                        <th>ADDRESS</th>
+                                        <th NOWRAP>HOME ADDRESS</th>
                                         <th>IMAGE</th>
                                         <th>STATUS</th>
-                                        <th>ACTION</th>
+                                        <th NOWRAP>USER ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody class="tableContents" id="usersTableContents">
@@ -144,6 +143,12 @@ require("../template/top.inc.php");
         </div>
     </div>
 </div>
+<!-- <div class="clearfix"></div>
+<footer class="page-footer">
+            <div class="page-inner bg-white">
+               
+            </div>
+         </footer> -->
 <?php require('../template/footer.inc.php') ?>
 <script src="../assets/js/usersmaster.js" type="text/javascript"></script>
 </body>

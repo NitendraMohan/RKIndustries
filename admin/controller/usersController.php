@@ -13,12 +13,12 @@ if ($_POST['action'] == "load") {
     try {
         $sql = "SELECT * FROM tbl_users";
         $result = $db->readData($sql);
+        $rowCounts = count($result);
         $sr = 1;
         $output = "";
         foreach ($result as $row) {
             $output .= "<tr>
                         <td>{$sr}</td>
-                        <td>{$row["id"]}</td>
                         <td>{$row["username"]}</td>
                         <td>{$row["role"]}</td>
                         <td>{$row["gender"]}</td>
@@ -26,7 +26,7 @@ if ($_POST['action'] == "load") {
                         <td>{$row["mobile"]}</td>
                         <td>{$row["email"]}</td>
                         <td>{$row["address"]}</td>
-                        <td><img src='{$row["image"]}'/></td>
+                        <td><img src='{$row["image"]}' height='60px' width='100px' /></td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
                         <td>
                             <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
@@ -274,7 +274,6 @@ if ($_POST['action'] == "search") {
         foreach ($result as $row) {
             $output .= "<tr>
                         <td>{$sr}</td>
-                        <td>{$row["id"]}</td>
                         <td>{$row["username"]}</td>
                         <td>{$row["role"]}</td>
                         <td>{$row["gender"]}</td>
@@ -282,7 +281,7 @@ if ($_POST['action'] == "search") {
                         <td>{$row["mobile"]}</td>
                         <td>{$row["email"]}</td>
                         <td>{$row["address"]}</td>
-                        <td><img src='{$row["image"]}'/></td>
+                        <td><img src='{$row["image"]}' height='60px' width='100px'/></td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
                         <td>
                         <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
