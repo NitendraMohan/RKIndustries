@@ -18,19 +18,22 @@ require("../template/top.inc.php");
                        
 
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
-                        <button type="button" class="btn btn-sm btn-primary add-button" style="margin:15px; align-items: center;" data-toggle="modal" data-target="#myModal">
+                        <div class="card-body">
+                        <button type="button" class="btn btn-sm btn-primary add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal">
                         Create New
                     </button>
                         </div>
+                        </div>
                    
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                        <div class="card-body">
                             <div class="search-bar " id="search-bar">
                                 <!-- <label for="search">Search :</label> -->
                                 <input type="text" placeholder="Search here" id="search" autocomplete="off">
                                 <!-- <button type="submit">Search</button> -->
                                 <img src="../images/icon/search.png" alt="Lance Icon" style="height: 5%; width:5%;">
                             </div>
-
+                        </div>
                         </div>
                    
                     </div>

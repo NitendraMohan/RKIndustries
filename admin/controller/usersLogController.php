@@ -1,5 +1,6 @@
 <?php
 require_once '../connection.inc.php';
+$output = "";
 $db = new dbConnector();
 if ($_POST['action'] == "loadUserLogs") {
     try {

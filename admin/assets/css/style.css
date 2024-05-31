@@ -3402,13 +3402,13 @@ footer.site-footer .footer-inner a {
   .search-bar {
     display: flex;
     align-items: center;
-    width: 90%; /* Adjust width as needed */
+    width: 100%; 
     max-width: 300px; /* Set a maximum width */
-    margin: 15px; /* Center horizontally */
+    /* margin: 15px;  */
     border: 2px solid #ccc;
     border-radius: 20px;
     overflow: hidden;
-    margin-top: 3%;
+    /* margin-top: 3%; */
 }
 
 .search-bar input[type="text"] {
@@ -3453,22 +3453,32 @@ footer.site-footer .footer-inner a {
     max-width: 100%;
     }
     .add-button{
-        width: 92%;
+        width: 100%;
     }
     .box-title{
         text-align: center;
+        background-color: #d6e8f0;
     }
+    /* .table{
+        font-size: 8px;
+    } */
 }
 
 @media (min-width: 577px) and (max-width: 991px) {
     .add-button{
-        width: 60%;
+        width: 80%;
     }
+    /* .table{
+        font-size: 11px;
+    } */
 }
 
 @media (min-width: 992px) {
     .add-button{
         width: 50%;
     }
+    /* .table{
+        font-size: 13px;
+    } */
+   
 }
- 
