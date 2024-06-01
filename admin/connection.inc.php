@@ -82,7 +82,10 @@ class dbConnector{
     $stmt = $this->conn->prepare($qry);
     $stmt->execute($params);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['id'];
+    if(isset($result)){
+      return $result['id'];
+    }
+    return 0;
   }
   /**
    * function to log user actions

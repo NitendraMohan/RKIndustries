@@ -1,6 +1,11 @@
 <?php
 require_once (dirname(__FILE__) . '/../../config.php');
 require_once '../utility/sessions.php';
+require_once '../connection.inc.php';
+//lodar record inside table
+$db = new dbConnector();
+$sql = "select * from tbl_modules";
+$result = $db->readData($sql);
 $username = checkUserSession();
 if(!isset($username)){
    header('location:../login.php');
@@ -35,39 +40,12 @@ if(!isset($username)){
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                <ul class="nav navbar-nav">
                   <li class="menu-title">Menu</li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="../view/sessionView.php"> Session Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="../view/companyView.php" > Company Master</a>
-                  </li>
-				      <li class="menu-item-has-children dropdown">
-                     <a href="#" > Department Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="../view/usersView.php" > User Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="../view/unitView.php">Unit Master</a>
-                  </li>
-				      <li class="menu-item-has-children dropdown">
-                     <a href="#" > Vendor Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="#" > Vendor Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="taxmaster.php" >Tax Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="categorymaster.php" >Category Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="limitmaster.php" >Limit Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="../view/usersLogView.php" >User Log</a>
-                  </li>
+                  <?php if(isset($result)){ foreach($result as $row) {
+                     echo "<li class='menu-item-has-children dropdown'>
+                     <a href='{$row['file_path']}'> {$row['module_name']}</a>
+                     </li>";   
+                  }}
+                  ?>
                </ul>
             </div>
          </nav>
