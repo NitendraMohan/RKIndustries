@@ -12,7 +12,6 @@ jQuery(document).ready(function ($) {
                 $("#usersTableContents").html(result);
                 var total_records = $("#usersTableContents tr").length;
                 $('#total_records').html("Total Records: "+total_records);
-                
             },
             error: function (xhr, status, error) {
                 console.error("AJAX request failed:", status, error);

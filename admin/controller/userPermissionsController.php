@@ -12,7 +12,7 @@ $username = checkUserSession();
 if ($_POST['action'] == "load") {
     try {
         $disable_all_checkboxes = '';
-        $sql = "SELECT m.id as module_id, m.module_name, COALESCE(p.insert_record, 0) AS insert_record, COALESCE(p.update_record, 0) AS update_record,     COALESCE(p.delete_record, 0) AS delete_record,COALESCE(p.status, 0) AS status FROM tbl_modules m LEFT JOIN tbl_user_permissions p ON m.id = p.moduleid";
+        $sql = "SELECT m.id as module_id, m.module_name, COALESCE(p.insert_record, 0) AS insert_record, COALESCE(p.update_record, 0) AS update_record, COALESCE(p.delete_record, 0) AS delete_record,COALESCE(p.status, 0) AS status FROM tbl_modules m LEFT JOIN tbl_user_permissions p ON m.id = p.moduleid";
         if(isset($_POST['userid']) && $_POST['userid']!=''){
             $sql .= " AND p.userid = '{$_POST['userid']}'";
         }

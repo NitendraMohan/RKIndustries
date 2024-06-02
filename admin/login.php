@@ -12,15 +12,16 @@ if(isset($_POST['submit'])){
   
    if(!empty($username) && !empty($password)){
     try{
-      $sql = "select * from login where user_name=:username and password=:password";
+      // $sql = "select * from login where user_name=:username and password=:password";
+      // $params = ["username"=>$username,"password"=>$password];
+      // $userExists = $db->isDataExists($sql,$params);
+      $sql = "select id from tbl_users where username=:username and password=:password";
       $params = ["username"=>$username,"password"=>$password];
-      $userExists = $db->isDataExists($sql,$params);
-      // $stmt= $db->prepare($sql);
-      // $stmt->execute(["username"=>$username,"password"=>$password]);
-      if($userExists === true){
-         
+      $userid = $db->getID($sql,$params);
+      if($userid > 0){
+      // if($userExists === true){
          session_start();
-         $_SESSION['userid'] = $db->getID($sql, $params);
+         $_SESSION['userid'] = $userid;
          $_SESSION['username'] = $username;
          $_SESSION['islogin'] = true;
          // print_r($_SESSION);
