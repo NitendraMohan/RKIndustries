@@ -1,14 +1,10 @@
 <?php
-require_once '../connection.inc.php';
 // require_once '../utility/sessions.php';
+require_once '../connection.inc.php';
 require("../template/top.inc.php");
 $db = new dbConnector();
-if(isset($_POST['moduleid'])){
-    $_SESSION['moduleid'] = $_POST['moduleid'];
-    $_SESSION['current_module_name'] = $_POST['modulename'];
-}
-$params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
-$permissions = $db->get_buttons_permissions($params);
+$sql =  "SELECT id,username FROM tbl_users";
+$users_list = $db->readData($sql);
 ?>
 <div class="content pb-0">
     <div class="orders">
@@ -16,35 +12,35 @@ $permissions = $db->get_buttons_permissions($params);
             <div class="col-xl-12">
                 <div class="card">
 
-                <div class="row">
-                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="row">
+                        <div class="col-xl-6">
                             <div class="card-body">
-                                <h3 class="box-title"><?php echo $_SESSION['current_module_name'] ?></h3>
-                                <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
+                                <h1 class="box-title">USER PERMISSIONS MASTER</h1>
                             </div>
                         </div>
-                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
-                            <div class="card-body">
-                                <button type="button" class="btn btn-sm btn-primary add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert']?>>
-                                    Create New
-                                </button>
+                        <div class="col-xl-6">
+                            <div class="search-bar " id="search-bar">
+                                <!-- <label for="search">Search :</label> -->
+                                <input type="text" placeholder="Search..." id="search" autocomplete="off">
+                                <!-- <button type="submit">Search</button> -->
+                                <img src="../images/icon/search.png" alt="Lance Icon" style="height: 5%; width:6%; margin-right:10px">
                             </div>
-                        </div>
-                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
-                            <div class="card-body">
-                                <div class="search-bar " id="search-bar">
-                                    <!-- <label for="search">Search :</label> -->
-                                    <input type="text" placeholder="Search here" id="search" autocomplete="off">
-                                    <!-- <button type="submit">Search</button> -->
-                                    <img src="../images/icon/search.png" alt="Lance Icon" style="height: 5%; width:5%; margin-right: 10px;">
-                                </div>
-                            </div>
+
                         </div>
                     </div>
 
-
-
-                    
+                    <div class="form-group col-xl-4">
+                        <label for="selected_user">Select User</label>
+                        <select class="form-control modalyearstatus" name="selected_user" id="selected_user">
+                            <option value="" selected>Select</option>
+                            <?php foreach($users_list as $user) {?>
+                                <option value='<?php echo $user['id']?>'><?php echo $user['username']?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <!-- <button type="button" class="btn btn-primary" style="margin:20px;" data-toggle="modal" data-target="#myModal">
+                        Create New
+                    </button> -->
                     
 
                     <div class="modal fade" id="myModal">
@@ -92,13 +88,11 @@ $permissions = $db->get_buttons_permissions($params);
                                         </div>
                                         <div class="form-group">
                                             <label for="mobile">Mobile Number</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="tel" placeholder="Enter Mobile Number" id="mobile" name="mobile" pattern="[0-9]{10}" required>
-                                            <small id="mobileHelp" class="form-text text-muted">Please enter a 10-digit mobile number.</small>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Mobile Number" id="mobile" name="mobile" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="email" placeholder="Enter Email" id="email" name="email" required>
-                                            <small id="emailHelp" class="form-text text-muted">Please enter a valid email address (e.g., example@example.com).</small>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Email" id="email" name="email" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="address">Address</label>
@@ -138,16 +132,11 @@ $permissions = $db->get_buttons_permissions($params);
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>USER NAME</th>
-                                        <th>ROLE</th>
-                                        <th>GENDER</th>
-                                        <th NOWRAP>DATE OF BIRTH</th>
-                                        <th>MOBILE</th>
-                                        <th>EMAIL</th>
-                                        <th NOWRAP>HOME ADDRESS</th>
-                                        <th>IMAGE</th>
+                                        <th>Module Name</th>
+                                        <th>Insert</th>
+                                        <th>Update</th>
+                                        <th>Delete</th>
                                         <th>STATUS</th>
-                                        <th NOWRAP>USER ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody class="tableContents" id="usersTableContents">
@@ -168,7 +157,7 @@ $permissions = $db->get_buttons_permissions($params);
             </div>
          </footer> -->
 <?php require('../template/footer.inc.php') ?>
-<script src="../assets/js/usersmaster.js" type="text/javascript"></script>
+<script src="../assets/js/userpermissionsmaster.js" type="text/javascript"></script>
 </body>
 
 </html>

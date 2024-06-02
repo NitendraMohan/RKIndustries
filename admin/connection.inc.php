@@ -82,7 +82,10 @@ class dbConnector{
     $stmt = $this->conn->prepare($qry);
     $stmt->execute($params);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['id'];
+    if(isset($result)){
+      return $result['id'];
+    }
+    return 0;
   }
   /**
    * function to log user actions
@@ -94,6 +97,19 @@ class dbConnector{
     $lastInsertedId = $this->insertData($qry, $params);  
   }
 
+  public function get_buttons_permissions($params){
+    // print_r($params);
+    $sql = "select * from tbl_user_permissions where userid=:userid and moduleid=:moduleid";
+    $data = $this->readSingleRecord($sql, $params);
+    $permission_values = [0=>'disabled',1=>''];
+    $permissions = [];
+    if(isset($data)){
+        $permissions["insert"]=$permission_values[$data["insert_record"]];
+        $permissions["update"]=$permission_values[$data["update_record"]];
+        $permissions["delete"]=$permission_values[$data["delete_record"]];
+    }
+    return $permissions;
+  }
 
 }
 ?>

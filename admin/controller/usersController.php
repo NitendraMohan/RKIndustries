@@ -15,7 +15,8 @@ if ($_POST['action'] == "load") {
         $result = $db->readData($sql);
         if (isset($result)) {
         $rowCounts = count($result);
-        
+        $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['current_module']];
+        $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
         $output = "";
         foreach ($result as $row) {
@@ -31,18 +32,14 @@ if ($_POST['action'] == "load") {
                         <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
                         <td>
-                            <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
-                            <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                            <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                            <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
                             </td>
 
                         </tr>";
             $sr++;
         }
     }
-        // while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-
-
-        // }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
@@ -126,82 +123,6 @@ if ($_POST['action'] == "edit") {
         $id = $_POST['id'];
         $sql = "select * from tbl_users where id  = {$id}";
         $row = $db->readSingleRecord($sql);
-    //     $output1 .= "<div class='modal-dialog modal-dialog-centered'>
-    //     <div class='modal-content'>
-    //         <div class='modal-header'>
-    //             <button type='button' class='close' data-dismiss='modal'>&times;</button>
-    //             <h4 class='modal-title'>Update Unit</h4>
-    //         </div>
-    //         <form action='' method='post' id='userFormUpdate'>
-    //             <div class='modal-body'>
-    //                 <input type='hidden' id='edituserId' name='edituserId' value='{$row['id']}' />
-    //                 <div class='form-group'>
-    //                 <label for='editimage'>Select User Image</label> 
-    //                 <input class='form-control' type='file' name='editimage' id='editimage'>
-    //                 </div>
-    //                 <img  src='{$row['image']}' alt='logo image' id='editlogo_image' name='editlogo_image' onerror='this.onerror=null; this.src='../images/info.png'' height='20%' width='20%'/> 
-    //                 <div class='form-group'>
-    //                 <label for='editusername'>User Name</label>
-    //                 <input class='form-control yearlimit modalyearfrom' type='text' placeholder='Enter User Name' id='editusername' name='editusername'  value='{$row['username']}' required>
-    //                 </div>
-    //                 <div class='form-group'>
-    //                 <label for='editrole'>Role</label>
-    //                 <select class='form-control modalyearstatus' name='editrole' id='editrole'>";
-    //                 $userRoles = ["Select"=>"", "Admin"=>"admin","User"=>"user"];
-    //                 foreach($userRoles as $keys=>$values){
-    //                     $output1.="<option value='$values' ".($values == $row['role'] ?"selected":"").">".$keys."</option>";    
-    //                 }
-    //                 $output1.="</select>
-    //                 </div>
-    //                 <div class='form-group'>
-    //                 <label for='editgender'>Gender</label>
-    //                 <select class='form-control modalyearstatus' name='editgender' id='editgender'>";
-    //                 $genderList = ["Select"=>"", "Male"=>"male","Female"=>"female"];
-    //                 foreach($genderList as $keys=>$values){
-    //                     $output1.="<option value='$values' ".($values == $row['gender'] ?"selected":"").">".$keys."</option>";    
-    //                 }
-    //                 $output1.="</select>
-    //                 </div>
-    //                 <div class='form-group'>
-    //                 <label for='editdob'>Date of Birth</label>
-    //                 <input class='form-control yearlimit modalyearfrom' type='date' min='1900-01-01' max='2030-12-31' placeholder='Enter Date of Birth' id='editdob' name='editdob'  value='{$row['dob']}' required>
-    //                 </div>
-    //                 <div class='form-group'>
-    //                 <label for='editmobile'>Mobile Number</label>
-    //                 <input class='form-control yearlimit modalyearfrom' type='text' placeholder='Enter Mobile Number' id='editmobile' name='editmobile'  value='{$row['mobile']}' required>
-    //                 </div>
-    //                 <div class='form-group'>
-    //                 <label for='editemail'>Email</label>
-    //                 <input class='form-control yearlimit modalyearfrom' type='text' placeholder='Enter Email' id='editemail' name='editemail'  value='{$row['email']}' required>
-    //                 </div>
-    //                 <div class='form-group'>
-    //                 <label for='editaddress'>Address</label>
-    //                 <input class='form-control yearlimit modalyearfrom' type='text' placeholder='Enter Address' id='editaddress' name='editaddress'  value='{$row['address']}' required>
-    //                 </div>
-    //                 <div class='form-group'>
-    //                 <label for='editpassword'>Initial Passwod</label>
-    //                 <input class='form-control yearlimit modalyearfrom' type='password' placeholder='Enter Initial Password' id='editpassword' name='editpassword'  value='{$row['password']}' required>
-    //                 </div>
-
-    //                  <div class='form-group'>
-    //                     <label for='editstatus'>Status</label>
-    //                     <select class='form-control' name='editstatus' id='editstatus'>";
-    //                     $options = array('', '0', '1');
-    //                     $values = array('Select', 'Inactive', 'Active');
-    //                     for ($i = 0; $i < count($options); $i++) {
-    //                     $output1 .= '<option ' . ($row['status'] == $options[$i] ? 'selected="selected"' : '') . '>' . $values[$i] . '</option>';
-    //                     }
-    //                 $output1 .= " </select></div>
-    //                 <!-- Modal footer -->
-    //                 <div class='modal-footer'>
-    //                     <button type='submit' class='btn btn-primary btnUpdate' id='btnUpdate' data-id='update'>Update</button>
-    //                     <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
-    //                 </div>
-    //             </form>
-    //         <div id='msg1'></div>
-    //     </div>
-    // </div>
-    // </div>";
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
@@ -273,6 +194,8 @@ if ($_POST['action'] == "search") {
         $result = $db->readData($sql);
         // print_r($result);
         // $result = $conn->query($sql);
+        $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['current_module']];
+        $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
         foreach ($result as $row) {
             $output .= "<tr>
@@ -284,11 +207,11 @@ if ($_POST['action'] == "search") {
                         <td>{$row["mobile"]}</td>
                         <td>{$row["email"]}</td>
                         <td>{$row["address"]}</td>
-                        <td><img src='{$row["image"]}' height='60px' width='100px'/></td>
+                        <td><img src='{$row["image"]}' height='40px' width='auto'/></td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
                         <td>
-                        <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
-                        <button class='btn btn-warning unitDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                        <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                        <button class='btn btn-warning unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
                         </td>
                         </tr>";
             $sr++;

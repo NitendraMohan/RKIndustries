@@ -1,6 +1,11 @@
 <?php
 require_once (dirname(__FILE__) . '/../../config.php');
 require_once '../utility/sessions.php';
+require_once '../connection.inc.php';
+//lodar record inside table
+$db = new dbConnector();
+$sql = "select m.* from tbl_modules m inner join tbl_user_permissions p on m.id=p.moduleid and p.userid={$_SESSION['userid']} and (p.insert_record=1 or p.update_record=1 or p.delete_record=1)";
+$result = $db->readData($sql);
 $username = checkUserSession();
 if(!isset($username)){
    header('location:../login.php');
@@ -35,43 +40,19 @@ if(!isset($username)){
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                <ul class="nav navbar-nav">
                   <li class="menu-title">Menu</li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="../view/sessionView.php"> Session Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="../view/companyView.php" > Company Master</a>
-                  </li>
-				      <li class="menu-item-has-children dropdown">
-                     <a href="#" > Department Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="../view/usersView.php" > User Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="../view/unitView.php">Unit Master</a>
-                  </li>
-				      <li class="menu-item-has-children dropdown">
-                     <a href="#" > Vendor Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="#" > Vendor Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="taxmaster.php" >Tax Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="categorymaster.php" >Category Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="limitmaster.php" >Limit Master</a>
-                  </li>
-                  <li class="menu-item-has-children dropdown">
-                     <a href="../view/usersLogView.php" >User Log</a>
-                  </li>
+                  <div class=""btn-group-vertical >
+                     <?php if(isset($result)){ foreach($result as $row) {
+                        echo "<li class='menu-item-has-children dropdown'>
+                        <button type='button' class='btn btn-info' onclick='senddata({$row['id']}, \"{$row['module_name']}\", \"{$row['file_path']}\")' style='width:220px; margin-bottom:1px;'>{$row['module_name']}</button>
+                        </li>";   
+                     }}
+                     ?>
+                  </div>
                </ul>
             </div>
          </nav>
       </aside>
+      <!-- <a href='{$row['file_path']}?moduleid={$row['id']}'> {$row['module_name']}</a> -->
       <div id="right-panel" class="right-panel">
          <header id="header" class="header">
             <div class="top-left">
@@ -93,3 +74,28 @@ if(!isset($username)){
                </div>
             </div>
          </header>
+         <script src="../assets/js/vendor/jquery-2.1.4.min.js" type="text/javascript"></script>
+         <script>
+            // function senddata(){
+               // jQuery.noConflict();
+// $(document).ready(function () {
+            function senddata(id, name, link){
+            
+               $.ajax({
+                  url: link,
+                  type: "POST",
+                  data: { moduleid: id, modulename: name},
+               success: function (result) {
+                     window.location.href=link;
+               // console.log(result);
+               //  $("#usersTableContents").html(result);
+               //  var total_records = $("#usersTableContents tr").length;
+               //  $('#total_records').html("Total Records: "+total_records);
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX request failed:", status, error);
+            }
+            });   
+            }
+         // });
+         </script>

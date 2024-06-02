@@ -5,6 +5,8 @@ require_once 'usersLogController.php';
 //lodar record inside table
 $db = new dbConnector();
 $username = checkUserSession();
+$params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['current_module']];
+$permissions = $db->get_buttons_permissions($params);
 // if(!isset($username)){
 //     return;
 // }
@@ -23,8 +25,8 @@ if ($_POST['action'] == "load") {
                         <td>{$row["unit"]}</td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
                         <td>
-                            <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
-                            <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                            <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                            <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
                             
                             </td>
 

@@ -125,3 +125,101 @@ ALTER TABLE `tbl_users`
 ALTER TABLE `tbl_users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
+
+-- Date: 31-May-2024 12:10 PM
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_modules`
+--
+
+CREATE TABLE `tbl_modules` (
+  `id` int(11) NOT NULL,
+  `module_name` varchar(255) NOT NULL,
+  `file_path` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_modules`
+--
+
+INSERT INTO `tbl_modules` (`id`, `module_name`, `file_path`) VALUES
+(1, 'Session Master', '../view/sessionView.php'),
+(2, 'Company Master', '../view/companyView.php'),
+(3, 'Department Master', '../view/departmentView.php'),
+(4, 'User Master', '../view/usersView.php'),
+(5, 'User Permissions', '../view/userPermissionsView.php'),
+(6, 'Unit Master', '../view/unitView.php'),
+(7, 'Vendor Master', '../view/vendorView.php'),
+(8, 'Party Master', '../view/partyView.php'),
+(9, 'Tax Master', '../view/taxView.php'),
+(10, 'Category Master', '../view/categoryView.php'),
+(11, 'Branch Master', '../view/branchView.php'),
+(12, 'BOM Master', '../view/BOMView.php'),
+(13, 'PO Generation', '../view/POGeneration.php'),
+(14, 'Purchase', '../view/purchaseView.php'),
+(15, 'Purchase Return', '../view/purchaseReturnView.php'),
+(16, 'Transfer', '../view/transferView.php'),
+(17, 'Sale', '../view/saleView.php'),
+(18, 'Sale Return', '../view/saleReturnView.php'),
+(19, 'User Log', '../view/usersLogView.php');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_modules`
+--
+ALTER TABLE `tbl_modules`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_modules`
+--
+ALTER TABLE `tbl_modules`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+COMMIT;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_user_permissions`
+--
+
+CREATE TABLE `tbl_user_permissions` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `moduleid` int(11) NOT NULL,
+  `insert_record` tinyint(4) NOT NULL,
+  `update_record` tinyint(4) NOT NULL,
+  `delete_record` tinyint(4) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_user_permissions`
+--
+ALTER TABLE `tbl_user_permissions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_user_permissions`
+--
+ALTER TABLE `tbl_user_permissions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
