@@ -9,7 +9,7 @@ if(isset($_POST['moduleid'])){
     $_SESSION['current_module_name'] = $_POST['modulename'];
 }
 $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
-// $_SESSION['current_module'] = $_POST['moduleid'];
+// $_SESSION['moduleid'] = $_POST['moduleid'];
 $permissions = $db->get_buttons_permissions($params);
 ?>
 <div class="content pb-0">
@@ -18,16 +18,16 @@ $permissions = $db->get_buttons_permissions($params);
             <div class="col-xl-12">
                 <div class="card">
 
-                    <div class="row">
+                <div class="row">
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                                <h4 class="box-title">UNIT MASTER </h4>
+                                <h3 class="box-title"><?php echo $_SESSION['current_module_name'] ?></h3>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
-                            <!-- <div class="card-body"> -->
-                                <button type="button" class="btn btn-sm btn-primary add-button" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert']?>>
+                            <div class="card-body">
+                                <button type="button" class="btn btn-sm btn-primary add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert']?>>
                                     Create New
                                 </button>
                             </div>
@@ -43,6 +43,10 @@ $permissions = $db->get_buttons_permissions($params);
                             </div>
                         </div>
                     </div>
+
+
+                      
+                
 
 
 

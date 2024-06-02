@@ -15,7 +15,7 @@ if ($_POST['action'] == "load") {
         $result = $db->readData($sql);
         if (isset($result)) {
         $rowCounts = count($result);
-        $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['current_module']];
+        $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
         $output = "";
@@ -194,7 +194,7 @@ if ($_POST['action'] == "search") {
         $result = $db->readData($sql);
         // print_r($result);
         // $result = $conn->query($sql);
-        $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['current_module']];
+        $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
         foreach ($result as $row) {

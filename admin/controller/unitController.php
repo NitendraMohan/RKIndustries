@@ -5,7 +5,7 @@ require_once 'usersLogController.php';
 //lodar record inside table
 $db = new dbConnector();
 $username = checkUserSession();
-$params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['current_module']];
+$params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
 $permissions = $db->get_buttons_permissions($params);
 // if(!isset($username)){
 //     return;
