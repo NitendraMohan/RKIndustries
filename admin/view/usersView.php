@@ -84,11 +84,13 @@ require("../template/top.inc.php");
                                         </div>
                                         <div class="form-group">
                                             <label for="mobile">Mobile Number</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Mobile Number" id="mobile" name="mobile" required>
+                                            <input class="form-control yearlimit modalyearfrom" type="tel" placeholder="Enter Mobile Number" id="mobile" name="mobile" pattern="[0-9]{10}" required>
+                                            <small id="mobileHelp" class="form-text text-muted">Please enter a 10-digit mobile number.</small>
                                         </div>
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Email" id="email" name="email" required>
+                                            <input class="form-control yearlimit modalyearfrom" type="email" placeholder="Enter Email" id="email" name="email" required>
+                                            <small id="emailHelp" class="form-text text-muted">Please enter a valid email address (e.g., example@example.com).</small>
                                         </div>
                                         <div class="form-group">
                                             <label for="address">Address</label>

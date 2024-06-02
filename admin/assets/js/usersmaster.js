@@ -11,8 +11,8 @@ jQuery(document).ready(function ($) {
             success: function (result) {
                 $("#usersTableContents").html(result);
                 var total_records = $("#usersTableContents tr").length;
-                $('#total_records').html("Total Records: "+total_records);
-                
+                // $('#total_records').html("Total Records: "+total_records);
+                $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
             },
             error: function (xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -140,7 +140,9 @@ jQuery(document).ready(function ($) {
         success : function(data){
             $("#usersTableContents").html(data);
             var total_records = $("#usersTableContents tr").length;
-            $('#total_records').html("Total Records: "+total_records);
+            // $('#total_records').html("<h6><b>Total Records: "+total_records+"</b></h6>");
+            $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
+
         }
         });
     });
