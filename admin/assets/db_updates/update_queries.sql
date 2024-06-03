@@ -308,3 +308,45 @@ ALTER TABLE `tbl_parties`
 --
 ALTER TABLE `tbl_parties`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+--
+-- Table structure for table `tbl_vendors`
+--
+  CREATE TABLE `tbl_branch` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `branch_name` varchar(255) NOT NULL,
+  `address` varchar(500) NOT NULL,
+  `pincode` varchar(6) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_branch`
+--
+
+INSERT INTO `tbl_branch` (`id`, `compid`, `branch_name`, `address`, `pincode`, `status`, `createdat`, `updatedat`) VALUES
+(7, 1, 'BRANCH1', 'R101B Gulab nagar bankhana Bareilly ', '243001', 1, '2024-06-03 11:47:51', '2024-06-03 11:47:51'),
+(9, 1, 'BRANCH12', 'sdfdsf', '444444', 1, '2024-06-03 11:50:38', '2024-06-03 11:50:38');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_branch`
+--
+ALTER TABLE `tbl_branch`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_branch`
+--
+ALTER TABLE `tbl_branch`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+COMMIT;
