@@ -5,12 +5,12 @@ jQuery(document).ready(function ($) {
  */
     function load_table() {
         $.ajax({
-            url: "../controller/partiesController.php",
+            url: "../controller/categoryController.php",
             type: "POST",
             data: { action: "load" },
             success: function (result) {
-                $("#partiesTableContents").html(result);
-                var total_records = $("#partiesTableContents tr").length;
+                $("#categoryTableContents").html(result);
+                var total_records = $("#categoryTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);
                 $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
             },
@@ -27,9 +27,9 @@ jQuery(document).ready(function ($) {
     $("#userForm").on("submit", function (e) {
         e.preventDefault();
         var action = "";
-        var username = $("#username").val();
-        var userstatus = $("#status").val();
-        if (username == "" || userstatus == "") {
+        var categoryname = $("#categoryname").val();
+        var status = $("#status").val();
+        if (categoryname == "" || status == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -39,18 +39,17 @@ jQuery(document).ready(function ($) {
             // var formData = $('#userForm').serialize() + '&action=insert';
             var formData = new FormData(this);
             var id = $('#modalid').val();
+            console.log('id='.id);
             if(id =='' || id == undefined){
                 action = 'insert';
                 formData.append("action","insert");
             }
             else{
                 action = 'update';
-                var currentImage =  $("#logo_image").attr('src') ?? '';
-                formData.append("image",currentImage);
                 formData.append("action","update");
             }
             $.ajax({
-                url: "../controller/partiesController.php",
+                url: "../controller/categoryController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
@@ -84,7 +83,7 @@ jQuery(document).ready(function ($) {
         var uaction = "delete";
         var element = this;
         $.ajax({
-            url: "../controller/partiesController.php",
+            url: "../controller/categoryController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
@@ -104,20 +103,14 @@ jQuery(document).ready(function ($) {
         var uid = $(this).data("id");
         var uaction = "edit";
         $.ajax({
-            url: "../controller/partiesController.php",
+            url: "../controller/categoryController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
                 var arr = JSON.parse(result);
-                console.log(arr['party_name']);
+                console.log(arr['category_name']);
                 $("#modalid").val(arr['id']);
-                $("#logo_image").attr('src',arr['image']);
-                $("#partyname").val(arr['party_name']);
-                $("#compname").val(arr['comp_name']);
-                $("#gstno").val(arr['gstno']);
-                $("#mobile").val(arr['mobile']);
-                $("#email").val(arr['email']);
-                $("#address").val(arr['address']);
+                $("#categoryname").val(arr['category_name']);
                 $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
@@ -132,12 +125,12 @@ jQuery(document).ready(function ($) {
         var search_term = $(this).val();
         var eventaction = "search";
         $.ajax({
-            url: "../controller/partiesController.php",
+            url: "../controller/categoryController.php",
         type: "POST",
         data: { action: eventaction, search : search_term },
         success : function(data){
-            $("#partiesTableContents").html(data);
-            var total_records = $("#partiesTableContents tr").length;
+            $("#categoryTableContents").html(data);
+            var total_records = $("#categoryTableContents tr").length;
             // $('#total_records').html("<h6><b>Total Records: "+total_records+"</b></h6>");
             $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
 

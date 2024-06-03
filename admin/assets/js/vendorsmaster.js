@@ -70,6 +70,7 @@ jQuery(document).ready(function ($) {
                     setTimeout(function () {
                         $("#msg").fadeOut("slow");
                         $("#userForm").trigger("reset");
+                        $("#modelid").val('');
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
