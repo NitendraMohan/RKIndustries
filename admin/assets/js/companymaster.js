@@ -12,7 +12,7 @@ jQuery(document).ready(function ($) {
                 console.log(result);
                 if(result!=null){
                     data = JSON.parse(result);
-                    imagepath = data['logo']!="" ? data['logo'] : "../images/info.png"
+                    imagepath = data['logo']!="" ? data['logo'] : "../images/favicon.png"
                     $('#company_name').val(data['company_name'])
                     $('#gst_no').val(data['gst_no'])
                     $('#address').val(data['address'])

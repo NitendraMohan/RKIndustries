@@ -43,7 +43,7 @@ if(!isset($username)){
                   <div class=""btn-group-vertical >
                      <?php if(isset($result)){ foreach($result as $row) {
                         echo "<li class='menu-item-has-children dropdown'>
-                        <button type='button' class='btn btn-info' onclick='senddata({$row['id']}, \"{$row['module_name']}\", \"{$row['file_path']}\")' style='width:220px; margin-bottom:1px;'>{$row['module_name']}</button>
+                        <button type='button' class='btn btn-info' onclick='senddata({$row['id']}, \"{$row['module_name']}\", \"{$row['file_path']}\")' style='width:220px; margin-bottom:1px; border-radius:4px'>{$row['module_name']}</button>
                         </li>";   
                      }}
                      ?>

@@ -25,7 +25,7 @@ require("../template/top.inc.php");
                                     
                                     </div>
                                 <div>
-                                <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/info.png'" height="20%" width="20%"/>    
+                                <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%"/>    
                                 </div>
                                     <div class="form-group">
                                         <label for="company_name">Company Name*</label>

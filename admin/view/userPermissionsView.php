@@ -61,7 +61,7 @@ $users_list = $db->readData($sql);
                                             <label for="image">Select User Image</label>    
                                             <input class="form-control" type="file" name="image" id="image">
                                         </div>
-                                        <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/info.png'" height="20%" width="20%"/>    
+                                        <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%"/>    
                                         <div class="form-group">
                                             <label for="username">User Name</label>
                                             <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter User Name" id="username" name="username" required>

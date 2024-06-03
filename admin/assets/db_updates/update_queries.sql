@@ -223,3 +223,88 @@ ALTER TABLE `tbl_user_permissions`
 ALTER TABLE `tbl_user_permissions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
+
+--Date: 03-June-2024
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_taxes`
+--
+
+CREATE TABLE `tbl_taxes` (
+  `id` int(11) NOT NULL,
+  `tax_name` varchar(255) NOT NULL,
+  `tax_percentage` float NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- Indexes for table `tbl_taxes`
+--
+ALTER TABLE `tbl_taxes`
+  ADD PRIMARY KEY (`id`);
+-- AUTO_INCREMENT for table `tbl_taxes`
+--
+ALTER TABLE `tbl_taxes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_vendors`
+--
+
+CREATE TABLE `tbl_vendors` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `vendor_name` varchar(255) NOT NULL,
+  `comp_name` varchar(255) NOT NULL,
+  `gstno` varchar(255) NOT NULL,
+  `mobile` varchar(10) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `address` varchar(500) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+--
+-- Indexes for table `tbl_vendors`
+--
+ALTER TABLE `tbl_vendors`
+  ADD PRIMARY KEY (`id`);
+--
+-- AUTO_INCREMENT for table `tbl_vendors`
+--
+ALTER TABLE `tbl_vendors`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  -- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_parties`
+--
+
+CREATE TABLE `tbl_parties` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `party_name` varchar(255) NOT NULL,
+  `comp_name` varchar(255) NOT NULL,
+  `gstno` varchar(255) NOT NULL,
+  `mobile` varchar(10) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `address` varchar(500) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+--
+-- Indexes for table `tbl_vendors`
+--
+ALTER TABLE `tbl_parties`
+  ADD PRIMARY KEY (`id`);
+--
+-- AUTO_INCREMENT for table `tbl_vendors`
+--
+ALTER TABLE `tbl_parties`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;

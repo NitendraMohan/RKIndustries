@@ -41,12 +41,6 @@ $permissions = $db->get_buttons_permissions($params);
                             </div>
                         </div>
                     </div>
-
-
-
-                    
-                    
-
                     <div class="modal fade" id="myModal">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -54,7 +48,7 @@ $permissions = $db->get_buttons_permissions($params);
                                 <!-- Modal Header -->
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Add User</h4>
+                                    <h4 class="modal-title">Add Tax</h4>
                                 </div>
                                 <!-- Modal body -->
                                 <form action="" method="post" id="userForm">
@@ -62,51 +56,13 @@ $permissions = $db->get_buttons_permissions($params);
 
                                         <input type="hidden" id="modalid" name="modalid" value="" />
                                         <div class="form-group">
-                                            <label for="image">Select User Image</label>    
-                                            <input class="form-control" type="file" name="image" id="image">
-                                        </div>
-                                        <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%"/>    
-                                        <div class="form-group">
-                                            <label for="username">User Name</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter User Name" id="username" name="username" required>
+                                            <label for="taxname">Tax Name</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Tax Name" id="taxname" name="taxname" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="role">Role</label>
-                                            <select class="form-control modalyearstatus" name="role" id="role">
-                                                <option value="" selected>Select</option>
-                                                <option value="admin">Admin</option>
-                                                <option value="user">User</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="gender">Gender</label>
-                                            <select class="form-control modalyearstatus" name="gender" id="gender">
-                                                <option value="" selected>Select</option>
-                                                <option value="male">Male</option>
-                                                <option value="female">Female</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="dob">Date of Birth</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="date" min="1900-01-01" max="2030-12-31" placeholder="Enter Date of Birth" id="dob" name="dob" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="mobile">Mobile Number</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="tel" placeholder="Enter Mobile Number" id="mobile" name="mobile" pattern="[0-9]{10}" required>
-                                            <small id="mobileHelp" class="form-text text-muted">Please enter a 10-digit mobile number.</small>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="email" placeholder="Enter Email" id="email" name="email" required>
-                                            <small id="emailHelp" class="form-text text-muted">Please enter a valid email address (e.g., example@example.com).</small>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="address">Address</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Address" id="address" name="address" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="password">Initial Passwod</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="password" placeholder="Enter Initial Password" id="password" name="password" required>
+                                            <label for="taxpercentage">Tax Percentage</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="tel" placeholder="Enter Tax Percentage" id="taxpercentage" name="taxpercentage" pattern="[0-9]{2}" required>
+                                            <small id="mobileHelp" class="form-text text-muted">Please enter 2 to 3 digits percentage.</small>
                                         </div>
                                         <div class="form-group">
                                             <label for="Status">Status</label>
@@ -138,19 +94,13 @@ $permissions = $db->get_buttons_permissions($params);
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>USER NAME</th>
-                                        <th>ROLE</th>
-                                        <th>GENDER</th>
-                                        <th NOWRAP>DATE OF BIRTH</th>
-                                        <th>MOBILE</th>
-                                        <th>EMAIL</th>
-                                        <th NOWRAP>HOME ADDRESS</th>
-                                        <th>IMAGE</th>
+                                        <th>Tax NAME</th>
+                                        <th>Tax Percentage</th>
                                         <th>STATUS</th>
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>
                                 </thead>
-                                <tbody class="tableContents" id="usersTableContents">
+                                <tbody class="tableContents" id="taxTableContents">
 
                                 </tbody>
                             </table>
@@ -168,7 +118,7 @@ $permissions = $db->get_buttons_permissions($params);
             </div>
          </footer> -->
 <?php require('../template/footer.inc.php') ?>
-<script src="../assets/js/usersmaster.js" type="text/javascript"></script>
+<script src="../assets/js/taxmaster.js" type="text/javascript"></script>
 </body>
 
 </html>

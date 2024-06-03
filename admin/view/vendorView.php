@@ -54,7 +54,7 @@ $permissions = $db->get_buttons_permissions($params);
                                 <!-- Modal Header -->
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Add User</h4>
+                                    <h4 class="modal-title">Add Vendor</h4>
                                 </div>
                                 <!-- Modal body -->
                                 <form action="" method="post" id="userForm">
@@ -62,33 +62,21 @@ $permissions = $db->get_buttons_permissions($params);
 
                                         <input type="hidden" id="modalid" name="modalid" value="" />
                                         <div class="form-group">
-                                            <label for="image">Select User Image</label>    
+                                            <label for="image">Select Vendor Image</label>    
                                             <input class="form-control" type="file" name="image" id="image">
                                         </div>
                                         <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%"/>    
                                         <div class="form-group">
-                                            <label for="username">User Name</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter User Name" id="username" name="username" required>
+                                            <label for="vendorname">Vendor Name</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Vendor Name" id="vendorname" name="vendorname" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="role">Role</label>
-                                            <select class="form-control modalyearstatus" name="role" id="role">
-                                                <option value="" selected>Select</option>
-                                                <option value="admin">Admin</option>
-                                                <option value="user">User</option>
-                                            </select>
+                                            <label for="compname">Company Name</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Company Name" id="compname" name="compname" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="gender">Gender</label>
-                                            <select class="form-control modalyearstatus" name="gender" id="gender">
-                                                <option value="" selected>Select</option>
-                                                <option value="male">Male</option>
-                                                <option value="female">Female</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="dob">Date of Birth</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="date" min="1900-01-01" max="2030-12-31" placeholder="Enter Date of Birth" id="dob" name="dob" required>
+                                            <label for="gstno">GST Number</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="tel" placeholder="Enter GST Number" id="gstno" name="gstno">
                                         </div>
                                         <div class="form-group">
                                             <label for="mobile">Mobile Number</label>
@@ -103,10 +91,6 @@ $permissions = $db->get_buttons_permissions($params);
                                         <div class="form-group">
                                             <label for="address">Address</label>
                                             <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Address" id="address" name="address" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="password">Initial Passwod</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="password" placeholder="Enter Initial Password" id="password" name="password" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="Status">Status</label>
@@ -138,19 +122,18 @@ $permissions = $db->get_buttons_permissions($params);
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>USER NAME</th>
-                                        <th>ROLE</th>
-                                        <th>GENDER</th>
-                                        <th NOWRAP>DATE OF BIRTH</th>
+                                        <th>Vendor NAME</th>
+                                        <th>Company Name</th>
+                                        <th>GST Number</th>
                                         <th>MOBILE</th>
                                         <th>EMAIL</th>
-                                        <th NOWRAP>HOME ADDRESS</th>
+                                        <th NOWRAP>COMPANY ADDRESS</th>
                                         <th>IMAGE</th>
                                         <th>STATUS</th>
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>
                                 </thead>
-                                <tbody class="tableContents" id="usersTableContents">
+                                <tbody class="tableContents" id="vendorsTableContents">
 
                                 </tbody>
                             </table>
@@ -168,7 +151,7 @@ $permissions = $db->get_buttons_permissions($params);
             </div>
          </footer> -->
 <?php require('../template/footer.inc.php') ?>
-<script src="../assets/js/usersmaster.js" type="text/javascript"></script>
+<script src="../assets/js/vendorsmaster.js" type="text/javascript"></script>
 </body>
 
 </html>
