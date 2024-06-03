@@ -399,7 +399,7 @@ ALTER TABLE `tbl_subcategory`
 ALTER TABLE `tbl_subcategory`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
--- Table structure for table `tbl_vendors`
+-- Table structure for table `tbl_branch`
 --
   CREATE TABLE `tbl_branch` (
   `id` int(11) NOT NULL,
