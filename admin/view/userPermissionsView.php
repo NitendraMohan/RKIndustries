@@ -3,6 +3,12 @@
 require_once '../connection.inc.php';
 require("../template/top.inc.php");
 $db = new dbConnector();
+if(isset($_POST['moduleid'])){
+    $_SESSION['moduleid'] = $_POST['moduleid'];
+    $_SESSION['current_module_name'] = $_POST['modulename'];
+}
+$params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
+$permissions = $db->get_buttons_permissions($params);
 $sql =  "SELECT id,username FROM tbl_users";
 $users_list = $db->readData($sql);
 ?>
@@ -12,36 +18,40 @@ $users_list = $db->readData($sql);
             <div class="col-xl-12">
                 <div class="card">
 
-                    <div class="row">
-                        <div class="col-xl-6">
+                <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                                <h1 class="box-title">USER PERMISSIONS MASTER</h1>
+                                <h3 class="box-title"><?php echo $_SESSION['current_module_name'] ?></h3>
+                                <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>
-                        <div class="col-xl-6">
-                            <div class="search-bar " id="search-bar">
-                                <!-- <label for="search">Search :</label> -->
-                                <input type="text" placeholder="Search..." id="search" autocomplete="off">
-                                <!-- <button type="submit">Search</button> -->
-                                <img src="../images/icon/search.png" alt="Lance Icon" style="height: 5%; width:6%; margin-right:10px">
+                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                            <div class="card-body">
+                            <!-- <label for="selected_user">Select User</label> -->
+                                <select class="form-control modalyearstatus" name="selected_user" id="selected_user">
+                                    <option value="" selected>Select User...</option>
+                                    <?php foreach($users_list as $user) {?>
+                                        <option value='<?php echo $user['id']?>'><?php echo $user['username']?></option>
+                                    <?php } ?>
+                                </select>
+                                <!-- <button type="button" class="btn btn-sm btn-info add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert']?>>
+                                    Create New
+                                </button> -->
                             </div>
-
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                            <div class="card-body">
+                                <div class="search-bar " id="search-bar">
+                                    <!-- <label for="search">Search :</label> -->
+                                    <input type="text" placeholder="Search here" id="search" autocomplete="off">
+                                    <!-- <button type="submit">Search</button> -->
+                                    <img src="../images/icon/search.png" alt="Lance Icon" style="height: 5%; width:5%; margin-right: 10px;">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group col-xl-4">
-                        <label for="selected_user">Select User</label>
-                        <select class="form-control modalyearstatus" name="selected_user" id="selected_user">
-                            <option value="" selected>Select</option>
-                            <?php foreach($users_list as $user) {?>
-                                <option value='<?php echo $user['id']?>'><?php echo $user['username']?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <!-- <button type="button" class="btn btn-primary" style="margin:20px;" data-toggle="modal" data-target="#myModal">
-                        Create New
-                    </button> -->
-                    
+                   
 
                     <div class="modal fade" id="myModal">
                         <div class="modal-dialog modal-dialog-centered">

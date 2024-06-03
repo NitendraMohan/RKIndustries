@@ -27,7 +27,7 @@ $permissions = $db->get_buttons_permissions($params);
                         </div>
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                                <button type="button" class="btn btn-sm btn-primary add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert']?>>
+                                <button type="button" class="btn btn-sm btn-info add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert']?>>
                                     Create New
                                 </button>
                             </div>
