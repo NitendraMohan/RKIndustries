@@ -5,12 +5,12 @@ jQuery(document).ready(function ($) {
  */
     function load_table() {
         $.ajax({
-            url: "../controller/partiesController.php",
+            url: "../controller/subcategoryController.php",
             type: "POST",
             data: { action: "load" },
             success: function (result) {
-                $("#partiesTableContents").html(result);
-                var total_records = $("#partiesTableContents tr").length;
+                $("#subcategoryTableContents").html(result);
+                var total_records = $("#subcategoryTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);
                 $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
             },
@@ -27,9 +27,10 @@ jQuery(document).ready(function ($) {
     $("#userForm").on("submit", function (e) {
         e.preventDefault();
         var action = "";
-        var username = $("#username").val();
-        var userstatus = $("#status").val();
-        if (username == "" || userstatus == "") {
+        var subcategoryname = $("#subcategoryname").val();
+        var category = $("#category").val();
+        // var status = $("#status").val();
+        if (subcategoryname == "" || category == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -39,18 +40,17 @@ jQuery(document).ready(function ($) {
             // var formData = $('#userForm').serialize() + '&action=insert';
             var formData = new FormData(this);
             var id = $('#modalid').val();
+            console.log('id='.id);
             if(id =='' || id == undefined){
                 action = 'insert';
                 formData.append("action","insert");
             }
             else{
                 action = 'update';
-                var currentImage =  $("#logo_image").attr('src') ?? '';
-                formData.append("image",currentImage);
                 formData.append("action","update");
             }
             $.ajax({
-                url: "../controller/partiesController.php",
+                url: "../controller/subcategoryController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
@@ -63,7 +63,8 @@ jQuery(document).ready(function ($) {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
                     } else if (response.success) {
                         $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
-                        load_table(); // Assuming this function loads the table data
+                        
+                        load_table(); // this function loads the table data
                     } else {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
                     }
@@ -84,7 +85,7 @@ jQuery(document).ready(function ($) {
         var uaction = "delete";
         var element = this;
         $.ajax({
-            url: "../controller/partiesController.php",
+            url: "../controller/subcategoryController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
@@ -104,20 +105,15 @@ jQuery(document).ready(function ($) {
         var uid = $(this).data("id");
         var uaction = "edit";
         $.ajax({
-            url: "../controller/partiesController.php",
+            url: "../controller/subcategoryController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
                 var arr = JSON.parse(result);
-                console.log(arr['party_name']);
+                console.log(arr['subcategory_name']);
                 $("#modalid").val(arr['id']);
-                $("#logo_image").attr('src',arr['image']);
-                $("#partyname").val(arr['party_name']);
-                $("#compname").val(arr['comp_name']);
-                $("#gstno").val(arr['gstno']);
-                $("#mobile").val(arr['mobile']);
-                $("#email").val(arr['email']);
-                $("#address").val(arr['address']);
+                $("#category").val(arr['category_id']);
+                $("#subcategoryname").val(arr['subcategory_name']);
                 $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
@@ -132,12 +128,12 @@ jQuery(document).ready(function ($) {
         var search_term = $(this).val();
         var eventaction = "search";
         $.ajax({
-            url: "../controller/partiesController.php",
+            url: "../controller/subcategoryController.php",
         type: "POST",
         data: { action: eventaction, search : search_term },
         success : function(data){
-            $("#partiesTableContents").html(data);
-            var total_records = $("#partiesTableContents tr").length;
+            $("#subcategoryTableContents").html(data);
+            var total_records = $("#subcategoryTableContents tr").length;
             // $('#total_records').html("<h6><b>Total Records: "+total_records+"</b></h6>");
             $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
 
