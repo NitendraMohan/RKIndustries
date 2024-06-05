@@ -47,7 +47,7 @@ $permissions = $db->get_buttons_permissions($params);
 
                                 <!-- Modal Header -->
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <button type="button" class="close modalClose" data-dismiss="modal">&times;</button>
                                     <h4 class="modal-title">Add Tax</h4>
                                 </div>
                                 <!-- Modal body -->
@@ -77,7 +77,7 @@ $permissions = $db->get_buttons_permissions($params);
                                     <!-- Modal footer -->
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save">Submit</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary modalClose" data-dismiss="modal">Close</button>
                                     </div>
                                 </form>
                                 <!-- <div class="alert alert-dark" id="hmsg" style="display:none;"></div> -->
