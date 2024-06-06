@@ -11,19 +11,22 @@ $username = checkUserSession();
 
 if ($_POST['action'] == "load") {
     try {
-        $sql = "SELECT * FROM tbl_users";
+        // $sql = "SELECT * FROM tbl_users";
+        $sql = "select u.*,d.dept_name from tbl_users as u LEFT JOIN tbl_deparment as d ON u.dept_id = d.id";
         $result = $db->readData($sql);
         if (isset($result)) {
-        $rowCounts = count($result);
-        $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
-        $permissions = $db->get_buttons_permissions($params);
-        $sr = 1;
-        $output = "";
-        foreach ($result as $row) {
-            $output .= "<tr>
+            $rowCounts = count($result);
+            $params = ['userid' => $_SESSION['userid'], 'moduleid' => $_SESSION['moduleid']];
+            $permissions = $db->get_buttons_permissions($params);
+            $sr = 1;
+            $output = "";
+            foreach ($result as $row) {
+                $output .= "<tr>
                         <td>{$sr}</td>
                         <td>{$row["username"]}</td>
                         <td>{$row["role"]}</td>
+                        <td>{$row["dept_name"]}</td>
+                        <td>{$row["designation"]}</td>
                         <td>{$row["gender"]}</td>
                         <td>{$row["dob"]}</td>
                         <td>{$row["mobile"]}</td>
@@ -37,9 +40,9 @@ if ($_POST['action'] == "load") {
                             </td>
 
                         </tr>";
-            $sr++;
+                $sr++;
+            }
         }
-    }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
@@ -77,14 +80,14 @@ if ($_POST['action'] == "insert") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "insert into tbl_users(compid,role,username,gender,dob,mobile,email,address,image,password,status) values((select id from company_master),:role,:username,:gender,:dob,:mobile,:email,:address,:image,:password,:status)";
-            $params = ['role' => $_POST['role'], 'username' => $username, 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile ?? '../images/favicon.png', 'password' => $_POST['password'], 'status' => $_POST['status']];
+            $sql = "insert into tbl_users(compid,role,dept_id,designation,username,gender,dob,mobile,email,address,image,password,status) values((select id from company_master),:role,:deptid,:designation,:username,:gender,:dob,:mobile,:email,:address,:image,:password,:status)";
+            $params = ['role' => $_POST['role'], 'deptid' => $_POST['departmentname'], 'designation' => $_POST['designation'], 'username' => $username, 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile ?? '../images/favicon.png', 'password' => $_POST['password'], 'status' => $_POST['status']];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_users", $newRecordId, $_SESSION["username"]);
-                echo json_encode(array('success' => true, 'msg'=>'Success! New record added successfully'));
+                echo json_encode(array('success' => true, 'msg' => 'Success! New record added successfully'));
             } else {
-                echo json_encode(array('success' => false, 'msg'=>'Error! New record not added'));
+                echo json_encode(array('success' => false, 'msg' => 'Error! New record not added'));
             }
         }
     } catch (PDOException $e) {
@@ -150,8 +153,7 @@ if ($_POST['action'] == "update") {
                     exit;
                 }
             }
-        }
-        else if(isset($_POST['image']) && $_POST['image']!=''){
+        } else if (isset($_POST['image']) && $_POST['image'] != '') {
             // echo $_POST['image'];
             $targetFile = $_POST['image'];
         }
@@ -160,9 +162,9 @@ if ($_POST['action'] == "update") {
         $sql = "select * from tbl_users where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        
-        $sql = "update tbl_users set role=:role,username=:username,gender=:gender,dob=:dob,mobile=:mobile,email=:email,address=:address,image=:image,status=:status,password=:password where id=:id";
-        $params = ['id'=>$id, 'role' => $_POST['role'], 'username' => $_POST['username'], 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'],'password' => $_POST['password'], 'image' => $targetFile, 'status' => $_POST['status']];
+
+        $sql = "update tbl_users set role=:role,dept_id=:deptid,designation=:designation,username=:username,gender=:gender,dob=:dob,mobile=:mobile,email=:email,address=:address,image=:image,status=:status,password=:password where id=:id";
+        $params = ['id' => $id, 'deptid' => $_POST['departmentname'], 'designation' => $_POST['designation'], 'role' => $_POST['role'], 'username' => $_POST['username'], 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'password' => $_POST['password'], 'image' => $targetFile, 'status' => $_POST['status']];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_users", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
@@ -180,21 +182,20 @@ if ($_POST['action'] == "search") {
         $output = "";
         $search_value = $_POST['search'];
         $statusSearch = '';
-        if($search_value == 'active'){
+        if ($search_value == 'active') {
             $statusSearch = 1;
-        }
-        elseif( $search_value == 'inactive' ){
+        } elseif ($search_value == 'inactive') {
             $statusSearch = 0;
         }
         // $conn = new PDO($this->dsn, $this->username, $this->password);
-        $sql = "SELECT * FROM tbl_users where username like '%{$search_value}%' or role like '%{$search_value}%' or gender like '%{$search_value}%' or mobile like '%{$search_value}%' or address like '%{$search_value}%' or email like '%{$search_value}%'";
-        if($statusSearch!=''){
-            $sql.="or status={$statusSearch}";
+        echo $sql = "select u.*,d.dept_name from tbl_users as u LEFT JOIN tbl_deparment as d ON u.dept_id = d.id where u.username like '%{$search_value}%' or d.dept_name like '%{$search_value}%' or u.designation like '%{$search_value}%' or u.role like '%{$search_value}%' or u.gender like '%{$search_value}%' or u.mobile like '%{$search_value}%' or u.address like '%{$search_value}%' or u. email like '%{$search_value}%'";
+        if ($statusSearch != '') {
+            $sql .= "or status={$statusSearch}";
         }
         $result = $db->readData($sql);
         // print_r($result);
         // $result = $conn->query($sql);
-        $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
+        $params = ['userid' => $_SESSION['userid'], 'moduleid' => $_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
         foreach ($result as $row) {
@@ -202,6 +203,8 @@ if ($_POST['action'] == "search") {
                         <td>{$sr}</td>
                         <td>{$row["username"]}</td>
                         <td>{$row["role"]}</td>
+                        <td>{$row["dept_name"]}</td>
+                        <td>{$row["designation"]}</td>
                         <td>{$row["gender"]}</td>
                         <td>{$row["dob"]}</td>
                         <td>{$row["mobile"]}</td>

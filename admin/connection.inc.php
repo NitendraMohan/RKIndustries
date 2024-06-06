@@ -16,7 +16,7 @@ class dbConnector{
     return $db;
   }
   /**
-   * function to select data from table
+   * function to select single recoed from table
    */
   public function readSingleRecord($qry, $params = []){
     $stmt = $this->conn->prepare($qry);

@@ -5,12 +5,12 @@ jQuery(document).ready(function ($) {
  */
     function load_table() {
         $.ajax({
-            url: "../controller/usersController.php",
+            url: "../controller/departmentController.php",
             type: "POST",
             data: { action: "load" },
             success: function (result) {
-                $("#usersTableContents").html(result);
-                var total_records = $("#usersTableContents tr").length;
+                $("#departmentTableContents").html(result);
+                var total_records = $("#departmentTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);
                 $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
             },
@@ -27,9 +27,10 @@ jQuery(document).ready(function ($) {
     $("#userForm").on("submit", function (e) {
         e.preventDefault();
         var action = "";
-        var username = $("#username").val();
-        var userstatus = $("#status").val();
-        if (username == "" || userstatus == "") {
+        var branchname = $("#branchname").val();
+        var departmentname = $("#departmentname").val();
+        // var status = $("#status").val();
+        if (branchname == "" || departmentname == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -46,12 +47,10 @@ jQuery(document).ready(function ($) {
             }
             else{
                 action = 'update';
-                var currentImage =  $("#logo_image").attr('src') ?? '';
-                formData.append("image",currentImage);
                 formData.append("action","update");
             }
             $.ajax({
-                url: "../controller/usersController.php",
+                url: "../controller/departmentController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
@@ -64,14 +63,15 @@ jQuery(document).ready(function ($) {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
                     } else if (response.success) {
                         $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
-                        load_table(); // Assuming this function loads the table data
+                        
+                        load_table(); // this function loads the table data
                     } else {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
                     }
                     setTimeout(function () {
                         $("#msg").fadeOut("slow");
-                        $("#userForm").trigger("reset");
                         $("#modelid").val('');
+                        $("#userForm").trigger("reset");
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
@@ -85,7 +85,7 @@ jQuery(document).ready(function ($) {
         var uaction = "delete";
         var element = this;
         $.ajax({
-            url: "../controller/usersController.php",
+            url: "../controller/departmentController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
@@ -105,24 +105,14 @@ jQuery(document).ready(function ($) {
         var uid = $(this).data("id");
         var uaction = "edit";
         $.ajax({
-            url: "../controller/usersController.php",
+            url: "../controller/departmentController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
                 var arr = JSON.parse(result);
-                console.log(arr['username']);
                 $("#modalid").val(arr['id']);
-                $("#logo_image").attr('src',arr['image']);
-                $("#username").val(arr['username']);
-                $("#role").val(arr['role']);
-                $("#departmentname").val(arr['dept_id']);
-                $("#designation").val(arr['designation']);
-                $("#gender").val(arr['gender']);
-                $("#dob").val(arr['dob']);
-                $("#mobile").val(arr['mobile']);
-                $("#email").val(arr['email']);
-                $("#address").val(arr['address']);
-                $("#password").val(arr['password']);
+                $("#branchname").val(arr['branchid']);
+                $("#departmentname").val(arr['dept_name']);
                 $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
@@ -137,12 +127,12 @@ jQuery(document).ready(function ($) {
         var search_term = $(this).val();
         var eventaction = "search";
         $.ajax({
-            url: "../controller/usersController.php",
+            url: "../controller/departmentController.php",
         type: "POST",
         data: { action: eventaction, search : search_term },
         success : function(data){
-            $("#usersTableContents").html(data);
-            var total_records = $("#usersTableContents tr").length;
+            $("#departmentTableContents").html(data);
+            var total_records = $("#departmentTableContents tr").length;
             // $('#total_records').html("<h6><b>Total Records: "+total_records+"</b></h6>");
             $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
 

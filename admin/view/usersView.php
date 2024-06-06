@@ -3,12 +3,18 @@ require_once '../connection.inc.php';
 // require_once '../utility/sessions.php';
 require("../template/top.inc.php");
 $db = new dbConnector();
-if(isset($_POST['moduleid'])){
+if (isset($_POST['moduleid'])) {
     $_SESSION['moduleid'] = $_POST['moduleid'];
     $_SESSION['current_module_name'] = $_POST['modulename'];
 }
-$params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
+$params = ['userid' => $_SESSION['userid'], 'moduleid' => $_SESSION['moduleid']];
 $permissions = $db->get_buttons_permissions($params);
+
+
+require_once '../connection.inc.php';
+$db = new dbConnector();
+$sql = "select id,dept_name from tbl_deparment";
+$departments = $db->readData($sql, []);
 ?>
 <div class="content pb-0">
     <div class="orders">
@@ -16,7 +22,7 @@ $permissions = $db->get_buttons_permissions($params);
             <div class="col-xl-12">
                 <div class="card">
 
-                <div class="row">
+                    <div class="row">
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
                                 <h3 class="box-title"><?php echo $_SESSION['current_module_name'] ?></h3>
@@ -25,7 +31,7 @@ $permissions = $db->get_buttons_permissions($params);
                         </div>
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                                <button type="button" class="btn btn-sm btn-info add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert']?>>
+                                <button type="button" class="btn btn-sm btn-info add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert'] ?>>
                                     Create New
                                 </button>
                             </div>
@@ -44,8 +50,8 @@ $permissions = $db->get_buttons_permissions($params);
 
 
 
-                    
-                    
+
+
 
                     <div class="modal fade" id="myModal">
                         <div class="modal-dialog modal-dialog-centered">
@@ -62,10 +68,10 @@ $permissions = $db->get_buttons_permissions($params);
 
                                         <input type="hidden" id="modalid" name="modalid" value="" />
                                         <div class="form-group">
-                                            <label for="image">Select User Image</label>    
+                                            <label for="image">Select User Image</label>
                                             <input class="form-control" type="file" name="image" id="image">
                                         </div>
-                                        <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%"/>    
+                                        <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%" />
                                         <div class="form-group">
                                             <label for="username">User Name</label>
                                             <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter User Name" id="username" name="username" required>
@@ -77,6 +83,19 @@ $permissions = $db->get_buttons_permissions($params);
                                                 <option value="admin">Admin</option>
                                                 <option value="user">User</option>
                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="departmentname">Department Name</label>
+                                            <select class="form-control modalyearstatus" name="departmentname" id="departmentname">
+                                                <option value="" selected>Select Department</option>
+                                                <?php foreach ($departments as $department) {
+                                                    echo "<option value='{$department['id']}'>{$department['dept_name']}</option>";
+                                                } ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="designation">Designation</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Designation" id="designation" name="designation" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="gender">Gender</label>
@@ -132,14 +151,16 @@ $permissions = $db->get_buttons_permissions($params);
                     <div class="modal fade" id="myModalUpdate">
 
                     </div>
-                    <div class="card-body--">    
+                    <div class="card-body--">
                         <div class="table-responsive table-container">
                             <table class="table">
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>USER NAME</th>
+                                        <th>USER_NAME</th>
                                         <th>ROLE</th>
+                                        <th>DEPARTMENT</th>
+                                        <th>DESIGNATION</th>
                                         <th>GENDER</th>
                                         <th NOWRAP>DATE OF BIRTH</th>
                                         <th>MOBILE</th>

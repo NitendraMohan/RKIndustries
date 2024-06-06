@@ -1,5 +1,6 @@
 <?php
 require("../template/top.inc.php");
+
 ?>
 <div class="content pb-0">
     <div class="orders">
@@ -40,6 +41,16 @@ require("../template/top.inc.php");
                                                         <option value="user">Employee</option>
                                                     </select>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label for="deptid">Department Name</label>
+                                                    <select class="form-control" name="deptname" id="depetname">
+                                                        <option value="">Select Department</option>
+                                                        <option value="admin">Admin</option>
+                                                        <option value="user">Employee</option>
+                                                    </select>
+                                                </div>
+
+
                                                 <div class="form-group">
                                                     <label for="userfirstname">First Name</label>
                                                     <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter First name" id="ufname" name="ufname" required>

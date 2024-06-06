@@ -440,3 +440,93 @@ ALTER TABLE `tbl_branch`
 ALTER TABLE `tbl_branch`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
+
+--
+-- Table structure for table `tbl_deparment`
+--
+
+CREATE TABLE `tbl_deparment` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `branchid` int(11) NOT NULL,
+  `dept_name` varchar(255) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_deparment`
+--
+
+INSERT INTO `tbl_deparment` (`id`, `compid`, `branchid`, `dept_name`, `status`, `createdat`, `updatedat`) VALUES
+(3, 1, 7, 'CUTTINGWQEQ', 1, '2024-06-04 10:40:12', '2024-06-04 10:40:12'),
+(7, 1, 7, 'NEW DEPT', 1, '2024-06-04 13:05:32', '2024-06-04 13:05:32'),
+(8, 1, 7, 'NEW DEPT2', 1, '2024-06-04 13:09:09', '2024-06-04 13:09:09'),
+(9, 1, 9, 'CUTTING', 1, '2024-06-04 13:17:31', '2024-06-04 13:17:31');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_deparment`
+--
+ALTER TABLE `tbl_deparment`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_deparment`
+--
+ALTER TABLE `tbl_deparment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+COMMIT;
+
+--
+-- Table structure for table `tbl_brand`
+--
+
+CREATE TABLE `tbl_brand` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `brand_name` varchar(255) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_brand`
+--
+
+INSERT INTO `tbl_brand` (`id`, `compid`, `brand_name`, `status`, `createdat`, `updatedat`) VALUES
+(2, 1, 'MRFSADASDSADSA', 0, '2024-06-05 08:17:32', '2024-06-05 08:17:32'),
+(3, 1, 'NIKR', 0, '2024-06-05 08:24:33', '2024-06-05 08:24:33'),
+(5, 1, 'STYLE', 1, '2024-06-05 08:41:53', '2024-06-05 08:41:53');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_brand`
+--
+ALTER TABLE `tbl_brand`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_brand`
+--
+ALTER TABLE `tbl_brand`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+COMMIT;
+
+
