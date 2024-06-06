@@ -12,6 +12,9 @@ $permissions = $db->get_buttons_permissions($params);
 
 $sql = "Select id,category_name from tbl_category where status=1";
 $categories = $db->readData($sql);
+
+$sql = "Select id,unit from tbl_unit where status=1";
+$units = $db->readData($sql);
 ?>
 <div class="content pb-0">
     <div class="orders">
@@ -51,13 +54,18 @@ $categories = $db->readData($sql);
                                 <!-- Modal Header -->
                                 <div class="modal-header">
                                     <button type="button" class="close modalClose" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Add Sub Category</h4>
+                                    <h4 class="modal-title">Add Product</h4>
                                 </div>
                                 <!-- Modal body -->
                                 <form action="" method="post" id="userForm">
                                     <div class="modal-body">
 
                                         <input type="hidden" id="modalid" name="modalid" value="" />
+                                        <div class="form-group">
+                                            <label for="image">Select Product Image</label>    
+                                            <input class="form-control" type="file" name="image" id="image">
+                                        </div>
+                                        <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%"/>    
                                         <div class="form-group">
                                             <label for="category">Select Category</label>
                                             <select class="form-control modalyearstatus" name="category" id="category">
@@ -68,8 +76,30 @@ $categories = $db->readData($sql);
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="subcategoryname">Sub Category Name</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Category Name" id="subcategoryname" name="subcategoryname" required>
+                                            <label for="subcategory">Select Sub Category</label>
+                                            <select class="form-control modalyearstatus" name="subcategory" id="subcategory">
+                                                <option value="" selected>Select..</option>
+                                                <?php foreach($subcategories as $subcategory){
+                                                    echo "<option value='{$subcategory['id']}'>{$subcategory['subcategory_name']}</option>";
+                                                 }?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productname">Product Name</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Product Name" id="productname" name="productname" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="unit">Select Unit</label>
+                                            <select class="form-control modalyearstatus" name="unit" id="unit">
+                                                <option value="" selected>Select..</option>
+                                                <?php foreach($units as $unit){
+                                                    echo "<option value='{$unit['id']}'>{$unit['unit']}</option>";
+                                                 }?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="price">Enter Price</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Price" id="price" name="price" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="Status">Status</label>
@@ -84,7 +114,7 @@ $categories = $db->readData($sql);
                                     <!-- Modal footer -->
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save">Submit</button>
-                                        <button type="button" class="btn btn-secondary modalClose" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary modalClose" id="btnClose" data-dismiss="modal">Close</button>
                                     </div>
                                 </form>
                                 <!-- <div class="alert alert-dark" id="hmsg" style="display:none;"></div> -->
@@ -101,13 +131,17 @@ $categories = $db->readData($sql);
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>Category NAME</th>
-                                        <th>Sub Category NAME</th>
+                                        <th>Category</th>
+                                        <th>Sub Category</th>
+                                        <th>Product Name</th>
+                                        <th>Unit</th>
+                                        <th>Price</th>
+                                        <th>Image</th>
                                         <th>STATUS</th>
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>
                                 </thead>
-                                <tbody class="tableContents" id="subcategoryTableContents">
+                                <tbody class="tableContents" id="productsTableContents">
 
                                 </tbody>
                             </table>
@@ -125,7 +159,7 @@ $categories = $db->readData($sql);
             </div>
          </footer> -->
 <?php require('../template/footer.inc.php') ?>
-<script src="../assets/js/subcategorymaster.js" type="text/javascript"></script>
+<script src="../assets/js/productmaster.js" type="text/javascript"></script>
 </body>
 
 </html>

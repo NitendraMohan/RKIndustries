@@ -441,6 +441,53 @@ ALTER TABLE `tbl_branch`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_products`
+--
+
+CREATE TABLE `tbl_products` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `subcategory_id` int(11) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `unit_id` int(11) NOT NULL,
+  `price` float NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_products`
+--
+
+INSERT INTO `tbl_products` (`id`, `compid`, `category_id`, `subcategory_id`, `product_name`, `unit_id`, `price`, `image`, `status`, `createdat`, `updatedat`) VALUES
+(1, 1, 2, 6, '3MM_FOAM', 8, 30, '../images/favicon.png', 1, '2024-06-04 07:05:52', '2024-06-04 07:05:52');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_products`
+--
+ALTER TABLE `tbl_products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_products`
+--
+ALTER TABLE `tbl_products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
 --
 -- Table structure for table `tbl_deparment`
 --
