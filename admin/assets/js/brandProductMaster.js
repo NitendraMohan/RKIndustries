@@ -28,9 +28,9 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         var action = "";
         var brandname = $("#brandName").val();
-        var departmentname = $("#departmentName").val();
+        var productName = $("#productName").val();
         // var status = $("#status").val();
-        if (brandname == "" || departmentname == "") {
+        if (brandname == "" || productName == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -63,15 +63,14 @@ jQuery(document).ready(function ($) {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
                     } else if (response.success) {
                         $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
-                        
-                        load_table(); // this function loads the table data
+                      load_table(); // this function loads the table data
                     } else {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
                     }
                     setTimeout(function () {
                         $("#msg").fadeOut("slow");
-                        $("#modelid").val('');
                         $("#userForm").trigger("reset");
+                        $("#modelid").val('');
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
@@ -112,7 +111,7 @@ jQuery(document).ready(function ($) {
                 var arr = JSON.parse(result);
                 $("#modalid").val(arr['id']);
                 $("#brandName").val(arr['brandid']);
-                $("#departmentName").val(arr['departmentid']);
+                $("#productName").val(arr['departmentid']);
                 $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }

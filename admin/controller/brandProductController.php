@@ -11,7 +11,7 @@ $username = checkUserSession();
 
 if ($_POST['action'] == "load") {
     try {
-        $sql = "select r.*, b.brand_name,d.dept_name from ((tbl_brandproduct as r LEFT JOIN tbl_brand as b ON r.brandid=b.id ) left JOIN tbl_deparment as d ON r.departmentid=d.id);";
+        $sql = "select (select brand_name from tbl_brand where id = t.brandid) as brand_name, (select product_name from tbl_products where id = t.productid) as product_name ,t.id,t.status from tbl_brandproduct as t;";
         $result = $db->readData($sql);
         if (isset($result)) {
         $rowCounts = count($result);
@@ -23,7 +23,7 @@ if ($_POST['action'] == "load") {
             $output .= "<tr>
                         <td>{$sr}</td>
                         <td>{$row["brand_name"]}</td>
-                        <td>{$row["dept_name"]}</td>
+                        <td>{$row["product_name"]}</td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
@@ -45,16 +45,16 @@ if ($_POST['action'] == "load") {
 if ($_POST['action'] == "insert") {
     try {
         $brandNameId = $_POST['brandName'];
-        $departmentNameId = $_POST['departmentName'];
+        $productNameId = $_POST['productName'];
         $ustatus = $_POST['status'];
-        $sql = "select id from tbl_brandproduct where brandid=:brandid and departmentid=:departmentid";
-        $params = ['brandid' => $brandNameId, 'departmentid' => $departmentNameId];
+        $sql = "select id from tbl_brandproduct where brandid=:brandid and productid=:productid";
+        $params = ['brandid' => $brandNameId, 'productid' => $productNameId];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "insert into  tbl_brandproduct(compid,brandid,departmentid,status) values((select id from company_master),:brandid,:departmentid,:status)";
-            $params = [ 'brandid' => $brandNameId,'departmentid' => $departmentNameId, 'status' => $_POST['status']];
+            $sql = "insert into  tbl_brandproduct(compid,brandid,productid,status) values((select id from company_master),:brandid,:productid,:status)";
+            $params = [ 'brandid' => $brandNameId,'productid' => $productNameId, 'status' => $_POST['status']];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_brandproduct", $newRecordId, $_SESSION["username"]);
@@ -115,8 +115,8 @@ if ($_POST['action'] == "update") {
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
         
-        $sql = "update tbl_brandproduct set brandid=:brandid, departmentid=:departmentid,status=:status where id=:id";
-        $params = ['id'=>$id, 'brandid' => $_POST['brandName'],'departmentid' =>$_POST['departmentName'], 'status' => $_POST['status']];
+        $sql = "update tbl_brandproduct set brandid=:brandid, productid=:productid,status=:status where id=:id";
+        $params = ['id'=>$id, 'brandid' => $_POST['brandName'],'productid' =>$_POST['productName'], 'status' => $_POST['status']];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_brandproduct", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
@@ -141,8 +141,29 @@ if ($_POST['action'] == "search") {
             $statusSearch = 0;
         }
         // $conn = new PDO($this->dsn, $this->subcategoryname, $this->password);
-        $sql = "select r.*, b.brand_name,d.dept_name from ((tbl_brandproduct as r LEFT JOIN tbl_brand as b ON r.brandid=b.id ) left JOIN tbl_deparment as d ON r.departmentid=d.id)
-        where b.brand_name like '%{$search_value}%' or d.dept_name like '%{$search_value}%' ";
+        $sql = "WITH CTE AS (
+            SELECT 
+                t.id,
+                t.status,
+                b.brand_name,
+                p.product_name
+            FROM 
+                tbl_brandproduct AS t
+            INNER JOIN 
+                tbl_brand AS b ON t.brandid = b.id
+            INNER JOIN 
+                tbl_products AS p ON t.productid = p.id
+        )
+        SELECT 
+            brand_name,
+            product_name,
+            id,
+            status
+        FROM 
+            CTE
+        WHERE 
+            brand_name LIKE '%n%' OR product_name LIKE '%n%';
+         ";
         if($statusSearch!=''){
             $sql.="or status={$statusSearch}";
         }
@@ -155,9 +176,8 @@ if ($_POST['action'] == "search") {
         foreach ($result as $row) {
             $output .= "<tr>
             <td>{$sr}</td>
-            <td>{$sr}</td>
             <td>{$row["brand_name"]}</td>
-            <td>{$row["dept_name"]}</td>
+            <td>{$row["product_name"]}</td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>

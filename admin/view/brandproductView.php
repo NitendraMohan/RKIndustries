@@ -12,8 +12,8 @@ $permissions = $db->get_buttons_permissions($params);
 
 $sql = "Select id,brand_name from tbl_brand where status=1";
 $brands = $db->readData($sql);
-$sql = "Select id,dept_name from tbl_deparment where status=1";
-$departments = $db->readData($sql);
+$sql = "Select id,product_name from tbl_products where status=1";
+$products = $db->readData($sql);
 ?>
 <div class="content pb-0">
     <div class="orders">
@@ -73,10 +73,10 @@ $departments = $db->readData($sql);
 
                                         <div class="form-group">
                                             <label for="category">Select Deparments</label>
-                                            <select class="form-control modalyearstatus" name="departmentName" id="departmentName">
+                                            <select class="form-control modalyearstatus" name="productName" id="productName">
                                                 <option value="" selected>Select..</option>
-                                                <?php foreach($departments as $department){
-                                                    echo "<option value='{$department['id']}'>{$department['dept_name']}</option>";
+                                                <?php foreach($products as $product){
+                                                    echo "<option value='{$product['id']}'>{$product['product_name']}</option>";
                                                  }?>
                                             </select>
                                         </div>

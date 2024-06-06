@@ -577,3 +577,45 @@ ALTER TABLE `tbl_brand`
 COMMIT;
 
 
+--
+-- Table structure for table `tbl_brandproduct`
+--
+
+CREATE TABLE `tbl_brandproduct` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `brandid` int(11) NOT NULL,
+  `productid` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_brandproduct`
+--
+
+INSERT INTO `tbl_brandproduct` (`id`, `compid`, `brandid`, `productid`, `status`, `createdat`, `updatedat`) VALUES
+(10, 1, 5, 1, 1, '2024-06-05 11:53:05', '2024-06-05 11:53:05'),
+(14, 1, 8, 1, 1, '2024-06-06 06:40:47', '2024-06-06 06:40:47');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_brandproduct`
+--
+ALTER TABLE `tbl_brandproduct`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_brandproduct`
+--
+ALTER TABLE `tbl_brandproduct`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+COMMIT;
