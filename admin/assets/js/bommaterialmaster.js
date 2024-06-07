@@ -49,7 +49,7 @@ jQuery(document).ready(function ($) {
     $("#subcategory").on("change", function(e){
         e.preventDefault();
         var subcategory = $(this).val();
-        $("#product").html("<option value='' selected>Select..</option>");
+        $("#product").html("<option value='' selected>Product..</option>");
         console.log(category);
         // if(category!==''){
             $.ajax({
@@ -61,6 +61,38 @@ jQuery(document).ready(function ($) {
                 }
             });
         // }
+    })
+
+
+    $("#product").on("change", function(e){
+        e.preventDefault();
+        var productid = $(this).val();
+        // $("#munit").html("<option value='' selected>Unit..</option>");
+        console.log(category);
+        // if(category!==''){
+            $.ajax({
+                url: "../controller/bommaterialsController.php",
+                type: "POST",
+                data: { action: 'load_rateunit', product_id: productid },
+                success: function (result) {
+                    var data = JSON.parse(result);
+                    $("#munit").val(data['unit_id']);
+                    $("#mrate").val(data['price']);
+                }
+            });
+        // }
+    })
+
+
+    $("#mqty").on('input', function(){
+        var price = $("#mrate").val();
+        var qty = $("#mqty").val();
+        if(isNaN(price) || isNaN(qty)){return;}
+        var cost = price * qty;
+        if (!isNaN(cost)) {
+            $("#cost").val(cost.toFixed(2));
+        }
+        // $("#cost").val(cost);
     })
     
     /**

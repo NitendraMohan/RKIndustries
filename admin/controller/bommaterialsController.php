@@ -36,6 +36,7 @@ if ($_POST['action'] == "load") {
         $materialdata = $db->readData($sql);
         $result['bom_data'] = $bomdata;
         $output = "";
+        if(isset($materialdata)){
         foreach ($materialdata as $row) {
             $output .= "<tr>
                         <td>{$sr}</td>
@@ -53,6 +54,7 @@ if ($_POST['action'] == "load") {
                         </tr>";
             $sr++;
         }
+    }
         $result['material_data'] = $output;
     }
     } catch (PDOException $e) {
@@ -86,6 +88,17 @@ if($_POST['action'] == "load_products"){
     echo $list;
 }
 
+
+if($_POST['action'] == "load_rateunit"){
+    $sql = "Select id,unit_id,price from tbl_products where id={$_POST['product_id']} and status=1";
+    $units = $db->readSingleRecord($sql);
+    // $list = "<option value='' selected>Unit..</option>";
+    echo json_encode($units);
+}
+
+
+
+
 if($_POST['action'] == "load_brands"){
     $sql = "Select b.id,b.brand_name from tbl_brand b inner join tbl_brandproduct bp on b.id=bp.brandid where bp.productid={$_POST['product_id']} and bp.status=1";
     $products = $db->readData($sql);
@@ -103,42 +116,48 @@ if ($_POST['action'] == "insert") {
     try {
         $targetFile = null;
         $saveRecord = true;
-        if (isset($_FILES["image"]) && $_FILES["image"]["name"] != "") {
-            $targetDir = "../images/";
-            $targetFile = $targetDir . $_FILES["image"]["name"];
-            $uploadOk = 1;
-            $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-            // Validation here
-            if ($_FILES["image"]["name"] !== "") {
-                if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
-                    $saveRecord = true;
-                } else {
-                    $saveRecord = false;
-                    echo json_encode(array('success' => false, 'msg' => 'Error File Path! Record not saved'));
-                    exit;
-                }
-            }
-        }
-        $bomname = strtoupper($_POST['bomname']);
+        // if (isset($_FILES["image"]) && $_FILES["image"]["name"] != "") {
+        //     $targetDir = "../images/";
+        //     $targetFile = $targetDir . $_FILES["image"]["name"];
+        //     $uploadOk = 1;
+        //     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+        //     // Validation here
+        //     if ($_FILES["image"]["name"] !== "") {
+        //         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+        //             $saveRecord = true;
+        //         } else {
+        //             $saveRecord = false;
+        //             echo json_encode(array('success' => false, 'msg' => 'Error File Path! Record not saved'));
+        //             exit;
+        //         }
+        //     }
+        // }
+
+        // print_r($_POST);
+        // die();
+        $bomid = $_SESSION['bomid'];
+        // $bomname = strtoupper($_POST['bomname']);
         $categoryid = $_POST['category'];
         $subcategoryid = $_POST['subcategory'];
         $productid = $_POST['product'];
-        $brandid = $_POST['brand'];
-        $unitid = $_POST['unit'];
-        $qty = $_POST['qty'];
-        $detail = $_POST['detail'];
+        // $brandid = $_POST['brand'];
+        $mrate = $_POST['mrate'];
+        $munitid = $_POST['munit'];
+        $mqty = $_POST['mqty'];
+        $cost = $_POST['cost'];
         $ustatus = $_POST['status'];
-        $sql = "select id from tbl_BOM_product where bom_name=:bomname";
-        $params = ['bomname' => $bomname];
+        // $sql = "select id from tbl_BOM_product where bom_name=:bomname";
+        $sql = "select id from tbl_bom_material where bom_id=:bomid and product_id=:productid";
+        $params = ['bomid' => $bomid, 'productid' => $productid];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "insert into tbl_BOM_product(compid,bom_name,category_id,subcategory_id,product_id,brand_id,unit_id,qty,image,detail,status) values((select id from company_master),:bomname,:category,:subcategory,:product,:brand,:unit,:qty,:image,:detail,:status)";
-            $params = [ 'bomname' => $bomname,'category' => $categoryid,'subcategory' => $subcategoryid,'product' => $productid,'brand' => $brandid, 'unit'=>$unitid, 'qty'=>$qty, 'status' => $_POST['status'], 'detail' => $detail, 'image' => $targetFile ?? '../images/favicon.png'];
+            $sql = "insert into tbl_bom_material(compid,bom_id,category_id,subcategory_id,product_id,unit_id,rate,qty,cost,status) values((select id from company_master),:bom_id,:category_id,:subcategory_id,:product_id,:unit_id,:rate,:qty,:cost,:status)";
+            $params = [ 'bom_id' => $bomid,'category_id' => $categoryid,'subcategory_id' => $subcategoryid,'product_id' => $productid,'unit_id'=>$munitid, 'rate' => $mrate, 'qty'=>$mqty, 'cost' => $cost, 'status' => $_POST['status']];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
-                log_user_action($_SESSION['userid'], 'create', "tbl_BOM_product", $newRecordId, $_SESSION["username"]);
+                log_user_action($_SESSION['userid'], 'create', "tbl_bom_material", $newRecordId, $_SESSION["username"]);
                 echo json_encode(array('success' => true, 'msg'=>'Success! New record added successfully'));
             } else {
                 echo json_encode(array('success' => false, 'msg'=>'Error! New record not added'));

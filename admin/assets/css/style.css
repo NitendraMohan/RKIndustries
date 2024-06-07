@@ -3488,3 +3488,20 @@ footer.site-footer .footer-inner a {
     } */
    
 }
+/* CSS for responsive layout */
+/* CSS for inline form elements */
+/* CSS for inline form elements */
+.form-inline .form-group {
+    display: inline-block; /* Display form elements inline */
+    margin-right: 10px; /* Add margin between form elements */
+}
+
+/* For small screens, make form elements stack */
+@media (max-width: 768px) {
+    .form-inline .form-group {
+        display: block; /* Stack form elements on smaller screens */
+        margin-right: 0;
+        margin-bottom: 10px; /* Add margin bottom for stacking */
+    }
+}
+

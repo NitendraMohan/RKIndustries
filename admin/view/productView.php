@@ -86,7 +86,7 @@ $units = $db->readData($sql);
                                         </div>
                                         <div class="form-group">
                                             <label for="productname">Product Name</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Product Name" id="productname" name="productname" required>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Product Name" id="productname" name="productname"  required>
                                         </div>
                                         <div class="form-group">
                                             <label for="unit">Select Unit</label>
@@ -100,6 +100,7 @@ $units = $db->readData($sql);
                                         <div class="form-group">
                                             <label for="price">Enter Price</label>
                                             <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Price" id="price" name="price" required>
+                                        
                                         </div>
                                         <div class="form-group">
                                             <label for="Status">Status</label>

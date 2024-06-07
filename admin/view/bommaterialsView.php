@@ -3,16 +3,15 @@ require_once '../connection.inc.php';
 // require_once '../utility/sessions.php';
 require("../template/top.inc.php");
 $db = new dbConnector();
-print_r($_POST);
-if(isset($_POST['bomid'])){
+if (isset($_POST['bomid'])) {
     $_SESSION['bomid'] = $_POST['bomid'];
-    echo 'bom id '. $_SESSION['bomid'];
+    echo 'bom id ' . $_SESSION['bomid'];
 }
-if(isset($_POST['moduleid'])){
+if (isset($_POST['moduleid'])) {
     $_SESSION['moduleid'] = $_POST['moduleid'];
     $_SESSION['current_module_name'] = $_POST['modulename'];
 }
-$params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
+$params = ['userid' => $_SESSION['userid'], 'moduleid' => $_SESSION['moduleid']];
 $permissions = $db->get_buttons_permissions($params);
 
 $sql = "Select id,category_name from tbl_category where status=1";
@@ -27,19 +26,17 @@ $units = $db->readData($sql);
             <div class="col-xl-12">
                 <div class="card">
 
-                <div class="row">
+                    <div class="row">
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                                <input type="hidden" id="bomid" name="bomid" value='<?=$_SESSION['bomid']?>'>
+                                <input type="hidden" id="bomid" name="bomid" value='<?= $_SESSION['bomid'] ?>'>
                                 <h3 class="box-title">BOM Material</h3>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                                <button type="button" class="btn btn-sm btn-info add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert']?>>
-                                    Create New
-                                </button>
+                                BOM Name: <h3 class="box-title" id="bomname" name="bomname"></h3>
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
@@ -56,114 +53,82 @@ $units = $db->readData($sql);
                     <div class="row">
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                            BOM Name: <h3 class="box-title" id="bomname" name="bomname"></h3>
+                                Brand Name: <h3 class="box-title" id="brandname" name="brandname"></h3>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                                Brand Name: <h3 class="box-title" id="brandname" name="brandname"></h3>
+                                Total Cost: <h3 class="box-title" id="totalcost" name="totalcost">0.00</h3>
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                            <img src="" alt="product image" id="product_image" name="product_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%"/>    
+                                <img src="" alt="product image" id="product_image" name="product_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="40%" width="40%" />
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="myModal">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
 
-                                <!-- Modal Header -->
-                                <div class="modal-header">
-                                    <button type="button" class="close modalClose" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Add BOM Material</h4>
-                                </div>
-                                <!-- Modal body -->
-                                <form action="" method="post" id="userForm">
-                                    <div class="modal-body">
+                    <!-- <div class="container-fluid border border-primary bg-light p-4"> -->
+                    <form action="" class="form-inline" method="post" id="userForm">
+                        <!-- <div class="modal-body"> -->
 
-                                        <input type="hidden" id="modalid" name="modalid" value="" />
-                                        <div class="form-group">
-                                            <label for="category">Select Category</label>
-                                            <select class="form-control modalyearstatus" name="category" id="category">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($categories as $category){
-                                                    echo "<option value='{$category['id']}'>{$category['category_name']}</option>";
-                                                 }?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="subcategory">Select Sub Category</label>
-                                            <select class="form-control modalyearstatus" name="subcategory" id="subcategory">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($subcategories as $subcategory){
-                                                    echo "<option value='{$subcategory['id']}'>{$subcategory['subcategory_name']}</option>";
-                                                 }?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="product">Select Product</label>
-                                            <select class="form-control modalyearstatus" name="product" id="product">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($products as $product){
-                                                    echo "<option value='{$product['id']}'>{$product['product_name']}</option>";
-                                                 }?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="unit">Select Unit</label>
-                                            <select class="form-control modalyearstatus" name="unit" id="unit">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($units as $unit){
-                                                    echo "<option value='{$unit['id']}'>{$unit['unit']}</option>";
-                                                 }?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="price">Basic Rate</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Basic Rate" id="price" name="price" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="qty">Consumption Qty</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Qty" id="qty" name="qty" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="cost">Total Cost</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="0" id="cost" name="cost" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="Status">Status</label>
-                                            <select class="form-control modalyearstatus" name="status" id="status">
-                                                <option value="" selected>Select</option>
-                                                <option value="1">Active</option>
-                                                <option value="0">Inactive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save">Submit</button>
-                                        <button type="button" class="btn btn-secondary modalClose" id="btnClose" data-dismiss="modal">Close</button>
-                                    </div>
-                                </form>
-                                <!-- <div class="alert alert-dark" id="hmsg" style="display:none;"></div> -->
-                                <div id="msg"></div>
+                        <input type="hidden" id="modalid" name="modalid" value="" />
+                        <div class="form-row  border border-primary bg-light p-2">
+                            <h5 style="color:blue;">Add New Material</h5>
+                            <div class="form-group col-md">
+                                <select class="form-control modalyearstatus" name="category" id="category" style="width: 150px;">
+                                    <option value="" selected>Category..</option>
+                                    <?php foreach ($categories as $category) {
+                                        echo "<option value='{$category['id']}'>{$category['category_name']}</option>";
+                                    } ?>
+                                </select>
+                                <select class="form-control modalyearstatus" name="subcategory" id="subcategory" style="width: 150px;">
+                                    <option value="" selected>Subcategory..</option>
+                                    <?php foreach ($subcategories as $subcategory) {
+                                        echo "<option value='{$subcategory['id']}'>{$subcategory['subcategory_name']}</option>";
+                                    } ?>
+                                </select>
+                                <select class="form-control modalyearstatus" name="product" id="product" style="width: 300px;">
+                                    <option value="" selected>Product..</option>
+                                    <?php foreach ($products as $product) {
+                                        echo "<option value='{$product['id']}'>{$product['product_name']}</option>";
+                                    } ?>
+                                </select>
+                                <select class="form-control modalyearstatus" name="munit" id="munit" style="width: 100px;">
+                                    <option value="" selected>Unit..</option>
+                                    <?php foreach ($units as $unit) {
+                                        echo "<option value='{$unit['id']}'>{$unit['unit']}</option>";
+                                    } ?>
+                                </select>
+                                <input class="form-control decimalplaces" type="text" placeholder="Rate" id="mrate" name="mrate" required style="width: 100px;">
+                                <input class="form-control decimalplaces" type="text" placeholder="Qty" id="mqty" name="mqty" required style="width: 100px;">
+                                <input class="form-control decimalplaces" type="text" readonly placeholder="0" id="cost" name="cost" required style="width: 100px;">
+                                <select class="form-control modalyearstatus" name="status" id="status">
+                                    <option value="" selected>Select</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save"><i class="fa fa-plus"></i></button>
+                                <!-- <button type="button" class="btn btn-secondary modalClose" id="btnClose" data-dismiss="modal">Close</button> -->
                             </div>
                         </div>
-                    </div>
-                    <div class="modal fade" id="myModalUpdate">
 
-                    </div>
-                    <div class="card-body--">    
+                    </form>
+                    <div id="msg"></div>
+                    <!-- </div> -->
+
+
+
+
+                    <div class="card-body--">
                         <div class="table-responsive table-container">
                             <table class="table">
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
                                         <th>Product Name</th>
+                                        <th>Rate</th>
                                         <th>Unit</th>
                                         <th>Qty</th>
                                         <th>Cost</th>
@@ -171,10 +136,16 @@ $units = $db->readData($sql);
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>
                                 </thead>
+
+
+
+
+
                                 <tbody class="tableContents" id="bommaterialsTableContents">
 
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
