@@ -21,7 +21,7 @@ require('../admin/template/top.inc.php');
 
                                         <!-- Modal Header -->
                                         <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <button type="button" class="close modalClose" data-dismiss="modal">&times;</button>
                                             <h4 class="modal-title">Add Product Category</h4>
                                         </div>
                                         <!-- Modal body -->
