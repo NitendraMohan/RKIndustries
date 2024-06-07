@@ -234,7 +234,7 @@ COMMIT;
 CREATE TABLE `tbl_taxes` (
   `id` int(11) NOT NULL,
   `tax_name` varchar(255) NOT NULL,
-  `tax_percentage` float NOT NULL,
+  `tax_percentage` decimal(10,2) NOT NULL,
   `status` tinyint(4) NOT NULL,
   `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
   `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
@@ -454,7 +454,7 @@ CREATE TABLE `tbl_products` (
   `subcategory_id` int(11) NOT NULL,
   `product_name` varchar(255) NOT NULL,
   `unit_id` int(11) NOT NULL,
-  `price` float NOT NULL,
+  `price` decimal(10,2) NOT NULL,
   `image` varchar(255) NOT NULL,
   `status` tinyint(4) NOT NULL,
   `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -679,11 +679,13 @@ CREATE TABLE `tbl_BOM_material` (
   `id` int(11) NOT NULL,
   `compid` int(11) NOT NULL,
   `bom_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `subcategory_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `unit_id` int(11) NOT NULL,
-  `rate` float NOT NULL,
+  `rate` decimal(10,2) NOT NULL,
   `qty` int(11) NOT NULL,
-  `cost` float NOT NULL,
+  `cost` decimal(10,2) NOT NULL,
   `status` tinyint(4) NOT NULL,
   `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
   `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
