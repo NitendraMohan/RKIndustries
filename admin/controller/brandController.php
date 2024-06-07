@@ -63,9 +63,9 @@ if ($_POST['action'] == "insert") {
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_brand", $newRecordId, $_SESSION["username"]);
-                echo json_encode(array('success' => true));
+                echo json_encode(array('success' => true, 'msg'=>'Success! New record added successfully'));
             } else {
-                echo json_encode(array('success' => false));
+                echo json_encode(array('success' => false, 'msg'=>'Error! New record not added'));
             }
         }
     } catch (PDOException $e) {

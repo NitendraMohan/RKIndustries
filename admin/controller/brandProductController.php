@@ -141,29 +141,11 @@ if ($_POST['action'] == "search") {
             $statusSearch = 0;
         }
         // $conn = new PDO($this->dsn, $this->subcategoryname, $this->password);
-        $sql = "WITH CTE AS (
-            SELECT 
-                t.id,
-                t.status,
-                b.brand_name,
-                p.product_name
-            FROM 
-                tbl_brandproduct AS t
-            INNER JOIN 
-                tbl_brand AS b ON t.brandid = b.id
-            INNER JOIN 
-                tbl_products AS p ON t.productid = p.id
-        )
-        SELECT 
-            brand_name,
-            product_name,
-            id,
-            status
-        FROM 
-            CTE
-        WHERE 
-            brand_name LIKE '%n%' OR product_name LIKE '%n%';
-         ";
+        $sql = "select r.*, b.brand_name,p.product_name 
+        from ((tbl_brandproduct as r 
+        LEFT JOIN tbl_brand as b ON r.brandid=b.id ) 
+        LEFT JOIN tbl_products as p ON r.productid=p.id)
+        where b.brand_name like '%{$search_value}%' or p.product_name like '%{$search_value}%' ";
         if($statusSearch!=''){
             $sql.="or status={$statusSearch}";
         }
@@ -183,7 +165,6 @@ if ($_POST['action'] == "search") {
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
                             </td>
-
             </tr>";
             $sr++;
         }
