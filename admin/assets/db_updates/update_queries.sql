@@ -580,7 +580,6 @@ COMMIT;
 --
 -- Table structure for table `tbl_brandproduct`
 --
-
 CREATE TABLE `tbl_brandproduct` (
   `id` int(11) NOT NULL,
   `compid` int(11) NOT NULL,
@@ -617,5 +616,96 @@ ALTER TABLE `tbl_brandproduct`
 -- AUTO_INCREMENT for table `tbl_brandproduct`
 --
 ALTER TABLE `tbl_brandproduct`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_BOM_product`
+--
+
+CREATE TABLE `tbl_BOM_product` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `bom_name` varchar(255) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `subcategory_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `brand_id` int(11) NOT NULL,
+  `unit_id` int(11) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `detail` varchar(500) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `status` int(11) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_BOM_product`
+--
+
+INSERT INTO `tbl_BOM_product` (`id`, `compid`, `bom_name`, `category_id`, `subcategory_id`, `product_id`, `brand_id`, `unit_id`, `qty`, `detail`, `image`, `status`, `createdat`, `updatedat`) VALUES
+(1, 1, 'ABC BOM', 2, 5, 1, 5, 8, 1, 'BACK AND RED', '../images/student-icon-image-for-students.png', 1, '2024-06-06 12:32:51', '2024-06-06 12:32:51'),
+(2, 1, 'ABC', 2, 6, 3, 5, 17, 1, 'yellow and green', '../images/favicon.png', 1, '2024-06-06 16:23:02', '2024-06-06 16:23:02');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_BOM_product`
+--
+ALTER TABLE `tbl_BOM_product`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_BOM_product`
+--
+ALTER TABLE `tbl_BOM_product`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_BOM_material`
+--
+
+CREATE TABLE `tbl_BOM_material` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `bom_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `unit_id` int(11) NOT NULL,
+  `rate` float NOT NULL,
+  `qty` int(11) NOT NULL,
+  `cost` float NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_BOM_material`
+--
+ALTER TABLE `tbl_BOM_material`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_BOM_material`
+--
+ALTER TABLE `tbl_BOM_material`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
