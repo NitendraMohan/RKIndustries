@@ -122,8 +122,8 @@ jQuery(document).ready(function ($) {
             }
             else{
                 action = 'update';
-                var currentImage =  $("#logo_image").attr('src') ?? '';
-                formData.append("image",currentImage);
+                // var currentImage =  $("#logo_image").attr('src') ?? '';
+                // formData.append("image",currentImage);
                 formData.append("action","update");
             }
             $.ajax({
@@ -188,8 +188,7 @@ jQuery(document).ready(function ($) {
             success: function (result) {
                 var arr = JSON.parse(result);
                 var cat_id = arr['category_id']; 
-                console.log('category id:'+ cat_id);
-                console.log(arr['product_name']);
+                $("#category").val(arr['category_id']);
                 $.ajax({
                     url: "../controller/bommaterialsController.php",
                     type: "POST",
@@ -203,19 +202,21 @@ jQuery(document).ready(function ($) {
                             data: { action: 'load_products', subcategory_id: arr['subcategory_id'] },
                             success: function (product_list) {
                                 $("#product").html(product_list);
+                                $("#product").val(arr['product_id']);
                             }
                         });
                     }
                 });
                 $("#modalid").val(arr['id']);
-                $("#logo_image").attr('src',arr['image']);
-                $("#bomname").val(arr['bom_name']);
-                $("#category").val(arr['category_id']);
-                $("#unit").val(arr['unit_id']);
-                $("#qty").val(arr['qty']);
-                $("#detail").val(arr['detail']);
+                // $("#logo_image").attr('src',arr['image']);
+                // $("#bomname").val(arr['bom_name']);
+                // $("#category").val(arr['category_id']);
+                $("#munit").val(arr['unit_id']);
+                $("#mrate").val(arr['rate']);
+                $("#mqty").val(arr['qty']);
+                $("#cost").val(arr['cost']);
                 $("#status").val(arr['status']);
-                $("#myModal").modal('show');
+                // $("#myModal").modal('show');
             }
         });
     });

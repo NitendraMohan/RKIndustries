@@ -116,37 +116,15 @@ if ($_POST['action'] == "insert") {
     try {
         $targetFile = null;
         $saveRecord = true;
-        // if (isset($_FILES["image"]) && $_FILES["image"]["name"] != "") {
-        //     $targetDir = "../images/";
-        //     $targetFile = $targetDir . $_FILES["image"]["name"];
-        //     $uploadOk = 1;
-        //     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-        //     // Validation here
-        //     if ($_FILES["image"]["name"] !== "") {
-        //         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
-        //             $saveRecord = true;
-        //         } else {
-        //             $saveRecord = false;
-        //             echo json_encode(array('success' => false, 'msg' => 'Error File Path! Record not saved'));
-        //             exit;
-        //         }
-        //     }
-        // }
-
-        // print_r($_POST);
-        // die();
         $bomid = $_SESSION['bomid'];
-        // $bomname = strtoupper($_POST['bomname']);
         $categoryid = $_POST['category'];
         $subcategoryid = $_POST['subcategory'];
         $productid = $_POST['product'];
-        // $brandid = $_POST['brand'];
         $mrate = $_POST['mrate'];
         $munitid = $_POST['munit'];
         $mqty = $_POST['mqty'];
         $cost = $_POST['cost'];
         $ustatus = $_POST['status'];
-        // $sql = "select id from tbl_BOM_product where bom_name=:bomname";
         $sql = "select id from tbl_bom_material where bom_id=:bomid and product_id=:productid";
         $params = ['bomid' => $bomid, 'productid' => $productid];
         $result = $db->readSingleRecord($sql, $params);
@@ -174,14 +152,14 @@ if ($_POST['action'] == "delete") {
     try {
         $id = $_POST['id'];
         //get old record for user log
-        $sql = "select * from tbl_BOM_product where id=:id";
+        $sql = "select * from tbl_bom_material where id=:id";
         $params = ["id" => $_POST["id"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        $sql = "delete from tbl_BOM_product where id =:id";
+        $sql = "delete from tbl_bom_material where id =:id";
         $params = ['id' => $id];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_BOM_product", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
+            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_bom_material", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
             echo 1;
         } else {
             echo 0;
@@ -197,7 +175,7 @@ if ($_POST['action'] == "edit") {
     try {
         $output1 = '';
         $id = $_POST['id'];
-        $sql = "select * from tbl_BOM_product where id  = {$id}";
+        $sql = "select * from tbl_bom_material where id  = {$id}";
         $row = $db->readSingleRecord($sql);
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
@@ -211,37 +189,37 @@ if ($_POST['action'] == "update") {
     try {
         $targetFile = "";
         $saveRecord = true;
-        if (isset($_FILES["image"]) && $_FILES["image"]["name"] != "") {
-            $targetDir = "../images/";
-            $targetFile = $targetDir . $_FILES["image"]["name"];
-            $uploadOk = 1;
-            $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-            // Validation here
-            if ($_FILES["image"]["name"] !== "") {
-                if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
-                    $saveRecord = true;
-                } else {
-                    $saveRecord = false;
-                    echo json_encode(array('success' => false, 'msg' => 'Error File Path! Record not saved'));
-                    exit;
-                }
-            }
-        }
-        else if(isset($_POST['image']) && $_POST['image']!=''){
-            // echo $_POST['image'];
-            $targetFile = $_POST['image'];
-        }
+        // if (isset($_FILES["image"]) && $_FILES["image"]["name"] != "") {
+        //     $targetDir = "../images/";
+        //     $targetFile = $targetDir . $_FILES["image"]["name"];
+        //     $uploadOk = 1;
+        //     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+        //     // Validation here
+        //     if ($_FILES["image"]["name"] !== "") {
+        //         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+        //             $saveRecord = true;
+        //         } else {
+        //             $saveRecord = false;
+        //             echo json_encode(array('success' => false, 'msg' => 'Error File Path! Record not saved'));
+        //             exit;
+        //         }
+        //     }
+        // }
+        // else if(isset($_POST['image']) && $_POST['image']!=''){
+        //     // echo $_POST['image'];
+        //     $targetFile = $_POST['image'];
+        // }
         $id = $_POST['modalid'];
         //get old record for user log
-        $sql = "select * from tbl_BOM_product where id=:id";
+        $sql = "select * from tbl_bom_material where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
         
-        $sql = "update tbl_BOM_product set bom_name=:bomname, category_id=:category,subcategory_id=:subcategory, product_id=:product, brand_id=:brand,unit_id=:unit,qty=:qty,image=:image,status=:status where id=:id";
-        $params = ['id'=>$id, 'bomname' => $_POST['bomname'], 'category' => $_POST['category'],'subcategory' => $_POST['subcategory'],'product' => $_POST['product'], 'brand' => $_POST['brand'], 'unit' => $_POST['unit'], 'qty' => $_POST['qty'], 'status' => $_POST['status'], 'image' => $targetFile ?? '../images/favicon.png'];
+        $sql = "update tbl_bom_material set category_id=:category, subcategory_id=:subcategory, product_id=:product, unit_id=:unit, rate=:rate, qty=:qty, cost=:cost where id=:id";
+        $params = ['id'=>$id, 'category' => $_POST['category'], 'subcategory' => $_POST['subcategory'], 'product' => $_POST['product'], 'unit' => $_POST['munit'], 'rate' => $_POST['mrate'], 'qty' => $_POST['mqty'], 'cost' =>$_POST['cost']];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_BOM_product", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
+            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_bom_material", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
             echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
         } else {
             echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));

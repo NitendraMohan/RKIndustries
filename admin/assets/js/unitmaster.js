@@ -13,7 +13,7 @@ jQuery(document).ready(function ($) {
                 $("#unitTableContents").html(result);
                 var total_records = $("#unitTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);
-                $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
+                $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");
             },
             error: function (xhr, status, error) {
                 console.error("AJAX request failed:", status, error);
@@ -23,9 +23,43 @@ jQuery(document).ready(function ($) {
     load_table();
 
     /**
+     * code for active and deactive
+     */
+    // $(document).on('click', '.btn_toggle', function(e) {
+    //     e.preventDefault();
+    //     var id = $(this).data('id');
+    //     var status = $(this).data('status');
+        
+    //     $.ajax({
+    //         url: '../controller/unitController.php',
+    //         type: 'POST',
+    //         data: { id: id, action: status == "active" ? "Deactive" : "Active" },
+    //         success: function(response) {
+    //             if (response == 1) {
+    //                 toggleButtonStatus(id); // Toggle button status
+    //             } else {
+    //                 console.log("Error occurred while toggling button status.");
+    //             }
+    //         }
+    //     });
+    // });
+    
+    function toggleButtonStatus(id) {
+        var $btn = $(".btn_toggle[data-id='" + id + "']");
+        var status = $btn.data('status');
+        // Toggle button text and class
+        if (status == "active") {
+            $btn.text("Deactive").removeClass('btn-info').addClass('btn-warning').data('status', 'deactive');
+        } else {
+            $btn.text("Active").removeClass('btn-warning').addClass('btn-info').data('status', 'active');
+        }
+    }
+    
+   
+    /**
      * Code for submit model form data
      */
-    $(document).on("click", ".modalsubmit", function (e) {
+    $("#unitForm").on("submit", function (e) {
         e.preventDefault();
         var unitname = $("#unitname").val();
         var unitstatus = $("#status").val();
@@ -36,25 +70,38 @@ jQuery(document).ready(function ($) {
                 $("#msg").fadeOut("slow");
             }, 2000);
         } else {
-            var formData = $('#unitForm').serialize() + '&action=insert';
-            console.log(formData);
+            // var formData = new FormData(this);
+            var formData = new FormData(this);
+            var id = $("#modalid").val();
+            if (id == '' || id == undefined) {
+                var action = "inserrt";
+                formData.append("action", "insert");
+            } else {
+                var action = 'update';
+                formData.append("action", "update");
+            }
+            // console.log(formData);
             $.ajax({
                 url: "../controller/unitController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
+                contentType: false,
+                cache: false,
+                processData: false,
                 success: function (response) {
                     if (response.duplicate) {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
                     } else if (response.success) {
-                        $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html("Save successful: Your record has been successfully saved.");
+                        $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
                         load_table(); // Assuming this function loads the table data
                     } else {
-                        $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Save Failed: Record Not Saved.");
+                        $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
                     }
                     setTimeout(function () {
                         $("#msg").fadeOut("slow");
                         $("#unitForm").trigger("reset");
+                        $("#modalid").val('');
                     }, 2000);
                 }
             });
@@ -91,8 +138,13 @@ jQuery(document).ready(function ($) {
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
-                $("#myModalUpdate").html(result);
-                $("#myModalUpdate").modal('show');
+                // $("#myModalUpdate").html(result);
+                $arr = JSON.parse(result);
+                console.log($arr);
+                $("#modalid").val($arr['id']);
+                $("#unitname").val($arr['unit']);
+                $("#status").val($arr['status']);
+                $("#myModal").modal('show');
             }
         });
     });
