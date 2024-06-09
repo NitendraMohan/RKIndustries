@@ -27,7 +27,7 @@ if ($_POST['action'] == "load") {
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
         $sql = "select bm.id, p.product_name, u.unit, bm.rate, bm.qty,bm.cost,bm.status 
-        from tbl_BOM_material bm 
+        from tbl_bom_material bm 
         inner join tbl_products p 
         on bm.product_id=p.id
         inner join tbl_unit u
