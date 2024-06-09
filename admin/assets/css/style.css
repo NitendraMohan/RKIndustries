@@ -3505,3 +3505,39 @@ footer.site-footer .footer-inner a {
     }
 }
 
+#category_list {
+    display: none;
+    width: 93%;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable vertical scrolling if the list exceeds the maximum height */
+}
+#unit_list {
+    display: none;
+    width: 93%;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable vertical scrolling if the list exceeds the maximum height */
+}
+#branch_list {
+    display: none;
+    width: 93%;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable vertical scrolling if the list exceeds the maximum height */
+}
+#user_list {
+    display: none;
+    width: 93%;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable vertical scrolling if the list exceeds the maximum height */
+}
