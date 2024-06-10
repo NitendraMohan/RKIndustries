@@ -177,7 +177,7 @@ if ($_POST['action'] == "search") {
                         <td>{$sr}</td>
                         <td>{$row["id"]}</td>
                         <td>{$row["unit"]}</td>
-                        <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
+                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_unit' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_unit' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                         <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
                         <button class='btn btn-warning unitDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>

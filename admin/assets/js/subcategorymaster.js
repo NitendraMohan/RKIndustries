@@ -20,6 +20,42 @@ jQuery(document).ready(function ($) {
         });
     }
     load_table();
+   
+// var typingTimer;
+// var doneTypingInterval = 500; // Adjust the interval as needed
+// $("#category").keyup(function(){
+//     clearTimeout(typingTimer);
+//     var category = $(this).val();
+//     if(category != ''){
+//         typingTimer = setTimeout(function() {
+//             $.ajax({
+//                 url : "../controller/subcategoryController.php",
+//                 type: "POST",
+//                 data: {category:category, action: "categorylist"},
+//                 success: function(data){
+//                     console.log(data);
+//                     $("#category_list").html(data).fadeIn("fast");
+//                 },
+//                 error: function(xhr, status, error) {
+//                     console.error("AJAX request failed:", status, error);
+//                     // Handle errors here
+//                 }
+//             });
+//         }, doneTypingInterval);
+//     } else {
+//         $("#category_list").fadeOut();
+//     }
+// });
+
+// Handle click on autocomplete list item
+// $(document).on('click', '#category_list li', function() {
+//     var selectedCategory = $(this).text();
+//     $("#category").val(selectedCategory);
+//     $("#category_list").fadeOut();
+// });
+
+
+
 
     /**
      * Code for submit model form data
@@ -40,10 +76,11 @@ jQuery(document).ready(function ($) {
             // var formData = $('#userForm').serialize() + '&action=insert';
             var formData = new FormData(this);
             var id = $('#modalid').val();
-            console.log('id='.id);
+            // console.log('id='.id);
             if(id =='' || id == undefined){
                 action = 'insert';
                 formData.append("action","insert");
+                formData.append("category",category);
             }
             else{
                 action = 'update';
@@ -63,7 +100,6 @@ jQuery(document).ready(function ($) {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
                     } else if (response.success) {
                         $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
-                        
                         load_table(); // this function loads the table data
                     } else {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);

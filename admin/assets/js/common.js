@@ -56,6 +56,66 @@ jQuery(document).ready(function ($) {
         }
     }
     
+    // $("#category").keyup( function() {
+        // Call the setupAutocomplete function with appropriate parameters
+        setupAutocomplete("category", "category_list", "list", "tbl_category" ,"category_name");
+        // setupAutocomplete("unit", "unit_list", "list", "tbl_unit", "unit");
+        // setupAutocomplete("branch", "branch_list", "list", "tbl_branch", "branch_name");
+        // setupAutocomplete("user", "user_list", "list", " tbl_users", "username");
+    // });
+
+    function setupAutocomplete(inputId, listContainerId, actionName, tablename, tablefield) {
+        var typingTimer;
+        var doneTypingInterval = 300;
+        $("#" + inputId).keyup(function(){
+            clearTimeout(typingTimer);
+            var category = $(this).val();
+            if(category != ''){
+                typingTimer = setTimeout(function() {
+                    $.ajax({
+                        url : "../controller/commanController.php",
+                        type: "POST",
+                        data: {category:category, tablename:tablename,  action: actionName, tablefield:tablefield},
+                        success: function(data){
+                            $("#" + listContainerId).html(data).fadeIn("fast");
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX request failed:", status, error);
+                            // Handle errors here
+                        }
+                    });
+                }, doneTypingInterval);
+            } else {
+                $("#" + listContainerId).fadeOut();
+            }
+        });
+    
+        // Handle click on autocomplete list item
+        $(document).on('click', '#' + listContainerId + ' li', function() {
+            var selectedCategory = $(this).text();
+            $("#" + inputId).val(selectedCategory);
+            $("#" + listContainerId).fadeOut();
+        });
+
+        $(document).on('mouseenter', '#' + listContainerId + ' li', function() {
+            $(this).css('cursor', 'pointer');
+        });
+        
+        $(document).on('mouseleave', '#' + listContainerId + ' li', function() {
+            $(this).css('cursor', 'auto');
+        });
+    }
+    
+   
+    
+    // Call the setupAutocomplete function with different IDs for different text boxes
+    // $(document).ready(function() {
+    //     // Example usage:
+    //     setupAutocomplete("category1", "category_list1"); // Replace "category1" and "category_list1" with the IDs of your input field and list container respectively
+    //     setupAutocomplete("category2", "category_list2"); // Similarly, for the second text box
+    //     // Add more setupAutocomplete calls for additional text boxes as needed
+    // });
+    
 
 
 });

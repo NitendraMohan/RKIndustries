@@ -60,13 +60,12 @@ $categories = $db->readData($sql);
                                         <input type="hidden" id="modalid" name="modalid" value="" />
                                         <div class="form-group">
                                             <label for="category">Select Category</label>
-                                            <select class="form-control modalyearstatus" name="category" id="category">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($categories as $category){
-                                                    echo "<option value='{$category['id']}'>{$category['category_name']}</option>";
-                                                 }?>
-                                            </select>
+                                            <input class="form-control" type="text"  placeholder="Select Category" id="category" autocomplete="off">
+                                            <div class="form-group" id="category_list"></div>
                                         </div>
+                                        
+                                       
+                                       
                                         <div class="form-group">
                                             <label for="subcategoryname">Sub Category Name</label>
                                             <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Category Name" id="subcategoryname" name="subcategoryname" required>

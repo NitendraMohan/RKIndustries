@@ -44,16 +44,16 @@ jQuery(document).ready(function ($) {
     //     });
     // });
     
-    function toggleButtonStatus(id) {
-        var $btn = $(".btn_toggle[data-id='" + id + "']");
-        var status = $btn.data('status');
-        // Toggle button text and class
-        if (status == "active") {
-            $btn.text("Deactive").removeClass('btn-info').addClass('btn-warning').data('status', 'deactive');
-        } else {
-            $btn.text("Active").removeClass('btn-warning').addClass('btn-info').data('status', 'active');
-        }
-    }
+    // function toggleButtonStatus(id) {
+    //     var $btn = $(".btn_toggle[data-id='" + id + "']");
+    //     var status = $btn.data('status');
+    //     // Toggle button text and class
+    //     if (status == "active") {
+    //         $btn.text("Deactive").removeClass('btn-info').addClass('btn-warning').data('status', 'deactive');
+    //     } else {
+    //         $btn.text("Active").removeClass('btn-warning').addClass('btn-info').data('status', 'active');
+    //     }
+    // }
     
    
     /**
