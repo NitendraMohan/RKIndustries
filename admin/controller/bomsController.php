@@ -11,14 +11,16 @@ $username = checkUserSession();
 
 if ($_POST['action'] == "load") {
     try {
-        $sql = "select b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty,b.detail,b.image,b.status 
+        $sql = "select b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty,sum(bm.cost) as mcost,b.detail,b.image,b.status 
         from tbl_BOM_product b 
         inner join tbl_products p 
         on b.product_id=p.id
         inner join tbl_unit u
         on b.unit_id=u.id
         inner join tbl_brand br
-        on b.brand_id=br.id";
+        on b.brand_id=br.id
+        inner join tbl_bom_material bm
+        on b.id=bm.bom_id";
         $result = $db->readData($sql);
         if (isset($result)) {
         $rowCounts = count($result);
@@ -29,18 +31,20 @@ if ($_POST['action'] == "load") {
         foreach ($result as $row) {
             $output .= "<tr>
                         <td>{$sr}</td>
-                        <td>{$row["bom_name"]}</td>
                         <td>{$row["product_name"]}</td>
                         <td>{$row["brand_name"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
-                        <td>{$row["detail"]}</td>
+                        <td>{$row["mcost"]}</td>
+                        <td>0</td>
+                        <td>0</td>
                         <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
                         <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
-                            <button class='btn btn-info btn-sm material' title='show materials' data-id={$row["id"]}><i class='fa fa-level-down' aria-hidden='true'></i></button>
+                            <button class='btn btn-info btn-sm material' title='Materials' data-id={$row["id"]}><i class='fa fa-chevron-right aria-hidden='true'>‌</i></button>
+                            <button class='btn btn-primary btn-sm material' title='Other Charges' data-id={$row["id"]}><i class='fa fa-inr' aria-hidden='true'></i></button>
                             </td>
 
                         </tr>";
