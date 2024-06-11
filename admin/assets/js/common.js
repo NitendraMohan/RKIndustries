@@ -98,7 +98,7 @@ jQuery(document).ready(function ($) {
             $("#" + inputId).val(selectedCategory);
             var categoryId = $(this).data("category-id");
                 // Set the data-id attribute of the input field
-             $("#" + inputId).attr("data-id", categoryId);
+             $("#" + inputId).data("id", categoryId);
 
             $("#" + listContainerId).fadeOut();
         });
