@@ -59,14 +59,15 @@ jQuery(document).ready(function ($) {
     // $("#category").keyup( function() {
         // Call the setupAutocomplete function with appropriate parameters
         setupAutocomplete("category", "category_list", "list", "tbl_category" ,"category_name");
-        // setupAutocomplete("unit", "unit_list", "list", "tbl_unit", "unit");
+        setupAutocomplete("brandName", "brand_list", "list", "tbl_brand", "brand_name");
+        setupAutocomplete("productName", "product_list", "list", "tbl_products", "product_name");
         // setupAutocomplete("branch", "branch_list", "list", "tbl_branch", "branch_name");
         // setupAutocomplete("user", "user_list", "list", " tbl_users", "username");
     // });
 
     function setupAutocomplete(inputId, listContainerId, actionName, tablename, tablefield) {
         var typingTimer;
-        var doneTypingInterval = 300;
+        var doneTypingInterval = 200;
         $("#" + inputId).keyup(function(){
             clearTimeout(typingTimer);
             var category = $(this).val();
@@ -77,6 +78,7 @@ jQuery(document).ready(function ($) {
                         type: "POST",
                         data: {category:category, tablename:tablename,  action: actionName, tablefield:tablefield},
                         success: function(data){
+                            console.log(data);
                             $("#" + listContainerId).html(data).fadeIn("fast");
                         },
                         error: function(xhr, status, error) {
@@ -94,6 +96,10 @@ jQuery(document).ready(function ($) {
         $(document).on('click', '#' + listContainerId + ' li', function() {
             var selectedCategory = $(this).text();
             $("#" + inputId).val(selectedCategory);
+            var categoryId = $(this).data("category-id");
+                // Set the data-id attribute of the input field
+             $("#" + inputId).attr("data-id", categoryId);
+
             $("#" + listContainerId).fadeOut();
         });
 

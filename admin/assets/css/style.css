@@ -3541,3 +3541,21 @@ footer.site-footer .footer-inner a {
     max-height: 200px; /* Set a maximum height for the list */
     overflow-y: auto; /* Enable vertical scrolling if the list exceeds the maximum height */
 }
+#brand_list {
+    display: none;
+    width: 93%;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable vertical scrolling if the list exceeds the maximum height */
+}
+#product_list {
+    display: none;
+    width: 93%;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable vertical scrolling if the list exceeds the maximum height */
+}

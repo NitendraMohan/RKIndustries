@@ -27,10 +27,12 @@ jQuery(document).ready(function ($) {
     $("#userForm").on("submit", function (e) {
         e.preventDefault();
         var action = "";
-        var brandname = $("#brandName").val();
+        var brandName = $("#brandName").val();
         var productName = $("#productName").val();
+        var brandid = $("#brandName").data("id");
+        var productid = $("#productName").data("id");
         // var status = $("#status").val();
-        if (brandname == "" || productName == "") {
+        if (brandName == "" || productName == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -40,14 +42,21 @@ jQuery(document).ready(function ($) {
             // var formData = $('#userForm').serialize() + '&action=insert';
             var formData = new FormData(this);
             var id = $('#modalid').val();
+            
             console.log('id='.id);
             if(id =='' || id == undefined){
                 action = 'insert';
                 formData.append("action","insert");
+                formData.append("brandName",brandName);
+                formData.append("productName",productName);
+                formData.append("brandId",brandid);
+                formData.append("productId",productid);
             }
             else{
                 action = 'update';
                 formData.append("action","update");
+                formData.append("brandId",brandid);
+                formData.append("productId",productid);
             }
             $.ajax({
                 url: "../controller/brandProductController.php",
@@ -63,6 +72,7 @@ jQuery(document).ready(function ($) {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html("Duplicate Record Detected: Please Make Changes.");
                     } else if (response.success) {
                         $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
+                        $("#modalid").val('');
                       load_table(); // this function loads the table data
                     } else {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
@@ -70,7 +80,9 @@ jQuery(document).ready(function ($) {
                     setTimeout(function () {
                         $("#msg").fadeOut("slow");
                         $("#userForm").trigger("reset");
-                        $("#modelid").val('');
+                        $("#modalid").val('');
+                        $("#barndName").removeAttr("data-id");
+                        $("#productName").removeAttr("data-id");
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
@@ -110,8 +122,11 @@ jQuery(document).ready(function ($) {
             success: function (result) {
                 var arr = JSON.parse(result);
                 $("#modalid").val(arr['id']);
-                $("#brandName").val(arr['brandid']);
-                $("#productName").val(arr['departmentid']);
+                $("#brandName").val(arr['brand_name']);
+                // $("#brandName").attr("data-id",arr['brandId'])
+                $("#brandName").data("id",arr['brandId']);
+                $("#productName").val(arr['product_name']);
+                $("#productName").data("id",arr['productId']);
                 $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }

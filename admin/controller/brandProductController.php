@@ -44,17 +44,19 @@ if ($_POST['action'] == "load") {
 //Insert data into database
 if ($_POST['action'] == "insert") {
     try {
-        $brandNameId = $_POST['brandName'];
-        $productNameId = $_POST['productName'];
+        $brandName = $_POST['brandName'];
+        $productName = $_POST['productName'];
+        $brandId = $_POST['brandId'];
+        $productId = $_POST['productId'];
         $ustatus = $_POST['status'];
         $sql = "select id from tbl_brandproduct where brandid=:brandid and productid=:productid";
-        $params = ['brandid' => $brandNameId, 'productid' => $productNameId];
+        $params = ['brandid' => $brandId, 'productid' => $productId];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into  tbl_brandproduct(compid,brandid,productid,status) values((select id from company_master),:brandid,:productid,:status)";
-            $params = [ 'brandid' => $brandNameId,'productid' => $productNameId, 'status' => $_POST['status']];
+            $params = [ 'brandid' =>  $brandId,'productid' => $productId, 'status' => $_POST['status']];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_brandproduct", $newRecordId, $_SESSION["username"]);
@@ -97,8 +99,10 @@ if ($_POST['action'] == "edit") {
     try {
         $output1 = '';
         $id = $_POST['id'];
-        $sql = "select * from tbl_brandproduct where id  = {$id}";
+        // $sql = "select * from tbl_brandproduct where id  = {$id}";
+        $sql = "select bp.*,b.id as brandId,b.brand_name,p.id as productId,p.product_name from tbl_brandproduct as bp INNER JOIN tbl_brand as b ON b.id = bp.brandid inner join tbl_products as p on p.id = bp.productid where bp.id ={$id}";
         $row = $db->readSingleRecord($sql);
+
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
@@ -109,21 +113,34 @@ if ($_POST['action'] == "edit") {
 //Update record in database
 if ($_POST['action'] == "update") {
     try {
+    //  print_r($_POST);
+    //  die();
         $id = $_POST['modalid'];
+        $brandId = $_POST['brandId'];
+        $productId = $_POST['productId'];
+        
+
         //get old record for user log
         $sql = "select * from tbl_brandproduct where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        
+
+        $sql = "select id from tbl_brandproduct where brandid=:brandid and productid=:productid and id!=$id";
+        $params = ['brandid' => $brandId, 'productid' => $productId];
+        $result = $db->readSingleRecord($sql, $params);
+        if (isset($result)) {
+            echo json_encode(array('duplicate' => true));
+        } else {
         $sql = "update tbl_brandproduct set brandid=:brandid, productid=:productid,status=:status where id=:id";
-        $params = ['id'=>$id, 'brandid' => $_POST['brandName'],'productid' =>$_POST['productName'], 'status' => $_POST['status']];
-        $recordId = $db->ManageData($sql, $params);
+        $params = ['id'=>$id, 'brandid' => $brandId,'productid' => $productId, 'status' => $_POST['status']];
+       $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_brandproduct", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
             echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
         } else {
             echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
         }
+    }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }

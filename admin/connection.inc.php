@@ -88,6 +88,22 @@ class dbConnector{
     return 0;
   }
   /**
+   * function to get single field
+   */
+  
+   public function getSingleField($qry, $params = []){
+    $stmt = $this->conn->prepare($qry);
+    $stmt->execute($params);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if(isset($result)){
+      $idValue = array_values($result)[0];
+      return $idValue;
+    }
+    return 0;
+  }
+
+
+  /**
    * function to log user actions
    */
   public function log_user_action($user_id, $action, $table_name, $record_id, $details = null, $previous_data = null) {

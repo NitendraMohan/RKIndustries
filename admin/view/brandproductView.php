@@ -61,24 +61,27 @@ $products = $db->readData($sql);
 
                                         <input type="hidden" id="modalid" name="modalid" value="" />
                                        
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label for="category">Select Brands</label>
                                             <select class="form-control modalyearstatus" name="brandName" id="brandName">
                                                 <option value="" selected>Select..</option>
-                                                <?php foreach($brands as $brand){
-                                                    echo "<option value='{$brand['id']}'>{$brand['brand_name']}</option>";
-                                                 }?>
+                                                
                                             </select>
+                                        </div> -->
+                                        <div class="form-group">
+                                            <label for="brands">Select Brands</label>
+                                            <input type="text" class="form-control" name="brandName" id="brandName" autocomplete="off">
+                                            <div class="form-group" id="brand_list"></div>
                                         </div>
 
+                                        
+                                        
+                                       
+
                                         <div class="form-group">
-                                            <label for="category">Select Deparments</label>
-                                            <select class="form-control modalyearstatus" name="productName" id="productName">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($products as $product){
-                                                    echo "<option value='{$product['id']}'>{$product['product_name']}</option>";
-                                                 }?>
-                                            </select>
+                                            <label for="product">Select Product</label>
+                                            <input type="text" class="form-control" name="productName" id="productName" autocomplete="off">
+                                            <div class="form-group" id="product_list"></div>
                                         </div>
                                       
                                         <div class="form-group">
@@ -112,7 +115,7 @@ $products = $db->readData($sql);
                                     <tr>
                                         <th class="serial">#</th>
                                         <th>BRAND NAME</th>
-                                        <th>DEPARTMENT NAME</th>
+                                        <th>PRODUCT NAME</th>
                                         <th>STATUS</th>
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>

@@ -40,7 +40,7 @@ if(isset($_POST['action']) && isset($_POST['id'])){
             $category = $_POST['category'];
             $table = $_POST['tablename'];
             $field = $_POST['tablefield'];
-            $sql = "SELECT DISTINCT {$field} FROM {$table} WHERE {$field} LIKE '%$category%'";
+            $sql = "SELECT  DISTINCT id, {$field} FROM {$table} WHERE {$field} LIKE '%$category%'";
             $categorys = $db->readData($sql);
             $output ="";
             // Check if categories are retrieved
@@ -48,7 +48,9 @@ if(isset($_POST['action']) && isset($_POST['id'])){
                 $output = "<ul style='list-style-type: none;'>";
                 foreach($categorys as $category) {
                             //    "<li>{$result[$table.'_name']}</li>";
-                    $output .= "<li>{$category[$field]}</li>";
+                    // $output .= "<input type='hidden' name='category_id[]' value='{$category['id']}'>
+                    //             <li>{$category[$field]}</li>";
+                    $output .= "<li data-category-id='{$category['id']}'>{$category[$field]}</li>";
                 }
                 $output .= "</ul>";
             } else {
@@ -59,9 +61,10 @@ if(isset($_POST['action']) && isset($_POST['id'])){
         } else {
             echo "Error: Category parameter not set";
         }
-    } else {
-        echo "Error: Invalid action";
-    }
+    } 
+    // else if($_POST['action'] != "list") {
+    //     echo "Error: Invalid action";
+    // }
 // }
 
 
