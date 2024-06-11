@@ -153,12 +153,15 @@ $units = $db->readData($sql);
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>BOM Name</th>
+                                        <!-- <th>BOM Name</th> -->
                                         <th>Product Name</th>
                                         <th>Brand Name</th>
                                         <th>Unit</th>
                                         <th>Qty</th>
-                                        <th>Detail</th>
+                                        <th>Marerials Cost</th>
+                                        <th>Other Cost</th>
+                                        <th>Total Cost</th>
+                                        <!-- <th>Detail</th> -->
                                         <th>Image</th>
                                         <th>STATUS</th>
                                         <th NOWRAP>USER ACTION</th>
