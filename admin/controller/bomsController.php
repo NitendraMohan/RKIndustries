@@ -12,7 +12,7 @@ $username = checkUserSession();
 if ($_POST['action'] == "load") {
     try {
         $sql = "select b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty,sum(bm.cost) as mcost,b.detail,b.image,b.status 
-        from tbl_BOM_product b 
+        from tbl_bom_product b 
         inner join tbl_products p 
         on b.product_id=p.id
         inner join tbl_unit u
@@ -127,17 +127,17 @@ if ($_POST['action'] == "insert") {
         $qty = $_POST['qty'];
         $detail = $_POST['detail'];
         $ustatus = $_POST['status'];
-        $sql = "select id from tbl_BOM_product where bom_name=:bomname";
+        $sql = "select id from tbl_bom_product where bom_name=:bomname";
         $params = ['bomname' => $bomname];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "insert into tbl_BOM_product(compid,bom_name,category_id,subcategory_id,product_id,brand_id,unit_id,qty,image,detail,status) values((select id from company_master),:bomname,:category,:subcategory,:product,:brand,:unit,:qty,:image,:detail,:status)";
+            $sql = "insert into tbl_bom_product(compid,bom_name,category_id,subcategory_id,product_id,brand_id,unit_id,qty,image,detail,status) values((select id from company_master),:bomname,:category,:subcategory,:product,:brand,:unit,:qty,:image,:detail,:status)";
             $params = [ 'bomname' => $bomname,'category' => $categoryid,'subcategory' => $subcategoryid,'product' => $productid,'brand' => $brandid, 'unit'=>$unitid, 'qty'=>$qty, 'status' => $_POST['status'], 'detail' => $detail, 'image' => $targetFile ?? '../images/favicon.png'];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
-                log_user_action($_SESSION['userid'], 'create', "tbl_BOM_product", $newRecordId, $_SESSION["username"]);
+                log_user_action($_SESSION['userid'], 'create', "tbl_bom_product", $newRecordId, $_SESSION["username"]);
                 echo json_encode(array('success' => true, 'msg'=>'Success! New record added successfully'));
             } else {
                 echo json_encode(array('success' => false, 'msg'=>'Error! New record not added'));
@@ -154,14 +154,14 @@ if ($_POST['action'] == "delete") {
     try {
         $id = $_POST['id'];
         //get old record for user log
-        $sql = "select * from tbl_BOM_product where id=:id";
+        $sql = "select * from tbl_bom_product where id=:id";
         $params = ["id" => $_POST["id"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        $sql = "delete from tbl_BOM_product where id =:id";
+        $sql = "delete from tbl_bom_product where id =:id";
         $params = ['id' => $id];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_BOM_product", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
+            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_bom_product", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
             echo 1;
         } else {
             echo 0;
@@ -177,7 +177,7 @@ if ($_POST['action'] == "edit") {
     try {
         $output1 = '';
         $id = $_POST['id'];
-        $sql = "select * from tbl_BOM_product where id  = {$id}";
+        $sql = "select * from tbl_bom_product where id  = {$id}";
         $row = $db->readSingleRecord($sql);
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
@@ -213,15 +213,15 @@ if ($_POST['action'] == "update") {
         }
         $id = $_POST['modalid'];
         //get old record for user log
-        $sql = "select * from tbl_BOM_product where id=:id";
+        $sql = "select * from tbl_bom_product where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
         
-        $sql = "update tbl_BOM_product set bom_name=:bomname, category_id=:category,subcategory_id=:subcategory, product_id=:product, brand_id=:brand,unit_id=:unit,qty=:qty,image=:image,status=:status where id=:id";
+        $sql = "update tbl_bom_product set bom_name=:bomname, category_id=:category,subcategory_id=:subcategory, product_id=:product, brand_id=:brand,unit_id=:unit,qty=:qty,image=:image,status=:status where id=:id";
         $params = ['id'=>$id, 'bomname' => $_POST['bomname'], 'category' => $_POST['category'],'subcategory' => $_POST['subcategory'],'product' => $_POST['product'], 'brand' => $_POST['brand'], 'unit' => $_POST['unit'], 'qty' => $_POST['qty'], 'status' => $_POST['status'], 'image' => $targetFile ?? '../images/favicon.png'];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_BOM_product", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
+            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_bom_product", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
             echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
         } else {
             echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
@@ -244,7 +244,7 @@ if ($_POST['action'] == "search") {
         }
         // $conn = new PDO($this->dsn, $this->productname, $this->password);
         $sql = "select b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty,b.detail,b.image,b.status 
-        from tbl_BOM_product b 
+        from tbl_bom_product b 
         inner join tbl_products p 
         on b.product_id=p.id
         inner join tbl_unit u

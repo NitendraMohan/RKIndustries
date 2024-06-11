@@ -1,7 +1,7 @@
 <?php
 class dbConnector{
   private  $servername = 'localhost';
-  private  $dbname = 'rkindustries';
+  private  $dbname = 'rkindustry';
   private  $username = 'root';
   private  $password = '';
   private $conn;

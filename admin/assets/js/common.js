@@ -98,7 +98,12 @@ jQuery(document).ready(function ($) {
             $("#" + inputId).val(selectedCategory);
             var categoryId = $(this).data("category-id");
                 // Set the data-id attribute of the input field
-             $("#" + inputId).data("id", categoryId);
+               if( $("#" + inputId).attr("data-id")==undefined){
+                    $("#" + inputId).data("id", categoryId);       
+                }
+                else{
+                    $("#" + inputId).attr("data-id", categoryId);
+                }   
 
             $("#" + listContainerId).fadeOut();
         });

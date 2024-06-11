@@ -13,7 +13,7 @@ if ($_POST['action'] == "load") {
 
     try {
         $sql = "select b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty,b.detail,b.image,b.status 
-        from tbl_BOM_product b 
+        from tbl_bom_product b 
         inner join tbl_products p 
         on b.product_id=p.id
         inner join tbl_unit u
@@ -242,7 +242,7 @@ if ($_POST['action'] == "search") {
         }
         // $conn = new PDO($this->dsn, $this->productname, $this->password);
         $sql = "select b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty,b.detail,b.image,b.status 
-        from tbl_BOM_product b 
+        from tbl_bom_product b 
         inner join tbl_products p 
         on b.product_id=p.id
         inner join tbl_unit u

@@ -621,10 +621,10 @@ ALTER TABLE `tbl_brandproduct`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_BOM_product`
+-- Table structure for table `tbl_bom_product`
 --
 
-CREATE TABLE `tbl_BOM_product` (
+CREATE TABLE `tbl_bom_product` (
   `id` int(11) NOT NULL,
   `compid` int(11) NOT NULL,
   `bom_name` varchar(255) NOT NULL,
@@ -642,10 +642,10 @@ CREATE TABLE `tbl_BOM_product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_BOM_product`
+-- Dumping data for table `tbl_bom_product`
 --
 
-INSERT INTO `tbl_BOM_product` (`id`, `compid`, `bom_name`, `category_id`, `subcategory_id`, `product_id`, `brand_id`, `unit_id`, `qty`, `detail`, `image`, `status`, `createdat`, `updatedat`) VALUES
+INSERT INTO `tbl_bom_product` (`id`, `compid`, `bom_name`, `category_id`, `subcategory_id`, `product_id`, `brand_id`, `unit_id`, `qty`, `detail`, `image`, `status`, `createdat`, `updatedat`) VALUES
 (1, 1, 'ABC BOM', 2, 5, 1, 5, 8, 1, 'BACK AND RED', '../images/student-icon-image-for-students.png', 1, '2024-06-06 12:32:51', '2024-06-06 12:32:51'),
 (2, 1, 'ABC', 2, 6, 3, 5, 17, 1, 'yellow and green', '../images/favicon.png', 1, '2024-06-06 16:23:02', '2024-06-06 16:23:02');
 
@@ -654,9 +654,9 @@ INSERT INTO `tbl_BOM_product` (`id`, `compid`, `bom_name`, `category_id`, `subca
 --
 
 --
--- Indexes for table `tbl_BOM_product`
+-- Indexes for table `tbl_bom_product`
 --
-ALTER TABLE `tbl_BOM_product`
+ALTER TABLE `tbl_bom_product`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -664,9 +664,9 @@ ALTER TABLE `tbl_BOM_product`
 --
 
 --
--- AUTO_INCREMENT for table `tbl_BOM_product`
+-- AUTO_INCREMENT for table `tbl_bom_product`
 --
-ALTER TABLE `tbl_BOM_product`
+ALTER TABLE `tbl_bom_product`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
