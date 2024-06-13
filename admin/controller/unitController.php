@@ -19,7 +19,6 @@ if ($_POST['action'] == "load") {
             foreach ($result as $row) {
                 $output .= "<tr>
                         <td>{$sr}</td>
-                        <td>{$row["id"]}</td>
                         <td>{$row["unit"]}</td>
                         
                         <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_unit' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_unit' style='width:70px;'>Deactive</button>") . "</td>
@@ -131,21 +130,22 @@ if ($_POST['action'] == "update") {
     try {
         // print_r($_POST);
         // die();
+        $unit = strtoupper($_POST['unitname']);
         $id = $_POST['id'];
-        $status = $_POST['status'] == 'Active' ?? 'Active' ?? 'Inactive';
+        // $status = $_POST['status'] == 'Active' ?? 'Active' ?? 'Inactive';
         //get old record for user log
         $sql = "select unit,status from tbl_unit where id=:id";
         $params = ["id" => $_POST["id"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
 
-        $sql = "select * from tbl_unit where unit=:unit";
+        $sql = "select * from tbl_unit where unit=:unit and id!={$id}";
         $params = ['unit' => $_POST['unitname']];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "update tbl_unit set unit =:unit, status=:status where id=:id";
-            $params = ['unit' => $_POST['unitname'], 'status' =>  $status, 'id' => $id];
+            $params = ['unit' => $unit, 'status' =>  $_POST['status'], 'id' => $id];
             $recordId = $db->ManageData($sql, $params);
             // echo json_encode(array("success"=>true,"msg"=>$recordId));
             // exit;
@@ -175,7 +175,6 @@ if ($_POST['action'] == "search") {
         foreach ($result as $row) {
             $output .= "<tr>
                         <td>{$sr}</td>
-                        <td>{$row["id"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_unit' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_unit' style='width:70px;'>Deactive</button>") . "</td>
                         <td>

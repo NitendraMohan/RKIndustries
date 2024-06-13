@@ -102,6 +102,7 @@ jQuery(document).ready(function ($) {
                         $("#msg").fadeOut("slow");
                         $("#unitForm").trigger("reset");
                         $("#modalid").val('');
+                        if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
             });
