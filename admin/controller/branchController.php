@@ -119,15 +119,21 @@ if ($_POST['action'] == "update") {
         $sql = "select * from tbl_branch where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        
-        $sql = "update tbl_branch set branch_name=:branchname,address=:address,pincode=:pincode,status=:status where id=:id";
-        $params = ['id'=>$id, 'branchname' => $_POST['branchname'],'address' => $_POST['address'],'pincode' => $_POST['pincode'], 'status' => $_POST['status']];
-        $recordId = $db->ManageData($sql, $params);
-        if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_branch", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
-            echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
+        $sql = "select * from tbl_branch where branch_name=:branchname and id!={$id}";
+        $params = ['branchname' => $_POST['branchname']];
+        $result = $db->readSingleRecord($sql, $params);
+        if (isset($result)) {
+            echo json_encode(array('duplicate' => true));
         } else {
-            echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
+            $sql = "update tbl_branch set branch_name=:branchname,address=:address,pincode=:pincode,status=:status where id=:id";
+            $params = ['id'=>$id, 'branchname' => $_POST['branchname'],'address' => $_POST['address'],'pincode' => $_POST['pincode'], 'status' => $_POST['status']];
+            $recordId = $db->ManageData($sql, $params);
+            if ($recordId) {
+                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_branch", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
+                echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
+            } else {
+                echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
+            }
         }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();

@@ -61,7 +61,7 @@ $permissions = $db->get_buttons_permissions($params);
                                         </div>
                                         <div class="form-group">
                                             <label for="taxpercentage">Tax Percentage</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="tel" placeholder="Enter Tax Percentage" id="taxpercentage" name="taxpercentage" pattern="[0-9]{2}" required>
+                                            <input class="form-control yearlimit modalyearfrom" type="number" placeholder="Enter Tax Percentage" id="taxpercentage" name="taxpercentage" step="any" required>
                                             <small id="mobileHelp" class="form-text text-muted">Please enter 2 to 3 digits percentage.</small>
                                         </div>
                                         <div class="form-group">
@@ -94,8 +94,8 @@ $permissions = $db->get_buttons_permissions($params);
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>Tax NAME</th>
-                                        <th>Tax Percentage</th>
+                                        <th>TAX NAME</th>
+                                        <th>TAX PERCENTAGE</th>
                                         <th>STATUS</th>
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>

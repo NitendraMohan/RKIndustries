@@ -47,7 +47,7 @@ if ($_POST['action'] == "insert") {
         $branchname = $_POST['branchname'];
         $departmentname = strtoupper($_POST['departmentname']);
         $ustatus = $_POST['status'];
-        $sql = "select id from tbl_deparment where dept_name=:departmentname";
+        $sql = "select id from tbl_deparment where dept_name=:departmentname and branchid={$_POST['branchname']}";
         $params = ['departmentname' => $departmentname];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
@@ -114,15 +114,21 @@ if ($_POST['action'] == "update") {
         $sql = "select * from tbl_deparment where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        
-        $sql = "update tbl_deparment set branchid=:branchid, dept_name=:deptname,status=:status where id=:id";
-        $params = ['id'=>$id, 'branchid' => $_POST['branchname'],'deptname' =>strtoupper($_POST['departmentname']), 'status' => $_POST['status']];
-        $recordId = $db->ManageData($sql, $params);
-        if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_deparment", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
-            echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
+        $sql = "select id from tbl_deparment where dept_name=:departmentname and branchid={$_POST['branchname']} and id!={$id}";
+        $params = ['departmentname' => strtoupper($_POST['departmentname'])];
+        $result = $db->readSingleRecord($sql, $params);
+        if (isset($result)) {
+            echo json_encode(array('duplicate' => true));
         } else {
-            echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
+            $sql = "update tbl_deparment set branchid=:branchid, dept_name=:deptname,status=:status where id=:id";
+            $params = ['id'=>$id, 'branchid' => $_POST['branchname'],'deptname' =>strtoupper($_POST['departmentname']), 'status' => $_POST['status']];
+            $recordId = $db->ManageData($sql, $params);
+            if ($recordId) {
+                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_deparment", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
+                echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
+            } else {
+                echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
+            }
         }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();

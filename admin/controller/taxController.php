@@ -135,15 +135,21 @@ if ($_POST['action'] == "update") {
         $sql = "select * from tbl_taxes where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        
-        $sql = "update tbl_taxes set tax_name=:taxname,status=:status,tax_percentage=:taxpercentage where id=:id";
-        $params = ['id'=>$id, 'taxname' => $_POST['taxname'],'taxpercentage' => $_POST['taxpercentage'], 'status' => $_POST['status']];
-        $recordId = $db->ManageData($sql, $params);
-        if ($recordId) {
+        $sql = "select id from tbl_taxes where tax_name=:taxname and id!={$id}";
+        $params = ['taxname' => strtoupper($_POST['taxname'])];
+        $result = $db->readSingleRecord($sql, $params);
+        if (isset($result)) {
+            echo json_encode(array('duplicate' => true));
+        } else {
+            $sql = "update tbl_taxes set tax_name=:taxname,status=:status,tax_percentage=:taxpercentage where id=:id";
+            $params = ['id'=>$id, 'taxname' => strtoupper($_POST['taxname']),'taxpercentage' => $_POST['taxpercentage'], 'status' => $_POST['status']];
+            $recordId = $db->ManageData($sql, $params);
+            if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_taxes", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
             echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
-        } else {
-            echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
+            } else {
+                echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
+            }
         }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();

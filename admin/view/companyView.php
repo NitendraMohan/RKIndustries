@@ -42,10 +42,12 @@ require("../template/top.inc.php");
                                     <div class="form-group">
                                         <label for="mail_id">Official Mail id</label>
                                         <input class="form-control modalyearfrom" type="email" placeholder="Enter Mail Id" id="mail_id" name="mail_id">
+                                        <small id="emailHelp" class="form-text text-muted">Please enter a valid email address (e.g., example@example.com).</small>
                                     </div>
                                     <div class="form-group">
                                         <label for="contact_number">Contact Number</label>
-                                        <input class="form-control modalyearfrom" type="tel" placeholder="Enter Contact Number" id="contact_number" name="contact_number">
+                                        <input class="form-control modalyearfrom" type="tel" placeholder="Enter Contact Number" id="contact_number" name="contact_number" pattern="[0-9]{10}">
+                                        <small id="mobileHelp" class="form-text text-muted">Please enter a 10-digit mobile number.</small>
                                     </div>
                                 </div>
                             

@@ -30,6 +30,16 @@ jQuery(document).ready(function ($) {
     }
     load_table();
 
+    $('#logo').on('change', function(){
+        var file = this.files[0]; // Get the selected file
+        if (file) {
+            var reader = new FileReader(); // Create a new FileReader object
+            reader.onload = function(e) {
+                $('#logo_image').attr('src', e.target.result); // Set the src attribute of the image with the data URL of the selected file
+            };
+            reader.readAsDataURL(file); // Read the selected file as a data URL
+        }
+    });
     /**
      * Code for submit model form data
      */

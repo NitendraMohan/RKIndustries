@@ -19,7 +19,9 @@ if (isset($_GET['type']) && !empty($_GET['type'])) {
 }
 
 $sql = "select * from financial_years order by year_from desc";
-$result = $db->readData($sql);
+$financialYears = $db->readData($sql);
+// print_r($financialYears);
+// die();
 ?>
 <?php
 require('../template/top.inc.php');
@@ -96,8 +98,8 @@ require('../template/top.inc.php');
                                 <tbody class="tableContents" id="tableContents">
                                     <?php
                                     $count = 1;
-                                    if (isset($result)) {
-                                        foreach ($result as $row) {
+                                    if (isset($financialYears)) {
+                                        foreach ($financialYears as $row) {
                                             $jsonArray = json_encode(($row));
                                             // }
                                     ?>
