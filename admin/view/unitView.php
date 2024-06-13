@@ -105,7 +105,6 @@ $permissions = $db->get_buttons_permissions($params);
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th style="width: 10%;">ID</th>
                                         <th style="width:60%" ;>UNIT</th>
                                         <th style="width: 10%;">STATUS</th>
                                         <th>Action</th>
