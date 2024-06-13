@@ -711,3 +711,47 @@ ALTER TABLE `tbl_BOM_material`
 ALTER TABLE `tbl_BOM_material`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
+
+--
+-- Table structure for table `tbl_designation`
+--
+
+CREATE TABLE `tbl_designation` (
+  `id` int(11) NOT NULL,
+  `designation_name` varchar(255) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_designation`
+--
+
+INSERT INTO `tbl_designation` (`id`, `designation_name`, `status`, `createdat`, `updatedat`) VALUES
+(19, 'DIRECTOR', 1, '2024-06-13 09:22:06', '2024-06-13 09:22:06'),
+(20, 'MANAGER', 1, '2024-06-13 09:22:15', '2024-06-13 09:22:15'),
+(21, 'SUPERVISOR', 1, '2024-06-13 09:22:23', '2024-06-13 09:22:23'),
+(22, 'TEAM LEADER', 1, '2024-06-13 09:22:34', '2024-06-13 09:22:34'),
+(23, 'WORKER', 1, '2024-06-13 09:23:25', '2024-06-13 09:23:25');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_designation`
+--
+ALTER TABLE `tbl_designation`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_designation`
+--
+ALTER TABLE `tbl_designation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+COMMIT;

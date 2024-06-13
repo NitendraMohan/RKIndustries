@@ -5,13 +5,13 @@ jQuery(document).ready(function ($) {
      */
     function load_table() {
         $.ajax({
-            url: "../controller/unitController.php",
+            url: "../controller/designationController.php",
             type: "POST",
             data: { action: "load" },
             success: function (result) {
-                // Assuming the result returned by controller/unitController.php is the HTML table content
-                $("#unitTableContents").html(result);
-                var total_records = $("#unitTableContents tr").length;
+                // Assuming the result returned by controller/designationController.php is the HTML table content
+                $("#designationTableContents").html(result);
+                var total_records = $("#designationTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);
                 $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");
             },
@@ -26,11 +26,11 @@ jQuery(document).ready(function ($) {
     /**
      * Code for submit model form data
      */
-    $("#unitForm").on("submit", function (e) {
+    $("#designationForm").on("submit", function (e) {
         e.preventDefault();
-        var unitname = $("#unitname").val();
-        var unitstatus = $("#status").val();
-        if (unitname == "" || unitstatus == "") {
+        var designationId = $("#designationId").val();
+        var designationStatus = $("#status").val();
+        if (designationId == "" || designationStatus == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -39,7 +39,7 @@ jQuery(document).ready(function ($) {
         } else {
             // var formData = new FormData(this);
             var formData = new FormData(this);
-            var id = $("#modalid").val();
+            var id = $("#designationHiddenId").val();
             if (id == '' || id == undefined) {
                 var action = "inserrt";
                 formData.append("action", "insert");
@@ -49,7 +49,7 @@ jQuery(document).ready(function ($) {
             }
             // console.log(formData);
             $.ajax({
-                url: "../controller/unitController.php",
+                url: "../controller/designationController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
@@ -67,8 +67,8 @@ jQuery(document).ready(function ($) {
                     }
                     setTimeout(function () {
                         $("#msg").fadeOut("slow");
-                        $("#unitForm").trigger("reset");
-                        $("#modalid").val('');
+                        $("#designationForm").trigger("reset");
+                        $("#designationHiddenId").val('');
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
@@ -82,7 +82,7 @@ jQuery(document).ready(function ($) {
         var uaction = "delete";
         var element = this;
         $.ajax({
-            url: "../controller/unitController.php",
+            url: "../controller/designationController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
@@ -102,15 +102,15 @@ jQuery(document).ready(function ($) {
         var uid = $(this).data("id");
         var uaction = "edit";
         $.ajax({
-            url: "../controller/unitController.php",
+            url: "../controller/designationController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
                 // $("#myModalUpdate").html(result);
                 $arr = JSON.parse(result);
                 console.log($arr);
-                $("#modalid").val($arr['id']);
-                $("#unitname").val($arr['unit']);
+                $("#designationHiddenId").val($arr['id']);
+                $("#designationId").val($arr['designation_name']);
                 $("#status").val($arr['status']);
                 $("#myModal").modal('show');
             }
@@ -126,11 +126,11 @@ jQuery(document).ready(function ($) {
         var search_term = $(this).val();
         var eventaction = "search";
         $.ajax({
-            url: "../controller/unitController.php",
+            url: "../controller/designationController.php",
             type: "POST",
             data: { action: eventaction, search: search_term },
             success: function (data) {
-                $("#unitTableContents").html(data);
+                $("#designationTableContents").html(data);
             }
         });
     });
