@@ -38,9 +38,9 @@ jQuery(document).ready(function ($) {
         } else {
             // var formData = $('#userForm').serialize() + '&action=insert';
             var formData = new FormData(this);
-            var id = $('#modalid').val();
+            var id = $('#categoryHiddenId').val();
             console.log('id='.id);
-            if(id =='' || id == undefined){
+            if(id =='0' || id == undefined){
                 action = 'insert';
                 formData.append("action","insert");
             }
@@ -63,13 +63,16 @@ jQuery(document).ready(function ($) {
                     } else if (response.success) {
                         $("#msg").fadeIn().removeClass('error-msg').addClass('sucess-msg').html(response.msg);
                         load_table(); // Assuming this function loads the table data
+                        $("#modelid").val('');
                     } else {
                         $("#msg").fadeIn().removeClass('sucess-msg').addClass('error-msg').html(response.msg);
                     }
                     setTimeout(function () {
                         $("#msg").fadeOut("slow");
                         $("#userForm").trigger("reset");
-                        $("#modelid").val('');
+                        // console.log($("#modelid").length);
+                        $("#categoryHiddenId").val('');
+                        // console.log($("#modelid").length);
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
@@ -109,7 +112,7 @@ jQuery(document).ready(function ($) {
             success: function (result) {
                 var arr = JSON.parse(result);
                 console.log(arr['category_name']);
-                $("#modalid").val(arr['id']);
+                $("#categoryHiddenId").val(arr['id']);
                 $("#categoryname").val(arr['category_name']);
                 $("#status").val(arr['status']);
                 $("#myModal").modal('show');

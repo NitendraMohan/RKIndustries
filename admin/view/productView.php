@@ -3,15 +3,15 @@ require_once '../connection.inc.php';
 // require_once '../utility/sessions.php';
 require("../template/top.inc.php");
 $db = new dbConnector();
-if(isset($_POST['moduleid'])){
+if (isset($_POST['moduleid'])) {
     $_SESSION['moduleid'] = $_POST['moduleid'];
     $_SESSION['current_module_name'] = $_POST['modulename'];
 }
-$params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
+$params = ['userid' => $_SESSION['userid'], 'moduleid' => $_SESSION['moduleid']];
 $permissions = $db->get_buttons_permissions($params);
 
-$sql = "Select id,category_name from tbl_category where status=1";
-$categories = $db->readData($sql);
+$sql = "Select id,brand_name from  tbl_brand where status=1";
+$brands = $db->readData($sql);
 
 $sql = "Select id,unit from tbl_unit where status=1";
 $units = $db->readData($sql);
@@ -22,7 +22,7 @@ $units = $db->readData($sql);
             <div class="col-xl-12">
                 <div class="card">
 
-                <div class="row">
+                    <div class="row">
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
                                 <h3 class="box-title"><?php echo $_SESSION['current_module_name'] ?></h3>
@@ -31,7 +31,7 @@ $units = $db->readData($sql);
                         </div>
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                                <button type="button" class="btn btn-sm btn-info add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert']?>>
+                                <button type="button" class="btn btn-sm btn-info add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert'] ?>>
                                     Create New
                                 </button>
                             </div>
@@ -59,59 +59,80 @@ $units = $db->readData($sql);
                                 <!-- Modal body -->
                                 <form action="" method="post" id="userForm">
                                     <div class="modal-body">
-
-                                        <input type="hidden" id="modalid" name="modalid" value="" />
+                                        <input type="hidden" id="productHiddenId" name="productHiddenId" value="" />
                                         <div class="form-group">
-                                            <label for="image">Select Product Image</label>    
+                                            <label for="image">Select Product Image</label>
                                             <input class="form-control" type="file" name="image" id="image">
                                         </div>
-                                        <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%"/>    
+                                        <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%" />
+
+                                        <div class="form-group">
+                                            <label for="brandname">Select Brand Name</label>
+                                            <select class="form-control" id="brandId" name="brandName">
+                                                <option value="" selected>Select..</option>
+                                                <?php foreach ($brands as $brand) {
+                                                    echo "<option value='{$brand['id']}'>{$brand['brand_name']}</option>";
+                                                } ?>
+                                            </select>
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="category">Select Category</label>
-                                            <select class="form-control modalyearstatus" name="category" id="category">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($categories as $category){
-                                                    echo "<option value='{$category['id']}'>{$category['category_name']}</option>";
-                                                 }?>
-                                            </select>
+                                            <input class="form-control" type="text" placeholder="Select Category" id="categoryName" name="categoryName" autocomplete="off">
+                                            <div class="form-group item_list" id="category_list"></div>
                                         </div>
+
                                         <div class="form-group">
-                                            <label for="subcategory">Select Sub Category</label>
-                                            <select class="form-control modalyearstatus" name="subcategory" id="subcategory">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($subcategories as $subcategory){
-                                                    echo "<option value='{$subcategory['id']}'>{$subcategory['subcategory_name']}</option>";
-                                                 }?>
-                                            </select>
+                                            <label for="category">Select Sub Category</label>
+                                            <input class="form-control" type="text" placeholder="Select Sub Category" id="subcategoryInput" name="subcategoryInput" autocomplete="off">
+                                            <div class="form-group item_list" id="subcategoryList"></div>
                                         </div>
+
+
                                         <div class="form-group">
                                             <label for="productname">Product Name</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Product Name" id="productname" name="productname"  required>
+                                            <input class="form-control" type="text" placeholder="Enter Product Name" id="productname" name="productname" required>
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="productcode">Product Code</label>
+                                            <input class="form-control" type="text" placeholder="Enter Product Code" id="productCodeId" name="productCodeName">
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="unit">Select Unit</label>
-                                            <select class="form-control modalyearstatus" name="unit" id="unit">
+                                            <select class="form-control" name="unit" id="unit">
                                                 <option value="" selected>Select..</option>
-                                                <?php foreach($units as $unit){
+                                                <?php foreach ($units as $unit) {
                                                     echo "<option value='{$unit['id']}'>{$unit['unit']}</option>";
-                                                 }?>
+                                                } ?>
                                             </select>
                                         </div>
+
                                         <div class="form-group">
                                             <label for="price">Enter Price</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Price" id="price" name="price" required>
-                                        
+                                            <input class="form-control" type="number" placeholder="Enter Price" id="price" name="price" required>
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="minlimit">Enter Min Limit</label>
+                                            <input class="form-control" type="number" placeholder="Enter Min Limit" id="minLimitId" name="minLimitName">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="maxlimit">Enter Max Limit</label>
+                                            <input class="form-control" type="number" placeholder="Enter Max Limit" id="maxLimitId" name="maxLimitName">
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="Status">Status</label>
-                                            <select class="form-control modalyearstatus" name="status" id="status">
+                                            <select class="form-control" name="status" id="status">
                                                 <option value="" selected>Select</option>
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
                                             </select>
                                         </div>
                                     </div>
-
                                     <!-- Modal footer -->
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save">Submit</button>
@@ -126,18 +147,20 @@ $units = $db->readData($sql);
                     <div class="modal fade" id="myModalUpdate">
 
                     </div>
-                    <div class="card-body--">    
+                    <div class="card-body--">
                         <div class="table-responsive table-container">
                             <table class="table">
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>Category</th>
-                                        <th>Sub Category</th>
-                                        <th>Product Name</th>
-                                        <th>Unit</th>
-                                        <th>Price</th>
-                                        <th>Image</th>
+                                        <th>BRAND NAME</th>
+                                        <th>CATEGORY</th>
+                                        <th>SUB CATEGORY</th>
+                                        <th>PRODUCT NAME</th>
+                                        <th>PRODUCT CODE</th>
+                                        <th>UNIT</th>
+                                        <th>PRICE</th>
+                                        <th>IMAGE</th>
                                         <th>STATUS</th>
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>

@@ -54,14 +54,14 @@ $permissions = $db->get_buttons_permissions($params);
                                 <form action="" method="post" id="userForm">
                                     <div class="modal-body">
 
-                                        <input type="hidden" id="modalid" name="modalid" value="" />
+                                        <input type="hidden" id="categoryHiddenId" name="categoryHiddenName" value="" />
                                         <div class="form-group">
                                             <label for="categoryname">Category Name</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Tax Name" id="categoryname" name="categoryname" required>
+                                            <input class="form-control" type="text" placeholder="Enter Category Name" id="categoryname" name="categoryname" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="Status">Status</label>
-                                            <select class="form-control modalyearstatus" name="status" id="status">
+                                            <select class="form-control" name="status" id="status">
                                                 <option value="" selected>Select</option>
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
@@ -89,7 +89,7 @@ $permissions = $db->get_buttons_permissions($params);
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>Category NAME</th>
+                                        <th style="width: 80%;">CATEGORY NAME</th>
                                         <th>STATUS</th>
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>

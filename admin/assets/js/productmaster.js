@@ -33,22 +33,22 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    $("#category").on("change", function(e){
-        e.preventDefault();
-        var category = $(this).val();
-        $("#subcategory").html("<option value='' selected>Select..</option>");
-        console.log(category);
-        // if(category!==''){
-            $.ajax({
-                url: "../controller/productsController.php",
-                type: "POST",
-                data: { action: 'load_subcategories', category_id: category },
-                success: function (result) {
-                    $("#subcategory").html(result);
-                }
-            });
-        // }
-    })
+    // $("#category").on("change", function(e){
+    //     e.preventDefault();
+    //     var category = $(this).val();
+    //     $("#subcategory").html("<option value='' selected>Select..</option>");
+    //     console.log(category);
+    //     // if(category!==''){
+    //         $.ajax({
+    //             url: "../controller/productsController.php",
+    //             type: "POST",
+    //             data: { action: 'load_subcategories', category_id: category },
+    //             success: function (result) {
+    //                 $("#subcategory").html(result);
+    //             }
+    //         });
+    //     // }
+    // })
     /**
      * Code for submit model form data
      */
@@ -56,8 +56,10 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         var action = "";
         var productname = $("#productname").val();
-        var category = $("#category").val();
-        var subcategory = $("#subcategory").val();
+        var category = $("#categoryName").val();
+        var categoryId = $("#categoryName").data("id");
+        var subcategory = $("#subcategoryInput").val();
+        var subcategoryId = $("#subcategoryInput").data("id");
         var userstatus = $("#status").val();
         if (productname == "" || userstatus == "" || category == "" || subcategory == "") {
             $("#msg").fadeIn();
@@ -68,17 +70,21 @@ jQuery(document).ready(function ($) {
         } else {
             // var formData = $('#userForm').serialize() + '&action=insert';
             var formData = new FormData(this);
-            var id = $('#modalid').val();
+            var id = $('#productHiddenId').val();
             console.log('id='.id);
             if(id =='' || id == undefined){
                 action = 'insert';
                 formData.append("action","insert");
+                formData.append("categoryId",categoryId);
+                formData.append("subcategoryId",subcategoryId);
             }
             else{
                 action = 'update';
                 var currentImage =  $("#logo_image").attr('src') ?? '';
                 formData.append("image",currentImage);
                 formData.append("action","update");
+                formData.append("categoryId",categoryId);
+                formData.append("subcategoryId",subcategoryId);
             }
             $.ajax({
                 url: "../controller/productsController.php",
@@ -101,7 +107,7 @@ jQuery(document).ready(function ($) {
                     setTimeout(function () {
                         $("#msg").fadeOut("slow");
                         $("#userForm").trigger("reset");
-                        $("#modelid").val('');
+                        $("#productHiddenId").val('');
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
@@ -140,25 +146,20 @@ jQuery(document).ready(function ($) {
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
+                console.log(result);
                 var arr = JSON.parse(result);
-                var cat_id = arr['category_id']; 
-                console.log('category id:'+ cat_id);
-                console.log(arr['product_name']);
-                $.ajax({
-                    url: "../controller/productsController.php",
-                    type: "POST",
-                    data: { action: 'load_subcategories', category_id: cat_id },
-                    success: function (list) {
-                        $("#subcategory").html(list);
-                        $("#subcategory").val(arr['subcategory_id']);
-                    }
-                });
-                $("#modalid").val(arr['id']);
+                $("#productHiddenId").val(arr['id']);
                 $("#logo_image").attr('src',arr['image']);
+                $("#brandId").val(arr['brand_id']);
+                $("#categoryName").val(arr['category_name']);
+                $("#categoryName").data("id",arr['category_id']);
+                $("#subcategoryInput").val(arr['subcategory_name']);
+                $("#subcategoryInput").data("id",arr['subcategory_id']);
                 $("#productname").val(arr['product_name']);
-                $("#category").val(arr['category_id']);
-                // $("#subcategory").val(arr['subcategory_id']);
+                $("#productCodeId").val(arr['product_code']);
                 $("#unit").val(arr['unit_id']);
+                $("#minLimitId").val(arr['min_limit']);
+                $("#maxLimitId").val(arr['max_limit']);
                 $("#price").val(arr['price']);
                 $("#status").val(arr['status']);
                 $("#myModal").modal('show');

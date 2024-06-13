@@ -55,35 +55,31 @@ jQuery(document).ready(function ($) {
             $btn.text("Active").removeClass('btn-secondary').addClass('btn-success').data('status', 'active');
         }
     }
-    
-    // $("#category").keyup( function() {
-        // Call the setupAutocomplete function with appropriate parameters
-        setupAutocomplete("category", "category_list", "list", "tbl_category" ,"category_name");
-        setupAutocomplete("brandName", "brand_list", "list", "tbl_brand", "brand_name");
-        setupAutocomplete("productName", "product_list", "list", "tbl_products", "product_name");
-        // setupAutocomplete("branch", "branch_list", "list", "tbl_branch", "branch_name");
-        // setupAutocomplete("user", "user_list", "list", " tbl_users", "username");
-    // });
 
-    function setupAutocomplete(inputId, listContainerId, actionName, tablename, tablefield) {
+    function setupAutocomplete(inputId, listContainerId, actionName, tablename, tablefield, onItemSelected) {
         var typingTimer;
         var doneTypingInterval = 200;
-        $("#" + inputId).keyup(function(){
+    
+        $("#" + inputId).keyup(function() {
             clearTimeout(typingTimer);
-            var category = $(this).val();
-            if(category != ''){
+            var searchValue = $(this).val();
+            if (searchValue != '') {
                 typingTimer = setTimeout(function() {
                     $.ajax({
-                        url : "../controller/commanController.php",
+                        url: "../controller/commanController.php",
                         type: "POST",
-                        data: {category:category, tablename:tablename,  action: actionName, tablefield:tablefield},
-                        success: function(data){
+                        data: {
+                            searchValue: searchValue,
+                            tablename: tablename,
+                            action: actionName,
+                            tablefield: tablefield
+                        },
+                        success: function(data) {
                             console.log(data);
                             $("#" + listContainerId).html(data).fadeIn("fast");
                         },
                         error: function(xhr, status, error) {
                             console.error("AJAX request failed:", status, error);
-                            // Handle errors here
                         }
                     });
                 }, doneTypingInterval);
@@ -94,40 +90,97 @@ jQuery(document).ready(function ($) {
     
         // Handle click on autocomplete list item
         $(document).on('click', '#' + listContainerId + ' li', function() {
-            var selectedCategory = $(this).text();
-            $("#" + inputId).val(selectedCategory);
-            var categoryId = $(this).data("category-id");
-                // Set the data-id attribute of the input field
-               if( $("#" + inputId).attr("data-id")==undefined){
-                    $("#" + inputId).data("id", categoryId);       
-                }
-                else{
-                    $("#" + inputId).attr("data-id", categoryId);
-                }   
-
+            var selectedItem = $(this).text();
+            $("#" + inputId).val(selectedItem);
+            var itemId = $(this).data("id");
+    
+            if ($("#" + inputId).attr("data-id") == undefined) {
+                $("#" + inputId).data("id", itemId);
+            } else {
+                $("#" + inputId).attr("data-id", itemId);
+            }
+    
             $("#" + listContainerId).fadeOut();
+    
+            if (typeof onItemSelected === 'function') {
+                onItemSelected(itemId);
+            }
         });
-
+    
         $(document).on('mouseenter', '#' + listContainerId + ' li', function() {
             $(this).css('cursor', 'pointer');
         });
-        
+    
         $(document).on('mouseleave', '#' + listContainerId + ' li', function() {
             $(this).css('cursor', 'auto');
         });
     }
     
-   
+    function setupSubcategoryAutocomplete(categoryId, inputId, listContainerId, actionName, tablename, tablefield) {
+        var typingTimer;
+        var doneTypingInterval = 200;
     
-    // Call the setupAutocomplete function with different IDs for different text boxes
-    // $(document).ready(function() {
-    //     // Example usage:
-    //     setupAutocomplete("category1", "category_list1"); // Replace "category1" and "category_list1" with the IDs of your input field and list container respectively
-    //     setupAutocomplete("category2", "category_list2"); // Similarly, for the second text box
-    //     // Add more setupAutocomplete calls for additional text boxes as needed
-    // });
+        $("#" + inputId).keyup(function() {
+            clearTimeout(typingTimer);
+            var subcategory = $(this).val();
+            if (subcategory != '') {
+                typingTimer = setTimeout(function() {
+                    $.ajax({
+                        url: "../controller/commanController.php",
+                        type: "POST",
+                        data: {
+                            query: subcategory,
+                            categoryId: categoryId,
+                            tablename: tablename,
+                            action: actionName,
+                            tablefield: tablefield
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            $("#" + listContainerId).html(data).fadeIn("fast");
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX request failed:", status, error);
+                        }
+                    });
+                }, doneTypingInterval);
+            } else {
+                $("#" + listContainerId).fadeOut();
+            }
+        });
     
-
+        $(document).on('click', '#' + listContainerId + ' li', function() {
+            var selectedSubcategory = $(this).text();
+            $("#" + inputId).val(selectedSubcategory);
+            var subcategoryId = $(this).data("id");
+    
+            if ($("#" + inputId).attr("data-id") == undefined) {
+                $("#" + inputId).data("id", subcategoryId);
+            } else {
+                $("#" + inputId).attr("data-id", subcategoryId);
+            }
+    
+            $("#" + listContainerId).fadeOut();
+        });
+    
+        $(document).on('mouseenter', '#' + listContainerId + ' li', function() {
+            $(this).css('cursor', 'pointer');
+        });
+    
+        $(document).on('mouseleave', '#' + listContainerId + ' li', function() {
+            $(this).css('cursor', 'auto');
+        });
+    }
+    
+    $(document).ready(function() {
+        setupAutocomplete("categoryName", "category_list", "list", "tbl_category", "category_name", function(categoryId) {
+            setupSubcategoryAutocomplete(categoryId, 'subcategoryInput', 'subcategoryList', 'list', 'tbl_subcategory', 'subcategory_name');
+        });
+       
+        setupAutocomplete("brandName", "brand_list", "list", "tbl_brand", "brand_name");
+       
+        setupAutocomplete("productName", "product_list", "list", "tbl_products", "product_name");
+    });
 
 });
 //End

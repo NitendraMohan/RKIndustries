@@ -71,7 +71,7 @@ $products = $db->readData($sql);
                                         <div class="form-group">
                                             <label for="brands">Select Brands</label>
                                             <input type="text" class="form-control" name="brandName" id="brandName" autocomplete="off">
-                                            <div class="form-group" id="brand_list"></div>
+                                            <div class="form-group item_list" id="brand_list"></div>
                                         </div>
 
                                         

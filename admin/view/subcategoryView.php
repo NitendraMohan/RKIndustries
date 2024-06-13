@@ -57,18 +57,18 @@ $categories = $db->readData($sql);
                                 <form action="" method="post" id="userForm">
                                     <div class="modal-body">
 
-                                        <input type="hidden" id="modalid" name="modalid" value="" />
+                                        <input type="hidden" id="subcat" name="subcat" value="" />
                                         <div class="form-group">
                                             <label for="category">Select Category</label>
-                                            <input class="form-control" type="text"  placeholder="Select Category" id="category" autocomplete="off">
-                                            <div class="form-group" id="category_list"></div>
+                                            <input class="form-control" type="text"  placeholder="Select Category" id="categoryName" name="categoryName" autocomplete="off">
+                                            <div class="form-group item_list" id="category_list"></div>
                                         </div>
                                         
                                        
                                        
                                         <div class="form-group">
                                             <label for="subcategoryname">Sub Category Name</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Category Name" id="subcategoryname" name="subcategoryname" required>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Category Name" id="subcategoryName" name="subcategoryName" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="Status">Status</label>

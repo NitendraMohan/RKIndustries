@@ -123,7 +123,6 @@ jQuery(document).ready(function ($) {
                 var arr = JSON.parse(result);
                 $("#modalid").val(arr['id']);
                 $("#brandName").val(arr['brand_name']);
-                // $("#brandName").attr("data-id",arr['brandId'])
                 $("#brandName").data("id",arr['brandId']);
                 $("#productName").val(arr['product_name']);
                 $("#productName").data("id",arr['productId']);

@@ -63,21 +63,15 @@ if ($_POST['action'] == "load") {
 //Insert data into database
 if ($_POST['action'] == "insert") {
     try {
-        // print_r($_POST);
-        // die();
-        $subcategoryname = strtoupper($_POST['subcategoryname']);
-        $sql = "select id from  tbl_category where category_name = '{$_POST['category']}'";
-        $res = $db->readSingleRecord($sql);
-        // $categoryid = $_POST['category'];
-        $ustatus = $_POST['status'];
-        $sql = "select id from tbl_subcategory where subcategory_name=:subcategoryname";
-        $params = ['subcategoryname' => $subcategoryname];
-        $result = $db->readSingleRecord($sql, $params);
+        $subcategoryName = strtoupper($_POST['subcategoryName']);
+        $sql = "select * from  tbl_subcategory where category_id = :categoryId and subcategory_name = :subcategoryName";
+        $params = ["categoryId" => $_POST['categoryId'], "subcategoryName" => $subcategoryName];
+        $result = $db->readSingleRecord($sql,$params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "insert into tbl_subcategory(compid,category_id,subcategory_name,status) values((select id from company_master),:category,:subcategoryname,:status)";
-            $params = [ 'subcategoryname' => $subcategoryname,'category' => $res['id'], 'status' => $_POST['status']];
+            $sql = "insert into tbl_subcategory(compid,category_id,subcategory_name,status) values((select id from company_master),:categoryId,:subcategoryName,:status)";
+            $params = ['categoryId' => $_POST['categoryId'], 'subcategoryName' =>  strtoupper($subcategoryName),'status' => $_POST['status']];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_subcategory", $newRecordId, $_SESSION["username"]);
@@ -118,9 +112,9 @@ if ($_POST['action'] == "delete") {
 //Model display with data for updation record
 if ($_POST['action'] == "edit") {
     try {
-        $output1 = '';
+        // $output1 = '';
         $id = $_POST['id'];
-        $sql = "select * from tbl_subcategory where id  = {$id}";
+        $sql = "SELECT s.*,c.category_name FROM `tbl_subcategory` as s JOIN tbl_category as c ON s.category_id=c.id where s.id = {$id}";
         $row = $db->readSingleRecord($sql);
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
@@ -132,21 +126,34 @@ if ($_POST['action'] == "edit") {
 //Update record in database
 if ($_POST['action'] == "update") {
     try {
-        $id = $_POST['modalid'];
+        // print_r($_POST);
+        // die();
+        $id = $_POST['subcat'];
         //get old record for user log
         $sql = "select * from tbl_subcategory where id=:id";
-        $params = ["id" => $_POST["modalid"]];
+        $params = ["id" => $id];
         $oldRecord = $db->readSingleRecord($sql, $params);
+
+
+        $sql = "select * from  tbl_subcategory where category_id = :categoryId and subcategory_name = :subcategoryName";
+        $params = ["categoryId" => $_POST['categoryId'], "subcategoryName" => $_POST['subcategoryName']];
+        $result = $db->readSingleRecord($sql,$params);
+        if (isset($result)) {
+            echo json_encode(array('duplicate' => true));
+        } else {
         
-        $sql = "update tbl_subcategory set category_id=:category, subcategory_name=:subcategoryname,status=:status where id=:id";
-        $params = ['id'=>$id, 'category' => $_POST['category'],'subcategoryname' => $_POST['subcategoryname'], 'status' => $_POST['status']];
+        $sql = "update tbl_subcategory set category_id=:categoryId, subcategory_name=:subcategoryname,status=:status where id=:id";
+        $params = ['id'=>$id, 'categoryId' => $_POST['categoryId'],'subcategoryname' => $_POST['subcategoryName'], 'status' => $_POST['status']];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_subcategory", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
+            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_subcategory", $_POST['subcat'], $_SESSION["username"], json_encode($oldRecord));
             echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
         } else {
             echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
         }
+        }
+    
+    
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }

@@ -63,10 +63,11 @@ jQuery(document).ready(function ($) {
     $("#userForm").on("submit", function (e) {
         e.preventDefault();
         var action = "";
-        var subcategoryname = $("#subcategoryname").val();
-        var category = $("#category").val();
+        var categoryName = $("#categoryName").val();
+        var categoryId = $("#categoryName").data("id");
+        var subcategoryName = $("#subcategoryName").val();
         // var status = $("#status").val();
-        if (subcategoryname == "" || category == "") {
+        if (subcategoryName == "" || categoryName == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -75,16 +76,20 @@ jQuery(document).ready(function ($) {
         } else {
             // var formData = $('#userForm').serialize() + '&action=insert';
             var formData = new FormData(this);
-            var id = $('#modalid').val();
+            var id = $('#subcat').val();
             // console.log('id='.id);
             if(id =='' || id == undefined){
                 action = 'insert';
                 formData.append("action","insert");
-                formData.append("category",category);
+                formData.append("categoryName",categoryName);
+                formData.append("categoryId",categoryId)
             }
             else{
                 action = 'update';
                 formData.append("action","update");
+                formData.append("categoryName",categoryName);
+                formData.append("categoryId",categoryId)
+
             }
             $.ajax({
                 url: "../controller/subcategoryController.php",
@@ -107,7 +112,7 @@ jQuery(document).ready(function ($) {
                     setTimeout(function () {
                         $("#msg").fadeOut("slow");
                         $("#userForm").trigger("reset");
-                        $("#modelid").val('');
+                        $("#subcat").val('');
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
@@ -146,10 +151,12 @@ jQuery(document).ready(function ($) {
             data: { action: uaction, id: uid },
             success: function (result) {
                 var arr = JSON.parse(result);
-                console.log(arr['subcategory_name']);
-                $("#modalid").val(arr['id']);
-                $("#category").val(arr['category_id']);
-                $("#subcategoryname").val(arr['subcategory_name']);
+                console.log(arr);
+                // console.log(arr['subcategory_name']);
+                $("#subcat").val(arr['id']);
+                $("#categoryName").val(arr['category_name']);
+                $("#categoryName").data("id",arr['category_id'])
+                $("#subcategoryName").val(arr['subcategory_name']);
                 $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
