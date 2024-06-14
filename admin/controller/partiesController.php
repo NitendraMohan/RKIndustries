@@ -160,14 +160,23 @@ if ($_POST['action'] == "update") {
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
         
-        $sql = "update tbl_parties set party_name=:partyname,comp_name=:compname,gstno=:gstno,mobile=:mobile,email=:email,address=:address,image=:image,status=:status where id=:id";
-        $params = ['id'=>$id, 'partyname' => $_POST['partyname'],'compname' => $_POST['compname'], 'gstno' => $_POST['gstno'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile, 'status' => $_POST['status']];
-        $recordId = $db->ManageData($sql, $params);
-        if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_parties", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
-            echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
+        $partyname = strtoupper($_POST['partyname']);
+        $ustatus = $_POST['status'];
+        $sql = "select mobile from tbl_parties where party_name=:partyname and id!={$id}";
+        $params = ['partyname' => $partyname];
+        $result = $db->readSingleRecord($sql, $params);
+        if (isset($result)) {
+            echo json_encode(array('duplicate' => true));
         } else {
-            echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
+            $sql = "update tbl_parties set party_name=:partyname,comp_name=:compname,gstno=:gstno,mobile=:mobile,email=:email,address=:address,image=:image,status=:status where id=:id";
+            $params = ['id'=>$id, 'partyname' => $_POST['partyname'],'compname' => $_POST['compname'], 'gstno' => $_POST['gstno'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile, 'status' => $_POST['status']];
+            $recordId = $db->ManageData($sql, $params);
+            if ($recordId) {
+                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_parties", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
+                echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
+            } else {
+                echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
+            }
         }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();

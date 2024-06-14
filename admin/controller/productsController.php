@@ -202,7 +202,7 @@ if ($_POST['action'] == "update") {
         $params = ["id" => $_POST["productHiddenId"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
 
-        $sql = "select id from tbl_products where product_name=:productname and product_code=:productCode";
+        $sql = "select id from tbl_products where product_name=:productname and product_code=:productCode and id!={$id}";
         $params = ['productname' => $_POST['productname'], 'productCode' => $_POST['productCodeName']];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {

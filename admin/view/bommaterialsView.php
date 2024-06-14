@@ -101,8 +101,10 @@ $units = $db->readData($sql);
                                         echo "<option value='{$unit['id']}'>{$unit['unit']}</option>";
                                     } ?>
                                 </select>
-                                <input class="form-control decimalplaces" type="text" placeholder="Rate" id="mrate" name="mrate" required style="width: 100px;">
-                                <input class="form-control decimalplaces" type="text" placeholder="Qty" id="mqty" name="mqty" required style="width: 100px;">
+                                <!-- <input class="form-control decimalplaces" type="text" placeholder="Rate" id="mrate" name="mrate" required style="width: 100px;">
+                                <input class="form-control decimalplaces" type="text" placeholder="Qty" id="mqty" name="mqty" required style="width: 100px;"> -->
+                                <input class="form-control" type="number" placeholder="Rate" id="mrate" name="mrate" required step="any" style="width: 100px;">
+                                <input class="form-control" type="number" placeholder="Qty" id="mqty" name="mqty" required step="any" style="width: 100px;">
                                 <input class="form-control decimalplaces" type="text" readonly placeholder="0" id="cost" name="cost" required style="width: 100px;">
                                 <select class="form-control modalyearstatus" name="status" id="status">
                                     <option value="" selected>Select</option>

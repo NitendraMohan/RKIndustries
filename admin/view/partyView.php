@@ -122,9 +122,9 @@ $permissions = $db->get_buttons_permissions($params);
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>Party NAME</th>
-                                        <th>Company Name</th>
-                                        <th>GST Number</th>
+                                        <th>PARTY NAME</th>
+                                        <th>COMPANY NAME</th>
+                                        <th>GST NUMBER</th>
                                         <th>MOBILE</th>
                                         <th>EMAIL</th>
                                         <th NOWRAP>COMPANY ADDRESS</th>

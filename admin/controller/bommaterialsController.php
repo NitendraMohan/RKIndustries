@@ -12,14 +12,17 @@ $username = checkUserSession();
 if ($_POST['action'] == "load") {
 
     try {
-        $sql = "select b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty,b.detail,b.image,b.status 
+        $sql = "select b.id, b.bom_name, p.product_name, br.brand_name,COALESCE(sum(bm.cost),0) as mcost, u.unit, b.qty,b.detail,b.image,b.status 
         from tbl_bom_product b 
         inner join tbl_products p 
         on b.product_id=p.id
         inner join tbl_unit u
         on b.unit_id=u.id
         inner join tbl_brand br
-        on b.brand_id=br.id where b.id={$_POST['bomid']}";
+        on b.brand_id=br.id
+        left join tbl_bom_material bm
+        on b.id=bm.bom_id  where b.id={$_POST['bomid']} 
+        group by b.id";
         $bomdata = $db->readSingleRecord($sql);
         if (isset($bomdata)) {
         $rowCounts = count($bomdata);
@@ -214,15 +217,21 @@ if ($_POST['action'] == "update") {
         $sql = "select * from tbl_bom_material where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        
-        $sql = "update tbl_bom_material set category_id=:category, subcategory_id=:subcategory, product_id=:product, unit_id=:unit, rate=:rate, qty=:qty, cost=:cost where id=:id";
-        $params = ['id'=>$id, 'category' => $_POST['category'], 'subcategory' => $_POST['subcategory'], 'product' => $_POST['product'], 'unit' => $_POST['munit'], 'rate' => $_POST['mrate'], 'qty' => $_POST['mqty'], 'cost' =>$_POST['cost']];
-        $recordId = $db->ManageData($sql, $params);
-        if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_bom_material", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
-            echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
+        $sql = "select id from tbl_bom_material where bom_id=:bomid and product_id=:productid where id!={$id}";
+        $params = ['bomid' => $bomid, 'productid' => $productid];
+        $result = $db->readSingleRecord($sql, $params);
+        if (isset($result)) {
+            echo json_encode(array('duplicate' => true));
         } else {
-            echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
+            $sql = "update tbl_bom_material set category_id=:category, subcategory_id=:subcategory, product_id=:product, unit_id=:unit, rate=:rate, qty=:qty, cost=:cost where id=:id";
+            $params = ['id'=>$id, 'category' => $_POST['category'], 'subcategory' => $_POST['subcategory'], 'product' => $_POST['product'], 'unit' => $_POST['munit'], 'rate' => $_POST['mrate'], 'qty' => $_POST['mqty'], 'cost' =>$_POST['cost']];
+            $recordId = $db->ManageData($sql, $params);
+            if ($recordId) {
+                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_bom_material", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
+                echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
+            } else {
+                echo json_encode(array("success" => false, "msg" => "Record not updated"));
+            }
         }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
