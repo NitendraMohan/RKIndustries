@@ -68,14 +68,14 @@ $permissions = $db->get_buttons_permissions($params);
                                             <label for="expanse_name">Expanse Name</label>
                                             <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Charge Name" id="expanse_name" name="expanse_name" required>
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label for="is_percentage">Is Percentage</label>
                                             <input class="form-control chkBox" type="checkbox" id="is_percentage" name="is_percentage">
                                         </div>
                                         <div class="form-group">
                                             <label for="expanse_value">Expanse Value</label>
                                             <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Expanse Value" id="expanse_value" name="expanse_value" required>
-                                        </div>
+                                        </div> -->
                                         <div class="form-group">
                                             <label for="detail">Details</label>
                                             <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Detail" id="detail" name="detail" required>
@@ -118,8 +118,8 @@ $permissions = $db->get_buttons_permissions($params);
                                     <tr>
                                         <th class="serial">#</th>
                                         <th style="width:20%" ;>Expanse Name</th>
-                                        <th style="width: 15%;">Is Percentage</th>
-                                        <th style="width: 15%;">Value</th>
+                                        <!-- <th style="width: 15%;">Is Percentage</th>
+                                        <th style="width: 15%;">Value</th> -->
                                         <th style="width: 20%;">Details</th>
                                         <th style="width: 15%;">STATUS</th>
                                         <th style="width: 15%;">Action</th>

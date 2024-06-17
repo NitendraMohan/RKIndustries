@@ -262,5 +262,30 @@ jQuery(document).ready(function ($) {
          });
     });
     //End
+
+
+    //show charges records
+    $(document).on("click", ".charges", function () {
+
+        var uid = $(this).data("id");
+        console.log(uid);
+        // var uaction = "show_material";
+        // var element = this;
+        link = '../view/bomOtherChargesView.php';
+        $.ajax({
+            url: link,
+            type: "POST",
+            data: {
+               bomid: uid,
+            },
+            success: function() {
+               window.location.href = link;
+            },
+            error: function(xhr, status, error) {
+               console.error("AJAX request failed:", status, error);
+            }
+         });
+    });
+    //End
 });
 //End

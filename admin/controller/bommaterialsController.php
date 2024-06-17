@@ -12,17 +12,35 @@ $username = checkUserSession();
 if ($_POST['action'] == "load") {
 
     try {
-        $sql = "select b.id, b.bom_name, p.product_name, br.brand_name,COALESCE(sum(bm.cost),0) as mcost, u.unit, b.qty,b.detail,b.image,b.status 
-        from tbl_bom_product b 
-        inner join tbl_products p 
-        on b.product_id=p.id
-        inner join tbl_unit u
-        on b.unit_id=u.id
-        inner join tbl_brand br
-        on b.brand_id=br.id
-        left join tbl_bom_material bm
-        on b.id=bm.bom_id  where b.id={$_POST['bomid']} 
-        group by b.id";
+        $sql = "SELECT 
+                    b.id, 
+                    b.bom_name, 
+                    p.product_name, 
+                    br.brand_name,
+                    COALESCE(bm.total_cost, 0) AS mcost,
+                    COALESCE(oc.total_charge, 0) AS ocost, 
+                    (COALESCE(bm.total_cost, 0) + COALESCE(oc.total_charge, 0)) AS total_cost,
+                    u.unit, 
+                    b.qty,
+                    b.detail, 
+                    b.image, 
+                    b.status
+                FROM 
+                    tbl_bom_product b
+                INNER JOIN 
+                    tbl_products p ON b.product_id = p.id
+                INNER JOIN 
+                    tbl_unit u ON b.unit_id = u.id
+                INNER JOIN 
+                    tbl_brand br ON b.brand_id = br.id
+                LEFT JOIN 
+                    (SELECT bom_id, SUM(cost) AS total_cost FROM tbl_bom_material GROUP BY bom_id) bm ON b.id = bm.bom_id
+                LEFT JOIN 
+                    (SELECT bom_id, SUM(charge_value) AS total_charge FROM bom_other_charges GROUP BY bom_id) oc ON b.id = oc.bom_id
+                WHERE 
+                    b.id = {$_POST['bomid']}
+                GROUP BY 
+                    b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty, b.detail, b.image, b.status;";
         $bomdata = $db->readSingleRecord($sql);
         if (isset($bomdata)) {
         $rowCounts = count($bomdata);
@@ -48,7 +66,7 @@ if ($_POST['action'] == "load") {
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
                         <td>{$row["cost"]}</td>
-                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='bom_material' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='bom_material' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_bom_material' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='bom_material' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
@@ -192,33 +210,13 @@ if ($_POST['action'] == "update") {
     try {
         $targetFile = "";
         $saveRecord = true;
-        // if (isset($_FILES["image"]) && $_FILES["image"]["name"] != "") {
-        //     $targetDir = "../images/";
-        //     $targetFile = $targetDir . $_FILES["image"]["name"];
-        //     $uploadOk = 1;
-        //     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-        //     // Validation here
-        //     if ($_FILES["image"]["name"] !== "") {
-        //         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
-        //             $saveRecord = true;
-        //         } else {
-        //             $saveRecord = false;
-        //             echo json_encode(array('success' => false, 'msg' => 'Error File Path! Record not saved'));
-        //             exit;
-        //         }
-        //     }
-        // }
-        // else if(isset($_POST['image']) && $_POST['image']!=''){
-        //     // echo $_POST['image'];
-        //     $targetFile = $_POST['image'];
-        // }
         $id = $_POST['modalid'];
         //get old record for user log
         $sql = "select * from tbl_bom_material where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
         $sql = "select id from tbl_bom_material where bom_id=:bomid and product_id=:productid where id!={$id}";
-        $params = ['bomid' => $bomid, 'productid' => $productid];
+        $params = ['bomid' => $_Session, 'productid' => $productid];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));

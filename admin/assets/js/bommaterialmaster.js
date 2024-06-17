@@ -14,10 +14,12 @@ jQuery(document).ready(function ($) {
                 console.log(result);
                 data = JSON.parse(result);
                 var bomdata = data['bom_data'];
-                $('#bomname').text(bomdata['bom_name']);
+                $('#bomname').text(bomdata['product_name']);
                 $('#brandname').text(bomdata['brand_name']);
                 $('#product_image').attr('src',bomdata['image']); //mcost
-                $('#totalcost').text(bomdata['mcost']);
+                $('#materialcost').text(bomdata['mcost']);
+                $('#othercost').text(bomdata['ocost']);
+                $('#totalcost').text(bomdata['total_cost']);
                 $("#bommaterialsTableContents").html(data['material_data']);
                 var total_records = $("#bommaterialsTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);

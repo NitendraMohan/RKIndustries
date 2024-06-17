@@ -22,28 +22,6 @@ jQuery(document).ready(function ($) {
     }
     load_table();
 
-    /**
-     * code for active and deactive
-     */
-    // $(document).on('click', '.btn_toggle', function(e) {
-    //     e.preventDefault();
-    //     var id = $(this).data('id');
-    //     var status = $(this).data('status');
-        
-    //     $.ajax({
-    //         url: '../controller/otherchargesController.php',
-    //         type: 'POST',
-    //         data: { id: id, action: status == "active" ? "Deactive" : "Active" },
-    //         success: function(response) {
-    //             if (response == 1) {
-    //                 toggleButtonStatus(id); // Toggle button status
-    //             } else {
-    //                 console.log("Error occurred while toggling button status.");
-    //             }
-    //         }
-    //     });
-    // });
-    
     function toggleButtonStatus(id) {
         var $btn = $(".btn_toggle[data-id='" + id + "']");
         var status = $btn.data('status');
