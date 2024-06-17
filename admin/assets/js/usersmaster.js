@@ -51,7 +51,7 @@ jQuery(document).ready(function ($) {
         } else {
             // var formData = $('#userForm').serialize() + '&action=insert';
             var formData = new FormData(this);
-            var id = $('#modalid').val();
+            var id = $('#userHiddenId').val();
             console.log('id='.id);
             if(id =='' || id == undefined){
                 action = 'insert';
@@ -84,7 +84,7 @@ jQuery(document).ready(function ($) {
                     setTimeout(function () {
                         $("#msg").fadeOut("slow");
                         $("#userForm").trigger("reset");
-                        $("#modelid").val('');
+                        $("#userHiddenId").val('');
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
@@ -124,12 +124,12 @@ jQuery(document).ready(function ($) {
             success: function (result) {
                 var arr = JSON.parse(result);
                 console.log(arr['username']);
-                $("#modalid").val(arr['id']);
+                $("#userHiddenId").val(arr['id']);
                 $("#logo_image").attr('src',arr['image']);
                 $("#username").val(arr['username']);
                 $("#role").val(arr['role']);
                 $("#departmentname").val(arr['dept_id']);
-                $("#designation").val(arr['designation']);
+                $("#designation").val(arr['designation_id']);
                 $("#gender").val(arr['gender']);
                 $("#dob").val(arr['dob']);
                 $("#mobile").val(arr['mobile']);

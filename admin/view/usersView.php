@@ -15,6 +15,10 @@ require_once '../connection.inc.php';
 $db = new dbConnector();
 $sql = "select id,dept_name from tbl_deparment";
 $departments = $db->readData($sql, []);
+
+$sql = "select id , designation_name from tbl_designation";
+$designations = $db->readData($sql,[]);
+
 ?>
 <div class="content pb-0">
     <div class="orders">
@@ -66,7 +70,7 @@ $departments = $db->readData($sql, []);
                                 <form action="" method="post" id="userForm">
                                     <div class="modal-body">
 
-                                        <input type="hidden" id="modalid" name="modalid" value="" />
+                                        <input type="hidden" id="userHiddenId" name="userHiddenName" value="" />
                                         <div class="form-group">
                                             <label for="image">Select User Image</label>
                                             <input class="form-control" type="file" name="image" id="image">
@@ -95,7 +99,14 @@ $departments = $db->readData($sql, []);
                                         </div>
                                         <div class="form-group">
                                             <label for="designation">Designation</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Designation" id="designation" name="designation" required>
+                                            <!-- <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Designation" id="designation" name="designation" required> -->
+                                             <select name="designation" id="designation" class="form-control">
+                                             <option value="" selected>Select Designation</option>
+                                               <?php 
+                                                foreach($designations as $designation) { 
+                                               echo "<option value='{$designation['id']}'>{$designation['designation_name']}</option>"; 
+                                                } ?>
+                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="gender">Gender</label>
@@ -111,7 +122,7 @@ $departments = $db->readData($sql, []);
                                         </div>
                                         <div class="form-group">
                                             <label for="mobile">Mobile Number</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="tel" placeholder="Enter Mobile Number" id="mobile" name="mobile" pattern="[0-9]{10}" required>
+                                            <input class="form-control" type="tel" placeholder="Enter Mobile Number" id="mobile" name="mobile" pattern="[0-9]{10}" required>
                                             <small id="mobileHelp" class="form-text text-muted">Please enter a 10-digit mobile number.</small>
                                         </div>
                                         <div class="form-group">

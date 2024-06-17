@@ -107,14 +107,14 @@ if ($_POST['action'] == "edit") {
 //Update record in database
 if ($_POST['action'] == "update") {
     try {
-        $id = $_POST['modalid'];
+        $id = $_POST['categoryHiddenName'];
         //get old record for user log
         $sql = "select * from tbl_category where id=:id";
-        $params = ["id" => $_POST["modalid"]];
+        $params = ["id" => $_POST["categoryHiddenName"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
         
-        $sql = "select * from tbl_category where id = :id";
-        $params = ["id" => $id];
+        $sql = "select * from tbl_category where category_name=:categoryName and id != :id";
+        $params = ["id" => $id, "categoryName" => $_POST["categoryname"]];
         $res = $db->readSingleRecord($sql,$params);
         if($res){
             echo json_encode(array('duplicate' => true));     
@@ -124,7 +124,7 @@ if ($_POST['action'] == "update") {
             $params = ['id'=>$id, 'categoryname' => strtoupper($_POST['categoryname']), 'status' => $_POST['status']];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
-                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_category", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
+                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_category", $_POST['categoryHiddenName'], $_SESSION["username"], json_encode($oldRecord));
                 echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
             } else {
                 echo json_encode(array("success" => false, "msg" => "Error! Record not updated"));
@@ -147,14 +147,12 @@ if ($_POST['action'] == "search") {
         elseif( $search_value == 'inactive' ){
             $statusSearch = 0;
         }
-        // $conn = new PDO($this->dsn, $this->categoryname, $this->password);
-        $sql = "SELECT * FROM tbl_category where category_name like '%{$search_value}%' or role like '%{$search_value}%'";
+        $sql = "SELECT * FROM tbl_category where category_name like '%{$search_value}%'";
         if($statusSearch!=''){
             $sql.="or status={$statusSearch}";
         }
         $result = $db->readData($sql);
-        // print_r($result);
-        // $result = $conn->query($sql);
+        if(isset($result)){
         $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
@@ -170,6 +168,11 @@ if ($_POST['action'] == "search") {
             </tr>";
             $sr++;
         }
+    }else{
+        $output =   "<tr>
+        <td colspan = '10'><h4><span style='color:red;'>Attention:</span> The record cannot be located using the provided value.</h4></td>
+    </tr>";
+    }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }

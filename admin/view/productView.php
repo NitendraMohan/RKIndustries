@@ -153,11 +153,11 @@ $units = $db->readData($sql);
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <th>BRAND NAME</th>
                                         <th>CATEGORY</th>
                                         <th>SUB CATEGORY</th>
-                                        <th>PRODUCT NAME</th>
                                         <th>PRODUCT CODE</th>
+                                        <th>PRODUCT NAME</th>
+                                        <th>BRAND NAME</th>
                                         <th>UNIT</th>
                                         <th>PRICE</th>
                                         <th>IMAGE</th>

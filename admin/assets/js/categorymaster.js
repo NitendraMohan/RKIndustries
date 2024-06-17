@@ -40,7 +40,7 @@ jQuery(document).ready(function ($) {
             var formData = new FormData(this);
             var id = $('#categoryHiddenId').val();
             console.log('id='.id);
-            if(id =='0' || id == undefined){
+            if(id =="" || id == undefined){
                 action = 'insert';
                 formData.append("action","insert");
             }
@@ -124,7 +124,7 @@ jQuery(document).ready(function ($) {
      * Live Search
      */
     $("#search").on("keyup",function(){
-        console.log("searching...");
+        // console.log("searching...");
         var search_term = $(this).val();
         var eventaction = "search";
         $.ajax({
