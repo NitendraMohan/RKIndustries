@@ -22,11 +22,11 @@ if ($_POST['action'] == "load") {
             foreach ($result as $row) {
                 $output .= "<tr>
                         <td>{$sr}</td>
-                        <td>{$row["brand_name"]}</td>
                         <td>{$row["category_name"]}</td>
                         <td>{$row["subcategory_name"]}</td>
                         <td>{$row["product_code"]}</td>
                         <td>{$row["product_name"]}</td>
+                        <td>{$row["brand_name"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["price"]}</td>
                         <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
@@ -258,11 +258,11 @@ if ($_POST['action'] == "search") {
         foreach ($result as $row) {
             $output .= "<tr>
              <td>{$sr}</td>
-                        <td>{$row["brand_name"]}</td>
                         <td>{$row["category_name"]}</td>
                         <td>{$row["subcategory_name"]}</td>
                         <td>{$row["product_code"]}</td>
                         <td>{$row["product_name"]}</td>
+                        <td>{$row["brand_name"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["price"]}</td>
             <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>

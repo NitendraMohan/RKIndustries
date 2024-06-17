@@ -80,7 +80,7 @@ $permissions = $db->get_buttons_permissions($params);
                                         </div>
                                         <div class="form-group">
                                             <label for="mobile">Mobile Number</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="tel" placeholder="Enter Mobile Number" id="mobile" name="mobile" pattern="[0-9]{10}" required>
+                                            <input class="form-control" type="tel" placeholder="Enter Mobile Number" id="mobile" name="mobile" pattern="[0-9]{10}" required>
                                             <small id="mobileHelp" class="form-text text-muted">Please enter a 10-digit mobile number.</small>
                                         </div>
                                         <div class="form-group">

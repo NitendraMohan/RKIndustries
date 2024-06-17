@@ -168,7 +168,7 @@ if ($_POST['action'] == "search") {
             $statusSearch = 0;
         }
         // $conn = new PDO($this->dsn, $this->taxname, $this->password);
-        $sql = "SELECT * FROM tbl_taxes where tax_name like '%{$search_value}%' or role like '%{$search_value}%' or tax_percentage like '%{$search_value}%'";
+        $sql = "SELECT * FROM tbl_taxes where tax_name like '%{$search_value}%' or tax_percentage like '%{$search_value}%'";
         if($statusSearch!=''){
             $sql.="or status={$statusSearch}";
         }

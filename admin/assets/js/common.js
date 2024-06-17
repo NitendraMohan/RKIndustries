@@ -182,5 +182,16 @@ jQuery(document).ready(function ($) {
         setupAutocomplete("productName", "product_list", "list", "tbl_products", "product_name");
     });
 
+    $('.uppercase-input').on('input', function(){
+        $(this).val($(this).val().toUpperCase());
+    });
+    $(".auto-select").on("input", function(){
+        var input = $(this);
+        setTimeout(function() {
+            input.focus().select();
+        }, 0);
+    });
+    
+
 });
 //End
