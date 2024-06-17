@@ -715,7 +715,7 @@ COMMIT;
 --
 -- Table structure for table `tbl_designation`
 --
-
+use rkindustry;
 CREATE TABLE `tbl_designation` (
   `id` int(11) NOT NULL,
   `designation_name` varchar(255) NOT NULL,
