@@ -16,7 +16,8 @@ jQuery(document).ready(function ($) {
                 var bomdata = data['bom_data'];
                 $('#bomname').text(bomdata['bom_name']);
                 $('#brandname').text(bomdata['brand_name']);
-                $('#product_image').attr('src',bomdata['image']);
+                $('#product_image').attr('src',bomdata['image']); //mcost
+                $('#totalcost').text(bomdata['mcost']);
                 $("#bommaterialsTableContents").html(data['material_data']);
                 var total_records = $("#bommaterialsTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);

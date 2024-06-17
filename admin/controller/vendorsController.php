@@ -170,9 +170,7 @@ if ($_POST['action'] == "update") {
             $sql = "update tbl_vendors set vendor_name=:vendorname,comp_name=:compname,gstno=:gstno,mobile=:mobile,email=:email,address=:address,image=:image,status=:status where id=:id";
             $params = ['id'=>$id, 'vendorname' => $vendorname,'compname' => $_POST['compname'], 'gstno' => $_POST['gstno'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile, 'status' => $_POST['status']];
             $recordId = $db->ManageData($sql, $params);
-            echo $recordId;
-            die();
-            if ($recordId) {
+           if ($recordId) {
                 log_user_action($_SESSION['userid'], $_POST['action'], "tbl_vendors", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
                 echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
             } else {

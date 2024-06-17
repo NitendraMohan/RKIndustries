@@ -111,7 +111,7 @@ $units = $db->readData($sql);
 
                                         <div class="form-group">
                                             <label for="price">Enter Price</label>
-                                            <input class="form-control" type="number" placeholder="Enter Price" id="price" name="price" required>
+                                            <input class="form-control" type="number" placeholder="Enter Price" id="price" name="price" step="any" required>
                                         </div>
 
                                         <div class="form-group">
