@@ -54,6 +54,7 @@ jQuery(document).ready(function ($) {
         } else {
             $btn.text("Active").removeClass('btn-secondary').addClass('btn-success').data('status', 'active');
         }
+        // load_table();
     }
 
     function setupAutocomplete(inputId, listContainerId, actionName, tablename, tablefield, onItemSelected) {
