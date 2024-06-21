@@ -822,6 +822,7 @@ CREATE TABLE `bom_other_charges` (
 -- Dumping data for table `bom_other_charges`
 --
 
+
 INSERT INTO `bom_other_charges` (`id`, `compid`, `bom_id`, `charge_id`, `is_percentage`, `apply_on_material`, `charge_value`, `status`, `createdat`, `updatedat`) VALUES
 (3, 1, 5, 2, 0, 0, 50.00, 1, '2024-06-17 09:16:00', '2024-06-17 09:16:00'),
 (4, 1, 5, 1, 0, 0, 60.00, 1, '2024-06-17 10:13:26', '2024-06-17 10:13:26');
@@ -846,72 +847,154 @@ ALTER TABLE `bom_other_charges`
 ALTER TABLE `bom_other_charges`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
-truncate table tbl_category; 
-INSERT INTO `tbl_category` (`id`, `compid`, `category_name`, `status`, `createdat`, `updatedat`) VALUES
-(1, 1, 'raw', 1, '2024-06-03 12:30:52', '2024-06-03 12:30:52'),
-(2, 1, 'final product', 1, '2024-06-07 08:08:39', '2024-06-07 08:08:39');
+-- --------------------------------------------------------
 
-truncate table tbl_subcategory;
-INSERT INTO `tbl_subcategory` (`id`, `compid`, `category_id`, `subcategory_name`, `status`, `createdat`, `updatedat`) VALUES
-(5, 1, 2, 'BAG', 1, '2024-06-03 06:25:42', '2024-06-03 06:25:42'),
-(6, 1, 2, 'HELMET', 1, '2024-06-03 06:26:02', '2024-06-03 06:26:02'),
-(7, 1, 1, 'FOAM', 1, '2024-06-03 06:33:50', '2024-06-03 06:33:50'),
-(14, 1, 1, 'ZIPPER', 1, '2024-06-11 07:58:33', '2024-06-11 07:58:33'),
-(16, 1, 1, 'BODY FABRIC', 1, '2024-06-12 13:30:36', '2024-06-12 13:30:36'),
-(17, 1, 1, 'BASE FABRIC', 1, '2024-06-12 13:30:36', '2024-06-12 13:30:36'),
-(18, 1, 1, 'LINING', 1, '2024-06-12 13:31:50', '2024-06-12 13:31:50'),
-(19, 1, 1, 'ELASTIC', 1, '2024-06-12 13:31:50', '2024-06-12 13:31:50'),
-(20, 1, 1, 'LABEL', 1, '2024-06-12 13:32:30', '2024-06-12 13:32:30'),
-(21, 1, 1, 'THREAD', 1, '2024-06-12 13:32:30', '2024-06-12 13:32:30'),
-(22, 1, 1, 'BUCKLE', 1, '2024-06-12 13:33:25', '2024-06-12 13:33:25'),
-(23, 1, 1, 'WEBBINGS', 1, '2024-06-12 13:33:25', '2024-06-12 13:33:25');
+--
+-- Table structure for table `tbl_stock`
+--
 
-truncate table tbl_brand;
-INSERT INTO `tbl_brand` (`id`, `compid`, `brand_name`, `status`, `createdat`, `updatedat`) VALUES
-(5, 1, 'AMERICAN TOURIST', 0, '2024-06-05 08:41:53', '2024-06-05 08:41:53'),
-(8, 1, 'NIKE', 1, '2024-06-05 13:07:08', '2024-06-05 13:07:08'),
-(9, 1, 'STUTUS', 1, '2024-06-05 13:07:19', '2024-06-05 13:07:19'),
-(13, 1, 'LIVE SMART', 1, '2024-06-12 13:35:54', '2024-06-12 13:35:54'),
-(14, 1, 'OTHER', 1, '2024-06-14 10:18:25', '2024-06-14 10:18:25');
+CREATE TABLE `tbl_stock` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `prod_id` int(11) NOT NULL,
+  `dept_id` int(11) NOT NULL,
+  `unit_id` int(11) NOT NULL,
+  `rate` decimal(10,2) NOT NULL,
+  `qty` decimal(10,2) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-truncate table tbl_products;
-INSERT INTO `tbl_products` (`id`, `compid`, `brand_id`, `category_id`, `subcategory_id`, `product_name`, `product_code`, `unit_id`, `price`, `image`, `min_limit`, `max_limit`, `status`, `createdat`, `updatedat`) VALUES
-(1, 1, 13, 1, 7, '6MM EPE FOAM GRY IN BACK PANEL & LAPTOP', '6MM FOAM', 91, 31.00, '../images/2022-09-03 (4).png', 50, 5000, 1, '2024-06-04 01:35:52', '2024-06-04 01:35:52'),
-(2, 1, 5, 2, 5, 'LAPTOP BACKPACK', 'BACKPACK', 75, 30.00, '../images/2022-09-03 (2).png', 20, 2000, 1, '2024-06-07 08:43:27', '2024-06-07 08:43:27'),
-(8, 1, 9, 2, 6, 'NINJA MEDIUM', 'NINJA', 75, 1500.00, '../images/favicon.png', 28, 3000, 1, '2024-06-12 13:14:30', '2024-06-12 13:14:30'),
-(9, 1, 5, 2, 5, 'TROLLY BAG MEDIUM', 'TROLLY', 75, 3000.00, '../images/favicon.png', 50, 4000, 1, '2024-06-12 13:15:20', '2024-06-12 13:15:20'),
-(10, 1, 14, 1, 16, '900D PU BODY FABRIC 60 YELLOW', '900D', 91, 128.00, '../images/favicon.png', 50, 4000, 1, '2024-06-14 10:28:04', '2024-06-14 10:28:04'),
-(11, 1, 14, 1, 17, '900D PU TRIMFABRIC BLK', '900DTRIM', 91, 128.00, '../images/favicon.png', 10, 1000, 1, '2024-06-14 10:30:19', '2024-06-14 10:30:19'),
-(12, 1, 14, 1, 18, 'TAFFET PRINTED UNING 72 GSM GRY', 'TAFFET72GSM', 91, 60.00, '../images/favicon.png', 50, 5000, 1, '2024-06-14 10:35:36', '2024-06-14 10:35:36'),
-(13, 1, 14, 1, 7, '08MM EPE FOAM IN SOLDER STRAP & GRAB HANDLE', '08MMEPEFOAM', 91, 41.60, '../images/favicon.png', 20, 3000, 1, '2024-06-14 10:37:37', '2024-06-14 10:37:37'),
-(14, 1, 14, 1, 23, '10MM WEBBING H.BASKET / PP', '10MMWEBBING', 91, 1.20, '../images/favicon.png', 4, 400, 1, '2024-06-14 10:39:39', '2024-06-14 10:39:39'),
-(15, 1, 14, 1, 23, '25MM WEBBING H.BASKET / BLACK PP', '25MMWEBBING', 91, 2.70, '../images/favicon.png', 5, 800, 1, '2024-06-14 10:41:04', '2024-06-14 10:41:04'),
-(16, 1, 14, 1, 19, '25MM ELASTIC BLACK COLOR/0.015KGS', '25MMELASTICBLACK', 91, 5.00, '../images/favicon.png', 6, 600, 1, '2024-06-14 10:42:30', '2024-06-14 10:42:30'),
-(17, 1, 14, 1, 14, '05NO ZIPPER 32MM', '05NOZIPPER', 91, 4.25, '../images/favicon.png', 7, 700, 1, '2024-06-14 10:44:08', '2024-06-14 10:44:08'),
-(18, 1, 14, 1, 20, 'SHOULDER WOVEN LOGO', 'SHOULDER WOVEN', 75, 1.50, '../images/favicon.png', 6, 600, 1, '2024-06-14 10:46:06', '2024-06-14 10:46:06'),
-(19, 1, 14, 1, 20, 'INNER SATIN LABEL', 'INNERSATIN', 75, 0.40, '../images/favicon.png', 5, 99, 1, '2024-06-14 10:47:44', '2024-06-14 10:47:44'),
-(20, 1, 14, 1, 21, 'NYLON 3 PLY THREAD TKT 40 FOR BODY', 'NYLON3 PLY', 91, 0.04, '../images/favicon.png', 8, 600, 1, '2024-06-14 10:49:12', '2024-06-14 10:49:12'),
-(21, 1, 14, 1, 22, '25MM LADER LOCK V SHAPE GRY', '25MMLADERLOCK', 75, 1.35, '../images/favicon.png', 8, 555, 1, '2024-06-14 10:51:04', '2024-06-14 10:51:04');
+--
+-- Dumping data for table `tbl_stock`
+--
 
-truncate table tbl_bom_product;
-INSERT INTO `tbl_bom_product` (`id`, `compid`, `bom_name`, `category_id`, `subcategory_id`, `product_id`, `brand_id`, `unit_id`, `qty`, `detail`, `image`, `status`, `createdat`, `updatedat`) VALUES
-(5, 1, 'BACKPACK BOM', 2, 5, 2, 5, 75, 1, 'yellow and black', '../images/human-body.png', 1, '2024-06-14 08:35:42', '2024-06-14 08:35:42'),
-(6, 1, 'TROLLY BAG BOM', 2, 5, 9, 5, 75, 1, 'blue and black', '../images/internal_organs.jpg', 1, '2024-06-14 08:58:07', '2024-06-14 08:58:07'),
-(7, 1, 'HELMET BOM', 2, 6, 8, 9, 75, 1, 'black', '../images/profile_photo.jpg', 1, '2024-06-14 09:56:41', '2024-06-14 09:56:41');
+INSERT INTO `tbl_stock` (`id`, `compid`, `prod_id`, `dept_id`, `unit_id`, `rate`, `qty`, `status`, `createdat`, `updatedat`) VALUES
+(1, 1, 1, 14, 91, 31.00, 10.00, 1, '2024-06-19 07:08:05', '2024-06-19 07:08:05'),
+(2, 1, 13, 14, 91, 41.60, 15.00, 1, '2024-06-19 07:09:01', '2024-06-19 07:09:01'),
+(3, 1, 17, 14, 91, 4.25, 80.00, 1, '2024-06-19 07:09:39', '2024-06-19 07:09:39'),
+(4, 1, 10, 14, 91, 128.00, 80.00, 1, '2024-06-19 07:10:34', '2024-06-19 07:10:34');
 
-truncate table tbl_bom_material;
-INSERT INTO `tbl_bom_material` (`id`, `compid`, `bom_id`, `category_id`, `subcategory_id`, `product_id`, `unit_id`, `rate`, `qty`, `cost`, `status`, `createdat`, `updatedat`) VALUES
-(4, 1, 5, 1, 7, 1, 91, 31.00, 0.36, 11.16, 1, '2024-06-14 09:11:35', '2024-06-14 09:11:35'),
-(5, 1, 6, 1, 7, 1, 91, 31.00, 2.00, 62.00, 1, '2024-06-14 09:57:41', '2024-06-14 09:57:41'),
-(6, 1, 5, 1, 7, 13, 91, 41.60, 0.16, 6.66, 1, '2024-06-14 10:58:12', '2024-06-14 10:58:12'),
-(7, 1, 5, 1, 14, 17, 91, 4.25, 1.60, 6.80, 1, '2024-06-14 13:43:09', '2024-06-14 13:43:09'),
-(8, 1, 5, 1, 16, 10, 91, 128.00, 0.31, 39.68, 1, '2024-06-14 13:44:09', '2024-06-14 13:44:09'),
-(9, 1, 5, 1, 17, 11, 91, 128.00, 0.21, 26.88, 1, '2024-06-14 13:44:45', '2024-06-14 13:44:45'),
-(10, 1, 5, 1, 18, 12, 91, 60.00, 0.86, 51.60, 1, '2024-06-14 13:45:22', '2024-06-14 13:45:22'),
-(11, 1, 5, 1, 19, 16, 91, 5.00, 0.20, 1.00, 1, '2024-06-14 13:46:09', '2024-06-14 13:46:09'),
-(12, 1, 5, 1, 20, 18, 75, 1.50, 1.00, 1.50, 1, '2024-06-14 13:46:46', '2024-06-14 13:46:46'),
-(13, 1, 5, 1, 20, 19, 75, 0.40, 1.00, 0.40, 1, '2024-06-14 13:47:12', '2024-06-14 13:47:12'),
-(14, 1, 5, 1, 21, 20, 91, 0.04, 200.00, 8.00, 1, '2024-06-14 13:47:40', '2024-06-14 13:47:40'),
-(15, 1, 5, 1, 22, 21, 75, 1.35, 2.00, 2.70, 1, '2024-06-14 13:48:12', '2024-06-14 13:48:12'),
-(16, 1, 5, 1, 23, 14, 91, 1.20, 0.68, 0.82, 1, '2024-06-14 13:48:53', '2024-06-14 13:48:53'),
-(17, 1, 5, 1, 23, 15, 91, 2.70, 1.74, 4.70, 1, '2024-06-14 13:49:59', '2024-06-14 13:49:59');
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_stock`
+--
+ALTER TABLE `tbl_stock`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_stock`
+--
+ALTER TABLE `tbl_stock`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_sale_order`
+--
+
+CREATE TABLE `tbl_sale_order` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `party_id` int(11) NOT NULL,
+  `bill_no` varchar(10) NOT NULL,
+  `order_date` date NOT NULL,
+  `delivery_date` date NOT NULL,
+  `voucher_no` int(11) NOT NULL,
+  `payment_mode` varchar(255) NOT NULL,
+  `delivery_address` varchar(500) NOT NULL,
+  `terms` varchar(500) NOT NULL,
+  `other_detail` varchar(500) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_sale_order`
+--
+
+INSERT INTO `tbl_sale_order` (`id`, `compid`, `party_id`, `bill_no`, `order_date`, `delivery_date`, `voucher_no`, `payment_mode`, `delivery_address`, `terms`, `other_detail`, `status`, `createdat`, `updatedat`) VALUES
+(1, 1, 1, '1', '2024-06-01', '2024-06-30', 2, 'Cheque', '', '', '', 1, '2024-06-20 13:14:53', '2024-06-20 13:14:53'),
+(2, 1, 2, '3', '2024-06-16', '2024-06-28', 2, 'Online', 'gurgaon', 'sale will not be returned', 'other expanses will be charged sperately', 1, '2024-06-20 13:24:08', '2024-06-20 13:24:08');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_sale_order`
+--
+ALTER TABLE `tbl_sale_order`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_sale_order`
+--
+ALTER TABLE `tbl_sale_order`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_sale_order_products`
+--
+
+CREATE TABLE `tbl_sale_order_products` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `saleorder_id` int(11) NOT NULL,
+  `brand_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `rate` decimal(10,2) NOT NULL,
+  `unit_id` int(11) NOT NULL,
+  `qty` decimal(10,2) NOT NULL,
+  `tax_id` int(11) NOT NULL,
+  `tax_amt` decimal(10,2) NOT NULL,
+  `cost` decimal(10,2) NOT NULL,
+  `total_cost` decimal(10,2) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_sale_order_products`
+--
+
+INSERT INTO `tbl_sale_order_products` (`id`, `compid`, `saleorder_id`, `brand_id`, `product_id`, `rate`, `unit_id`, `qty`, `tax_id`, `tax_amt`, `cost`, `total_cost`, `status`, `createdat`, `updatedat`) VALUES
+(3, 1, 1, 9, 9, 3000.00, 75, 6.00, 3, 396.00, 18000.00, 18396.00, 1, '2024-06-21 09:02:12', '2024-06-21 09:02:12'),
+(4, 1, 1, 8, 2, 30.00, 75, 2004.00, 1, 2525.04, 60120.00, 62645.04, 1, '2024-06-21 09:06:45', '2024-06-21 09:06:45');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_sale_order_products`
+--
+ALTER TABLE `tbl_sale_order_products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_sale_order_products`
+--
+ALTER TABLE `tbl_sale_order_products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
