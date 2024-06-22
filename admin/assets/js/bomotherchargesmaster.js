@@ -31,6 +31,11 @@ jQuery(document).ready(function ($) {
         });
     }
     load_table();
+
+    $(document).on("click", ".btn_toggle", function(){
+        load_table();
+    });
+
     $('#selected_user').change(function() {
         load_table();
     });

@@ -4,24 +4,13 @@ jQuery(document).ready(function ($) {
  * Function for loading complete data of units
  */
     function load_table() {
-        var bomid = $('#bomid').val();
-        console.log('bom id : '+bomid);
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/bomsController.php",
             type: "POST",
-            data: { action: "load", bomid: bomid },
+            data: { action: "load" },
             success: function (result) {
-                console.log(result);
-                data = JSON.parse(result);
-                var bomdata = data['bom_data'];
-                $('#bomname').text(bomdata['product_name']);
-                $('#brandname').text(bomdata['brand_name']);
-                $('#product_image').attr('src',bomdata['image']); //mcost
-                $('#materialcost').text(bomdata['mcost']);
-                $('#othercost').text(bomdata['ocost']);
-                $('#totalcost').text(bomdata['total_cost']);
-                $("#bommaterialsTableContents").html(data['material_data']);
-                var total_records = $("#bommaterialsTableContents tr").length;
+                $("#bomsTableContents").html(result);
+                var total_records = $("#bomsTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);
                 $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
             },
@@ -32,9 +21,66 @@ jQuery(document).ready(function ($) {
     }
     load_table();
 
-    $(document).on("click", ".btn_toggle", function(){
-        load_table();
+
+    // $(function() {
+    //     $('#autocomplete-input').autocomplete({
+    //       source: function(request, response) {
+    //         var availableTags = [
+    //           "ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure",
+    //           "COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java",
+    //           "JavaScript", "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"
+    //         ];
+  
+    //         var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+    //         response($.grep(availableTags, function(item){
+    //           return matcher.test(item);
+    //         }));
+    //       }
+    //     });
+    //   });
+
+    // var studentData = [
+    //     { label: "Alice Johnson", id: 1 },
+    //     { label: "Bob Smith", id: 2 },
+    //     { label: "Charlie Brown", id: 3 },
+    //     { label: "David Lee", id: 4 },
+    //     { label: "Emily Taylor", id: 5 }
+    // ];
+    // // $('#myModal').on('shown.bs.modal', function () {
+    // $('#autocomplete-input').autocomplete({
+    //     source: function(request, response) {
+    //         var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+    //         response($.grep(studentData, function(item) {
+    //             return matcher.test(item.label);
+    //         }));
+    //     },
+    //     select: function(event, ui) {
+    //         console.log(ui);
+    //         $('#autocomplete-input').val(ui.item.label);
+    //         $('#selected-id').val(ui.item.id);
+    //         return false;
+    //     }
+       
+    // });
+// });
+    
+
+    // $('#autocomplete-input').blur(function(){
+    //     alert("ok");
+    // });
+
+      
+    $('#image').on('change', function(){
+        var file = this.files[0]; // Get the selected file
+        if (file) {
+            var reader = new FileReader(); // Create a new FileReader object
+            reader.onload = function(e) {
+                $('#logo_image').attr('src', e.target.result); // Set the src attribute of the image with the data URL of the selected file
+            };
+            reader.readAsDataURL(file); // Read the selected file as a data URL
+        }
     });
+
 
     $("#category").on("change", function(e){
         e.preventDefault();
@@ -43,7 +89,7 @@ jQuery(document).ready(function ($) {
         console.log(category);
         // if(category!==''){
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/bomsController.php",
                 type: "POST",
                 data: { action: 'load_subcategories', category_id: category },
                 success: function (result) {
@@ -56,11 +102,11 @@ jQuery(document).ready(function ($) {
     $("#subcategory").on("change", function(e){
         e.preventDefault();
         var subcategory = $(this).val();
-        $("#product").html("<option value='' selected>Product..</option>");
+        $("#product").html("<option value='' selected>Select..</option>");
         console.log(category);
         // if(category!==''){
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/bomsController.php",
                 type: "POST",
                 data: { action: 'load_products', subcategory_id: subcategory },
                 success: function (result) {
@@ -69,39 +115,22 @@ jQuery(document).ready(function ($) {
             });
         // }
     })
-
-
     $("#product").on("change", function(e){
         e.preventDefault();
-        var productid = $(this).val();
-        // $("#munit").html("<option value='' selected>Unit..</option>");
+        var product = $(this).val();
+        $("#brand").html("<option value='' selected>Select..</option>");
         console.log(category);
         // if(category!==''){
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/bomsController.php",
                 type: "POST",
-                data: { action: 'load_rateunit', product_id: productid },
+                data: { action: 'load_brands', product_id: product },
                 success: function (result) {
-                    var data = JSON.parse(result);
-                    $("#munit").val(data['unit_id']);
-                    $("#mrate").val(data['price']);
+                    $("#brand").html(result);
                 }
             });
         // }
     })
-
-
-    $("#mqty").on('input', function(){
-        var price = $("#mrate").val();
-        var qty = $("#mqty").val();
-        if(isNaN(price) || isNaN(qty)){return;}
-        var cost = price * qty;
-        if (!isNaN(cost)) {
-            $("#cost").val(cost.toFixed(2));
-        }
-        // $("#cost").val(cost);
-    })
-    
     /**
      * Code for submit model form data
      */
@@ -129,12 +158,12 @@ jQuery(document).ready(function ($) {
             }
             else{
                 action = 'update';
-                // var currentImage =  $("#logo_image").attr('src') ?? '';
-                // formData.append("image",currentImage);
+                var currentImage =  $("#logo_image").attr('src') ?? '';
+                formData.append("image",currentImage);
                 formData.append("action","update");
             }
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/bomsController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
@@ -168,7 +197,7 @@ jQuery(document).ready(function ($) {
         var uaction = "delete";
         var element = this;
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/bomsController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
@@ -189,41 +218,51 @@ jQuery(document).ready(function ($) {
         var uaction = "edit";
         console.log("product id "+ uid);
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/bomsController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
                 var arr = JSON.parse(result);
                 var cat_id = arr['category_id']; 
-                $("#category").val(arr['category_id']);
+                console.log('category id:'+ cat_id);
+                console.log(arr['product_name']);
                 $.ajax({
-                    url: "../controller/bommaterialsController.php",
+                    url: "../controller/bomsController.php",
                     type: "POST",
                     data: { action: 'load_subcategories', category_id: cat_id },
                     success: function (list) {
                         $("#subcategory").html(list);
                         $("#subcategory").val(arr['subcategory_id']);
                         $.ajax({
-                            url: "../controller/bommaterialsController.php",
+                            url: "../controller/bomsController.php",
                             type: "POST",
                             data: { action: 'load_products', subcategory_id: arr['subcategory_id'] },
                             success: function (product_list) {
                                 $("#product").html(product_list);
                                 $("#product").val(arr['product_id']);
+                                $.ajax({
+                                    url: "../controller/bomsController.php",
+                                    type: "POST",
+                                    data: { action: 'load_brands', product_id: arr['product_id'] },
+                                    success: function (result) {
+                                        $("#brand").html(result);
+                                        $("#brand").val(arr['brand_id']);
+                                    }
+                                });
                             }
                         });
                     }
                 });
                 $("#modalid").val(arr['id']);
-                // $("#logo_image").attr('src',arr['image']);
-                // $("#bomname").val(arr['bom_name']);
-                // $("#category").val(arr['category_id']);
-                $("#munit").val(arr['unit_id']);
-                $("#mrate").val(arr['rate']);
-                $("#mqty").val(arr['qty']);
-                $("#cost").val(arr['cost']);
+                $("#logo_image").attr('src',arr['image']);
+                $("#bomname").val(arr['bom_name']);
+                $("#category").val(arr['category_id']);
+                $("#brand").val(arr['brand_id']);
+                $("#unit").val(arr['unit_id']);
+                $("#qty").val(arr['qty']);
+                $("#detail").val(arr['detail']);
                 $("#status").val(arr['status']);
-                // $("#myModal").modal('show');
+                $("#myModal").modal('show');
             }
         });
     });
@@ -236,17 +275,66 @@ jQuery(document).ready(function ($) {
         var search_term = $(this).val();
         var eventaction = "search";
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/bomsController.php",
         type: "POST",
         data: { action: eventaction, search : search_term },
         success : function(data){
-            $("#bommaterialsTableContents").html(data);
-            var total_records = $("#bommaterialsTableContents tr").length;
+            $("#bomsTableContents").html(data);
+            var total_records = $("#bomsTableContents tr").length;
             // $('#total_records').html("<h6><b>Total Records: "+total_records+"</b></h6>");
             $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
 
         }
         });
     });
+
+    //show material records
+    $(document).on("click", ".material", function () {
+
+        var uid = $(this).data("id");
+        console.log(uid);
+        // var uaction = "show_material";
+        // var element = this;
+        link = '../view/bommaterialsView.php';
+        $.ajax({
+            url: link,
+            type: "POST",
+            data: {
+               bomid: uid,
+            },
+            success: function() {
+               window.location.href = link;
+            },
+            error: function(xhr, status, error) {
+               console.error("AJAX request failed:", status, error);
+            }
+         });
+    });
+    //End
+
+
+    //show charges records
+    $(document).on("click", ".charges", function () {
+
+        var uid = $(this).data("id");
+        console.log(uid);
+        // var uaction = "show_material";
+        // var element = this;
+        link = '../view/bomOtherChargesView.php';
+        $.ajax({
+            url: link,
+            type: "POST",
+            data: {
+               bomid: uid,
+            },
+            success: function() {
+               window.location.href = link;
+            },
+            error: function(xhr, status, error) {
+               console.error("AJAX request failed:", status, error);
+            }
+         });
+    });
+    //End
 });
 //End
