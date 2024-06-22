@@ -150,7 +150,7 @@ if ($_POST['action'] == "insert") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "insert into tbl_bom_product(compid,bom_name,category_id,subcategory_id,product_id,brand_id,unit_id,qty,image,detail,status) values((select id from company_master),:bomname,:category,:subcategory,:product,:brand,:unit,:qty,:image,:detail,:status)";
+            $sql = "insert into tbl_bom_product(compid,bom_name,category_id,subcategory_id,product_id,brand_id,unit_id,qty,bom_cost,image,detail,status) values((select id from company_master),:bomname,:category,:subcategory,:product,:brand,:unit,:qty,0.00,:image,:detail,:status)";
             $params = [ 'bomname' => $bomname,'category' => $categoryid,'subcategory' => $subcategoryid,'product' => $productid,'brand' => $brandid, 'unit'=>$unitid, 'qty'=>$qty, 'status' => $_POST['status'], 'detail' => $detail, 'image' => $targetFile ?? '../images/favicon.png'];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {

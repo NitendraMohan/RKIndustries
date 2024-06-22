@@ -88,12 +88,33 @@ jQuery(document).ready(function ($) {
                         $("#msg").fadeOut("slow");
                         $("#userForm").trigger("reset");
                         $("#modelid").val('');
+                        update_bom_cost();           
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
             });
         }
     });
+
+    function update_bom_cost(){
+        var total_cost = $("#totalcost").text();
+        if(!isNaN(total_cost) && total_cost>0.00){
+            var bomid = $("#bomid").val();
+            $.ajax({
+                url: "../controller/bommaterialsController.php",
+                type: "POST",
+                data: { action: "update_totalcost", bomid: bomid, total_cost: total_cost },
+                success: function (result) {
+                    if (result == 1) {
+                        console.log("Success! bom cost updated successfully");
+                    } 
+                    else{
+                        console.log("Error! bom cost not updated");
+                    }
+                }
+            });
+        }
+    }
 
     //Code delete record from table
     $(document).on("click", ".unitDelete", function () {
@@ -108,6 +129,7 @@ jQuery(document).ready(function ($) {
                 if (result == 1) {
                     $(element).closest("tr").fadeOut();
                     load_table();
+                    update_bom_cost();
                 } else {
                     alert("can't delete");
                 }

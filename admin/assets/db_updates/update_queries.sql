@@ -822,6 +822,7 @@ CREATE TABLE `bom_other_charges` (
 -- Dumping data for table `bom_other_charges`
 --
 
+
 INSERT INTO `bom_other_charges` (`id`, `compid`, `bom_id`, `charge_id`, `is_percentage`, `apply_on_material`, `charge_value`, `status`, `createdat`, `updatedat`) VALUES
 (3, 1, 5, 2, 0, 0, 50.00, 1, '2024-06-17 09:16:00', '2024-06-17 09:16:00'),
 (4, 1, 5, 1, 0, 0, 60.00, 1, '2024-06-17 10:13:26', '2024-06-17 10:13:26');
@@ -844,4 +845,156 @@ ALTER TABLE `bom_other_charges`
 -- AUTO_INCREMENT for table `bom_other_charges`
 --
 ALTER TABLE `bom_other_charges`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_stock`
+--
+
+CREATE TABLE `tbl_stock` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `prod_id` int(11) NOT NULL,
+  `dept_id` int(11) NOT NULL,
+  `unit_id` int(11) NOT NULL,
+  `rate` decimal(10,2) NOT NULL,
+  `qty` decimal(10,2) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_stock`
+--
+
+INSERT INTO `tbl_stock` (`id`, `compid`, `prod_id`, `dept_id`, `unit_id`, `rate`, `qty`, `status`, `createdat`, `updatedat`) VALUES
+(1, 1, 1, 14, 91, 31.00, 10.00, 1, '2024-06-19 07:08:05', '2024-06-19 07:08:05'),
+(2, 1, 13, 14, 91, 41.60, 15.00, 1, '2024-06-19 07:09:01', '2024-06-19 07:09:01'),
+(3, 1, 17, 14, 91, 4.25, 80.00, 1, '2024-06-19 07:09:39', '2024-06-19 07:09:39'),
+(4, 1, 10, 14, 91, 128.00, 80.00, 1, '2024-06-19 07:10:34', '2024-06-19 07:10:34');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_stock`
+--
+ALTER TABLE `tbl_stock`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_stock`
+--
+ALTER TABLE `tbl_stock`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_sale_order`
+--
+
+CREATE TABLE `tbl_sale_order` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `party_id` int(11) NOT NULL,
+  `bill_no` varchar(10) NOT NULL,
+  `order_date` date NOT NULL,
+  `delivery_date` date NOT NULL,
+  `voucher_no` int(11) NOT NULL,
+  `payment_mode` varchar(255) NOT NULL,
+  `delivery_address` varchar(500) NOT NULL,
+  `terms` varchar(500) NOT NULL,
+  `other_detail` varchar(500) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_sale_order`
+--
+
+INSERT INTO `tbl_sale_order` (`id`, `compid`, `party_id`, `bill_no`, `order_date`, `delivery_date`, `voucher_no`, `payment_mode`, `delivery_address`, `terms`, `other_detail`, `status`, `createdat`, `updatedat`) VALUES
+(1, 1, 1, '1', '2024-06-01', '2024-06-30', 2, 'Cheque', '', '', '', 1, '2024-06-20 13:14:53', '2024-06-20 13:14:53'),
+(2, 1, 2, '3', '2024-06-16', '2024-06-28', 2, 'Online', 'gurgaon', 'sale will not be returned', 'other expanses will be charged sperately', 1, '2024-06-20 13:24:08', '2024-06-20 13:24:08');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_sale_order`
+--
+ALTER TABLE `tbl_sale_order`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_sale_order`
+--
+ALTER TABLE `tbl_sale_order`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_sale_order_products`
+--
+
+CREATE TABLE `tbl_sale_order_products` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `saleorder_id` int(11) NOT NULL,
+  `brand_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `rate` decimal(10,2) NOT NULL,
+  `unit_id` int(11) NOT NULL,
+  `qty` decimal(10,2) NOT NULL,
+  `tax_id` int(11) NOT NULL,
+  `tax_amt` decimal(10,2) NOT NULL,
+  `cost` decimal(10,2) NOT NULL,
+  `total_cost` decimal(10,2) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_sale_order_products`
+--
+
+INSERT INTO `tbl_sale_order_products` (`id`, `compid`, `saleorder_id`, `brand_id`, `product_id`, `rate`, `unit_id`, `qty`, `tax_id`, `tax_amt`, `cost`, `total_cost`, `status`, `createdat`, `updatedat`) VALUES
+(3, 1, 1, 9, 9, 3000.00, 75, 6.00, 3, 396.00, 18000.00, 18396.00, 1, '2024-06-21 09:02:12', '2024-06-21 09:02:12'),
+(4, 1, 1, 8, 2, 30.00, 75, 2004.00, 1, 2525.04, 60120.00, 62645.04, 1, '2024-06-21 09:06:45', '2024-06-21 09:06:45');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_sale_order_products`
+--
+ALTER TABLE `tbl_sale_order_products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_sale_order_products`
+--
+ALTER TABLE `tbl_sale_order_products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;

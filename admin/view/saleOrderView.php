@@ -3,18 +3,15 @@ require_once '../connection.inc.php';
 // require_once '../utility/sessions.php';
 require("../template/top.inc.php");
 $db = new dbConnector();
-if(isset($_POST['moduleid'])){
+if (isset($_POST['moduleid'])) {
     $_SESSION['moduleid'] = $_POST['moduleid'];
     $_SESSION['current_module_name'] = $_POST['modulename'];
 }
-$params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
+$params = ['userid' => $_SESSION['userid'], 'moduleid' => $_SESSION['moduleid']];
 $permissions = $db->get_buttons_permissions($params);
 
-$sql = "Select id,category_name from tbl_category where status=1";
-$categories = $db->readData($sql);
-
-$sql = "Select id,unit from tbl_unit where status=1";
-$units = $db->readData($sql);
+$sql = "select id,party_name from tbl_parties";
+$parties = $db->readData($sql, []);
 ?>
 <div class="content pb-0">
     <div class="orders">
@@ -22,7 +19,7 @@ $units = $db->readData($sql);
             <div class="col-xl-12">
                 <div class="card">
 
-                <div class="row">
+                    <div class="row">
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
                                 <h3 class="box-title"><?php echo $_SESSION['current_module_name'] ?></h3>
@@ -31,7 +28,7 @@ $units = $db->readData($sql);
                         </div>
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                                <button type="button" class="btn btn-sm btn-info add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert']?>>
+                                <button type="button" class="btn btn-sm btn-info add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert'] ?>>
                                     Create New
                                 </button>
                             </div>
@@ -47,6 +44,12 @@ $units = $db->readData($sql);
                             </div>
                         </div>
                     </div>
+
+
+
+
+
+
                     <div class="modal fade" id="myModal">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -54,74 +57,58 @@ $units = $db->readData($sql);
                                 <!-- Modal Header -->
                                 <div class="modal-header">
                                     <button type="button" class="close modalClose" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Add BOM</h4>
+                                    <h4 class="modal-title">Add Sale Order</h4>
                                 </div>
                                 <!-- Modal body -->
                                 <form action="" method="post" id="userForm">
                                     <div class="modal-body">
-
-                                        <input type="hidden" id="modalid" name="modalid" value="" />
+                                        <input type="hidden" id="userHiddenId" name="userHiddenName" value="" />
                                         <div class="form-group">
-                                            <label for="bomname">Enter BOM Name</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter BOM Name" id="bomname" name="bomname" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="image">Select Product Image</label>    
-                                            <input class="form-control" type="file" name="image" id="image">
-                                        </div>
-                                        <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%"/>    
-                                        <div class="form-group">
-                                            <label for="category">Select Category</label>
-                                            <select class="form-control modalyearstatus" name="category" id="category">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($categories as $category){
-                                                    echo "<option value='{$category['id']}'>{$category['category_name']}</option>";
-                                                 }?>
+                                            <label for="party_id">Party Name</label>
+                                            <select class="form-control modalyearstatus" name="party_id" id="party_id">
+                                                <option value="" selected>Select Party</option>
+                                                <?php foreach ($parties as $party) {
+                                                    echo "<option value='{$party['id']}'>{$party['party_name']}</option>";
+                                                } ?>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="subcategory">Select Sub Category</label>
-                                            <select class="form-control modalyearstatus" name="subcategory" id="subcategory">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($subcategories as $subcategory){
-                                                    echo "<option value='{$subcategory['id']}'>{$subcategory['subcategory_name']}</option>";
-                                                 }?>
+                                            <label for="bill_no">Bill No</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Bill No" id="bill_no" name="bill_no" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="voucher_no">Voucher No</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Voucher Number" id="voucher_no" name="voucher_no">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="order_date">Date of Order</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="date" min="1900-01-01" max="2030-12-31" placeholder="Enter Date of Order" id="order_date" name="order_date" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="delivery_date">Date of Delivery</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="date" min="1900-01-01" max="2030-12-31" placeholder="Enter Date of Delivery" id="delivery_date" name="delivery_date">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="payment_mode">Payment Mode</label>
+                                            <select class="form-control modalyearstatus" name="payment_mode" id="payment_mode">
+                                                <option value="" selected>Select Payment mode</option>
+                                                <option value="cash">Cash</option>
+                                                <option value="Cheque">Cheque</option>
+                                                <option value="Online">Online</option>
+                                                <option value="Card">Card</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="product">Select Product</label>
-                                            <select class="form-control modalyearstatus" name="product" id="product">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($products as $product){
-                                                    echo "<option value='{$product['id']}'>{$product['product_name']}</option>";
-                                                 }?>
-                                            </select>
+                                            <label for="delivery_address">Delivery Address</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Delivery Address" id="delivery_address" name="delivery_address">
                                         </div>
                                         <div class="form-group">
-                                            <label for="brand">Select Brand</label>
-                                            <select class="form-control modalyearstatus" name="brand" id="brand">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($brands as $brand){
-                                                    echo "<option value='{$brand['id']}'>{$brand['brand_name']}</option>";
-                                                 }?>
-                                            </select>
+                                            <label for="terms">Terms</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Terms" id="terms" name="terms">
                                         </div>
                                         <div class="form-group">
-                                            <label for="unit">Select Unit</label>
-                                            <select class="form-control modalyearstatus" name="unit" id="unit">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($units as $unit){
-                                                    echo "<option value='{$unit['id']}'>{$unit['unit']}</option>";
-                                                 }?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="qty">Enter Qty</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Qty" id="qty" name="qty" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="detail">Enter Description</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Desc.." id="detail" name="detail" required>
+                                            <label for="other_detail">Other Details</label>
+                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Other Details" id="other_detail" name="other_detail">
                                         </div>
                                         <div class="form-group">
                                             <label for="Status">Status</label>
@@ -136,7 +123,7 @@ $units = $db->readData($sql);
                                     <!-- Modal footer -->
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save">Submit</button>
-                                        <button type="button" class="btn btn-secondary modalClose" id="btnClose" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary modalClose" data-dismiss="modal">Close</button>
                                     </div>
                                 </form>
                                 <!-- <div class="alert alert-dark" id="hmsg" style="display:none;"></div> -->
@@ -147,27 +134,25 @@ $units = $db->readData($sql);
                     <div class="modal fade" id="myModalUpdate">
 
                     </div>
-                    <div class="card-body--">    
+                    <div class="card-body--">
                         <div class="table-responsive table-container">
                             <table class="table">
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
-                                        <!-- <th>BOM Name</th> -->
-                                        <th>Product Name</th>
-                                        <th>Brand Name</th>
-                                        <th>Unit</th>
-                                        <th>Qty</th>
-                                        <th>Materials Cost</th>
-                                        <th>Other Cost</th>
-                                        <th>Total Cost</th>
-                                        <!-- <th>Detail</th> -->
-                                        <th>Image</th>
+                                        <th>Party Name</th>
+                                        <th>Bill No</th>
+                                        <th>Voucher No</th>
+                                        <th NOWRAP>Order Date</th>
+                                        <th NOWRAP>Delivery Date</th>
+                                        <th>Payment Mode</th>
+                                        <th>Delivery Address</th>
+                                        <th>Terms</th>
                                         <th>STATUS</th>
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>
                                 </thead>
-                                <tbody class="tableContents" id="bomsTableContents">
+                                <tbody class="tableContents" id="saleOrderTableContents">
 
                                 </tbody>
                             </table>
@@ -185,7 +170,7 @@ $units = $db->readData($sql);
             </div>
          </footer> -->
 <?php require('../template/footer.inc.php') ?>
-<script src="../assets/js/bommaster.js" type="text/javascript"></script>
+<script src="../assets/js/saleordermaster.js" type="text/javascript"></script>
 </body>
 
 </html>

@@ -12,63 +12,37 @@ $username = checkUserSession();
 if ($_POST['action'] == "load") {
 
     try {
-        $sql = "SELECT 
-                    b.id, 
-                    b.bom_name, 
-                    p.product_name, 
-                    br.brand_name,
-                    COALESCE(bm.total_cost, 0) AS mcost,
-                    COALESCE(oc.total_charge, 0) AS ocost, 
-                    (COALESCE(bm.total_cost, 0) + COALESCE(oc.total_charge, 0)) AS total_cost,
-                    u.unit, 
-                    b.qty,
-                    b.detail, 
-                    b.image, 
-                    b.status
-                FROM 
-                    tbl_bom_product b
-                INNER JOIN 
-                    tbl_products p ON b.product_id = p.id
-                INNER JOIN 
-                    tbl_unit u ON b.unit_id = u.id
-                INNER JOIN 
-                    tbl_brand br ON b.brand_id = br.id
-                LEFT JOIN 
-                    (SELECT bom_id,status, SUM(cost) AS total_cost FROM tbl_bom_material GROUP BY bom_id,status having status=1) bm ON b.id = bm.bom_id
-                LEFT JOIN 
-                    (SELECT bom_id,status, SUM(charge_value) AS total_charge FROM bom_other_charges GROUP BY bom_id,status having status=1) oc ON b.id = oc.bom_id
-                WHERE 
-                    b.id = {$_POST['bomid']}
-                GROUP BY 
-                    b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty, b.detail, b.image, b.status;";
-        $bomdata = $db->readSingleRecord($sql);
-        if (isset($bomdata)) {
-        $rowCounts = count($bomdata);
+        // $sql = "";
+        // $bomdata = $db->readSingleRecord($sql);
+        // if (isset($bomdata)) {
+        // $rowCounts = count($bomdata);
         $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
-        $sql = "select bm.id, p.product_name, u.unit, bm.rate, bm.qty,bm.cost,bm.status 
-        from tbl_bom_material bm 
+        $sql = "select s.id,d.dept_name, p.product_name, u.unit, s.rate, s.qty,s.status 
+        from tbl_stock s 
         inner join tbl_products p 
-        on bm.product_id=p.id
+        on s.prod_id=p.id
+        inner join tbl_deparment d
+        on s.dept_id= d.id
         inner join tbl_unit u
-        on bm.unit_id=u.id
-        where bm.bom_id={$_POST['bomid']}";
-        $materialdata = $db->readData($sql);
-        $result['bom_data'] = $bomdata;
+        on s.unit_id=u.id
+        ";
+        $stockdata = $db->readData($sql);
+        // $result['bom_data'] = $bomdata;
         $output = "";
-        if(isset($materialdata)){
-        foreach ($materialdata as $row) {
+        if(isset($stockdata)){
+        foreach ($stockdata as $row) {
             $output .= "<tr>
                         <td>{$sr}</td>
+                        <td>{$row["dept_name"]}</td>
                         <td>{$row["product_name"]}</td>
                         <td>{$row["rate"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
-                        <td>{$row["cost"]}</td>
                         <td>" . ($row['status'] == 1 
-                        ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_bom_material' style='width:70px;'>Active</button>" 
-                        : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_bom_material' style='width:70px;'>Deactive</button>") . "</td>
+                        ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_stock' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_stock' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
@@ -77,20 +51,20 @@ if ($_POST['action'] == "load") {
                         </tr>";
             $sr++;
         }
-    }
-        $result['material_data'] = $output;
+    // }
+        // $result['material_data'] = $output;
     }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
-    echo json_encode($result);
+    echo json_encode($output);
 }
 //End
 
 if($_POST['action'] == "load_subcategories"){
     $sql = "Select id,subcategory_name from tbl_subcategory where category_id={$_POST['category_id']} and status=1";
     $subcategories = $db->readData($sql);
-    $list = "<option value='' selected>Select..</option>";
+    $list = "<option value='' selected>Subcategory..</option>";
     if(isset($subcategories)){
         foreach($subcategories as $subcategory){
             $list.="<option value='{$subcategory['id']}'>{$subcategory['subcategory_name']}</option>";
@@ -102,7 +76,7 @@ if($_POST['action'] == "load_subcategories"){
 if($_POST['action'] == "load_products"){
     $sql = "Select id,product_name from tbl_products where subcategory_id={$_POST['subcategory_id']} and status=1";
     $products = $db->readData($sql);
-    $list = "<option value='' selected>Select..</option>";
+    $list = "<option value='' selected>Product..</option>";
     if(isset($products)){
         foreach($products as $product){
             $list.="<option value='{$product['id']}'>{$product['product_name']}</option>";
@@ -137,28 +111,24 @@ if($_POST['action'] == "load_brands"){
 //Insert data into database
 if ($_POST['action'] == "insert") {
     try {
-        $targetFile = null;
-        $saveRecord = true;
-        $bomid = $_SESSION['bomid'];
-        $categoryid = $_POST['category'];
-        $subcategoryid = $_POST['subcategory'];
+        $deptid = $_POST['dept'];
         $productid = $_POST['product'];
         $mrate = $_POST['mrate'];
         $munitid = $_POST['munit'];
         $mqty = $_POST['mqty'];
         $cost = $_POST['cost'];
         $ustatus = $_POST['status'];
-        $sql = "select id from tbl_bom_material where bom_id=:bomid and product_id=:productid";
-        $params = ['bomid' => $bomid, 'productid' => $productid];
+        $sql = "select id from tbl_stock where dept_id=:deptid and prod_id=:productid";
+        $params = ['deptid' => $deptid, 'productid' => $productid];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "insert into tbl_bom_material(compid,bom_id,category_id,subcategory_id,product_id,unit_id,rate,qty,cost,status) values((select id from company_master),:bom_id,:category_id,:subcategory_id,:product_id,:unit_id,:rate,:qty,:cost,:status)";
-            $params = [ 'bom_id' => $bomid,'category_id' => $categoryid,'subcategory_id' => $subcategoryid,'product_id' => $productid,'unit_id'=>$munitid, 'rate' => $mrate, 'qty'=>$mqty, 'cost' => $cost, 'status' => $_POST['status']];
+            $sql = "insert into tbl_stock(compid,prod_id,dept_id,unit_id,rate,qty,status) values((select id from company_master),:prod_id,:dept_id,:unit_id,:rate,:qty,:status)";
+            $params = [ 'dept_id' => $deptid,'prod_id' => $productid,'unit_id'=>$munitid, 'rate' => $mrate, 'qty'=>$mqty, 'status' => $_POST['status']];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
-                log_user_action($_SESSION['userid'], 'create', "tbl_bom_material", $newRecordId, $_SESSION["username"]);
+                log_user_action($_SESSION['userid'], 'create', "tbl_stock", $newRecordId, $_SESSION["username"]);
                 echo json_encode(array('success' => true, 'msg'=>'Success! New record added successfully'));
             } else {
                 echo json_encode(array('success' => false, 'msg'=>'Error! New record not added'));
@@ -175,14 +145,14 @@ if ($_POST['action'] == "delete") {
     try {
         $id = $_POST['id'];
         //get old record for user log
-        $sql = "select * from tbl_bom_material where id=:id";
+        $sql = "select * from tbl_stock where id=:id";
         $params = ["id" => $_POST["id"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        $sql = "delete from tbl_bom_material where id =:id";
+        $sql = "delete from tbl_stock where id =:id";
         $params = ['id' => $id];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_bom_material", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
+            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_stock", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
             echo 1;
         } else {
             echo 0;
@@ -198,8 +168,17 @@ if ($_POST['action'] == "edit") {
     try {
         $output1 = '';
         $id = $_POST['id'];
-        $sql = "select * from tbl_bom_material where id  = {$id}";
+        $sql = "select * from tbl_stock where id  = {$id}";
         $row = $db->readSingleRecord($sql);
+        if(isset($row)){
+            $prod_id = $row['prod_id'];
+            $sql = "select category_id, subcategory_id from tbl_products where id={$prod_id}";
+            $prod_data=$db->readSingleRecord($sql);
+            $row['category_id']= $prod_data['category_id'];
+            $row['subcategory_id']= $prod_data['subcategory_id'];
+            $cost=$row['rate']*$row['qty'];
+            $row['cost']= number_format((float)$cost, 2, '.', '');
+        }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
@@ -210,24 +189,26 @@ if ($_POST['action'] == "edit") {
 //Update record in database
 if ($_POST['action'] == "update") {
     try {
-        $targetFile = "";
-        $saveRecord = true;
+        // $targetFile = "";
+        // $saveRecord = true;
         $id = $_POST['modalid'];
         //get old record for user log
-        $sql = "select * from tbl_bom_material where id=:id";
+        $sql = "select * from tbl_stock where id=:id";
         $params = ["id" => $_POST["modalid"]];
+        $deptid = $_POST['dept'];
+        $productid = $_POST['product'];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        $sql = "select id from tbl_bom_material where bom_id=:bomid and product_id=:productid and id!={$id}";
-        $params = ['bomid' => $_Session, 'productid' => $productid];
+        $sql = "select id from tbl_stock where dept_id=:deptid and prod_id=:productid and id!={$id}";
+        $params = ['deptid' => $deptid, 'productid' => $productid];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_bom_material set category_id=:category, subcategory_id=:subcategory, product_id=:product, unit_id=:unit, rate=:rate, qty=:qty, cost=:cost where id=:id";
-            $params = ['id'=>$id, 'category' => $_POST['category'], 'subcategory' => $_POST['subcategory'], 'product' => $_POST['product'], 'unit' => $_POST['munit'], 'rate' => $_POST['mrate'], 'qty' => $_POST['mqty'], 'cost' =>$_POST['cost']];
+            $sql = "update tbl_stock set dept_id=:deptid, prod_id=:product, unit_id=:unit, rate=:rate, qty=:qty where id=:id";
+            $params = ['id'=>$id,'deptid'=>$deptid,  'product' => $_POST['product'], 'unit' => $_POST['munit'], 'rate' => $_POST['mrate'], 'qty' => $_POST['mqty']];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
-                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_bom_material", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
+                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_stock", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
                 echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
             } else {
                 echo json_encode(array("success" => false, "msg" => "Record not updated"));
@@ -289,12 +270,4 @@ if ($_POST['action'] == "search") {
         echo "Connection failed: " . $e->getMessage();
     }
     echo $output;
-}
-if($_POST['action']=="update_totalcost"){
-    $bomid = $_POST['bomid'];
-    $total_cost = $_POST['total_cost'];
-    $sql = "update tbl_bom_product set bom_cost={$total_cost} where id={$bomid}";
-    $recordId = $db->ManageData($sql);
-    echo $recordId ?  1 :  0;
-    
 }

@@ -297,3 +297,11 @@ if ($_POST['action'] == "search") {
     }
     echo $output;
 }
+if($_POST['action']=="update_totalcost"){
+    $bomid = $_POST['bomid'];
+    $total_cost = $_POST['total_cost'];
+    $sql = "update tbl_bom_product set bom_cost={$total_cost} where id={$bomid}";
+    $recordId = $db->ManageData($sql);
+    echo $recordId ?  1 :  0;
+    
+}

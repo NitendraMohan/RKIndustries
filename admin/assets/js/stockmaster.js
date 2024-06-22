@@ -4,24 +4,18 @@ jQuery(document).ready(function ($) {
  * Function for loading complete data of units
  */
     function load_table() {
-        var bomid = $('#bomid').val();
-        console.log('bom id : '+bomid);
+        // var bomid = $('#bomid').val();
+        // console.log('bom id : '+bomid);
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/stockController.php",
             type: "POST",
-            data: { action: "load", bomid: bomid },
+            data: { action: "load" },
             success: function (result) {
                 console.log(result);
                 data = JSON.parse(result);
-                var bomdata = data['bom_data'];
-                $('#bomname').text(bomdata['product_name']);
-                $('#brandname').text(bomdata['brand_name']);
-                $('#product_image').attr('src',bomdata['image']); //mcost
-                $('#materialcost').text(bomdata['mcost']);
-                $('#othercost').text(bomdata['ocost']);
-                $('#totalcost').text(bomdata['total_cost']);
-                $("#bommaterialsTableContents").html(data['material_data']);
-                var total_records = $("#bommaterialsTableContents tr").length;
+                // var bomdata = data['bom_data'];
+                $("#stockTableContents").html(data);
+                var total_records = $("#stockTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);
                 $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
             },
@@ -32,18 +26,14 @@ jQuery(document).ready(function ($) {
     }
     load_table();
 
-    $(document).on("click", ".btn_toggle", function(){
-        load_table();
-    });
-
     $("#category").on("change", function(e){
         e.preventDefault();
         var category = $(this).val();
-        $("#subcategory").html("<option value='' selected>Select..</option>");
+        $("#subcategory").html("<option value='' selected>Subcategory..</option>");
         console.log(category);
         // if(category!==''){
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/stockController.php",
                 type: "POST",
                 data: { action: 'load_subcategories', category_id: category },
                 success: function (result) {
@@ -60,7 +50,7 @@ jQuery(document).ready(function ($) {
         console.log(category);
         // if(category!==''){
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/stockController.php",
                 type: "POST",
                 data: { action: 'load_products', subcategory_id: subcategory },
                 success: function (result) {
@@ -78,7 +68,7 @@ jQuery(document).ready(function ($) {
         console.log(category);
         // if(category!==''){
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/stockController.php",
                 type: "POST",
                 data: { action: 'load_rateunit', product_id: productid },
                 success: function (result) {
@@ -134,7 +124,7 @@ jQuery(document).ready(function ($) {
                 formData.append("action","update");
             }
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/stockController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
@@ -155,7 +145,6 @@ jQuery(document).ready(function ($) {
                         $("#msg").fadeOut("slow");
                         $("#userForm").trigger("reset");
                         $("#modelid").val('');
-                        update_bom_cost();
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
@@ -163,40 +152,19 @@ jQuery(document).ready(function ($) {
         }
     });
 
-function update_bom_cost(){
-    var total_cost = $("#totalcost").text();
-    if(!isNaN(total_cost) && total_cost>0.00){
-        var bomid = $("#bomid").val();
-        $.ajax({
-            url: "../controller/bommaterialsController.php",
-            type: "POST",
-            data: { action: "update_totalcost", bomid: bomid, total_cost: total_cost },
-            success: function (result) {
-                if (result == 1) {
-                    console.log("Success! bom cost updated successfully");
-                } 
-                else{
-                    console.log("Error! bom cost not updated");
-                }
-            }
-        });
-    }
-}    
     //Code delete record from table
     $(document).on("click", ".unitDelete", function () {
         var uid = $(this).data("id");
         var uaction = "delete";
         var element = this;
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/stockController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
                 if (result == 1) {
                     $(element).closest("tr").fadeOut();
                     load_table();
-                    update_bom_cost();
-
                 } else {
                     alert("can't delete");
                 }
@@ -211,27 +179,28 @@ function update_bom_cost(){
         var uaction = "edit";
         console.log("product id "+ uid);
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/stockController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
                 var arr = JSON.parse(result);
                 var cat_id = arr['category_id']; 
+                $("#dept").val(arr['dept_id']);
                 $("#category").val(arr['category_id']);
                 $.ajax({
-                    url: "../controller/bommaterialsController.php",
+                    url: "../controller/stockController.php",
                     type: "POST",
                     data: { action: 'load_subcategories', category_id: cat_id },
                     success: function (list) {
                         $("#subcategory").html(list);
                         $("#subcategory").val(arr['subcategory_id']);
                         $.ajax({
-                            url: "../controller/bommaterialsController.php",
+                            url: "../controller/stockController.php",
                             type: "POST",
                             data: { action: 'load_products', subcategory_id: arr['subcategory_id'] },
                             success: function (product_list) {
                                 $("#product").html(product_list);
-                                $("#product").val(arr['product_id']);
+                                $("#product").val(arr['prod_id']);
                             }
                         });
                     }
@@ -258,12 +227,12 @@ function update_bom_cost(){
         var search_term = $(this).val();
         var eventaction = "search";
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/stockController.php",
         type: "POST",
         data: { action: eventaction, search : search_term },
         success : function(data){
-            $("#bommaterialsTableContents").html(data);
-            var total_records = $("#bommaterialsTableContents tr").length;
+            $("#stockTableContents").html(data);
+            var total_records = $("#stockTableContents tr").length;
             // $('#total_records').html("<h6><b>Total Records: "+total_records+"</b></h6>");
             $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
 

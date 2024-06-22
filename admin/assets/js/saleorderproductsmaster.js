@@ -4,24 +4,22 @@ jQuery(document).ready(function ($) {
  * Function for loading complete data of units
  */
     function load_table() {
-        var bomid = $('#bomid').val();
-        console.log('bom id : '+bomid);
+        var saleorder_id = $('#saleorder_id').val();
+        console.log('saleorder id : '+saleorder_id);
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/saleOrderProductsController.php",
             type: "POST",
-            data: { action: "load", bomid: bomid },
+            data: { action: "load", saleorder_id: saleorder_id },
             success: function (result) {
                 console.log(result);
                 data = JSON.parse(result);
-                var bomdata = data['bom_data'];
-                $('#bomname').text(bomdata['product_name']);
-                $('#brandname').text(bomdata['brand_name']);
-                $('#product_image').attr('src',bomdata['image']); //mcost
-                $('#materialcost').text(bomdata['mcost']);
-                $('#othercost').text(bomdata['ocost']);
-                $('#totalcost').text(bomdata['total_cost']);
-                $("#bommaterialsTableContents").html(data['material_data']);
-                var total_records = $("#bommaterialsTableContents tr").length;
+                var sale_order = data['sale_order'];
+                $('#party_name').text(sale_order['party_name']);
+                $('#bill_no').text(sale_order['bill_no']);
+                $('#order_date').text(sale_order['order_date']);
+                $('#delivery_date').text(sale_order['delivery_date']);
+                $("#saleOrderProductsTableContents").html(data['sale_products']);
+                var total_records = $("#saleOrderProductsTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);
                 $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
             },
@@ -32,9 +30,17 @@ jQuery(document).ready(function ($) {
     }
     load_table();
 
-    $(document).on("click", ".btn_toggle", function(){
-        load_table();
-    });
+    $("#tax_id").on("change", function(e){
+        e.preventDefault();
+        var selectedOption = $('#tax_id option:selected');
+        var tax_perc = selectedOption.text();
+        var cost = $("#cost").val();
+        var tax_amt = parseFloat(cost * tax_perc)/100.00;
+        console.log(tax_amt);
+        typeof tax_amt == 'number' && $("#tax_amt").val(tax_amt.toFixed(2));
+        var total_cost = parseFloat(cost) + parseFloat(tax_amt);
+        typeof total_cost == 'number' && $("#total_cost").val(total_cost.toFixed(2));
+    })
 
     $("#category").on("change", function(e){
         e.preventDefault();
@@ -43,7 +49,7 @@ jQuery(document).ready(function ($) {
         console.log(category);
         // if(category!==''){
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/saleOrderProductsController.php",
                 type: "POST",
                 data: { action: 'load_subcategories', category_id: category },
                 success: function (result) {
@@ -60,7 +66,7 @@ jQuery(document).ready(function ($) {
         console.log(category);
         // if(category!==''){
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/saleOrderProductsController.php",
                 type: "POST",
                 data: { action: 'load_products', subcategory_id: subcategory },
                 success: function (result) {
@@ -78,13 +84,14 @@ jQuery(document).ready(function ($) {
         console.log(category);
         // if(category!==''){
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/saleOrderProductsController.php",
                 type: "POST",
                 data: { action: 'load_rateunit', product_id: productid },
                 success: function (result) {
                     var data = JSON.parse(result);
                     $("#munit").val(data['unit_id']);
                     $("#mrate").val(data['price']);
+                    $("#mqty").val(1);
                 }
             });
         // }
@@ -99,9 +106,29 @@ jQuery(document).ready(function ($) {
         if (!isNaN(cost)) {
             $("#cost").val(cost.toFixed(2));
         }
-        // $("#cost").val(cost);
+        var tax_amt = $("#tax_amt").val();
+        if (!isNaN(tax_amt)) {
+            var total_cost= parseFloat(cost) + parseFloat(tax_amt);
+
+            $("#total_cost").val(total_cost.toFixed(2));
+        }
     })
     
+    $("#mrate").on('input', function(){
+        var price = $("#mrate").val();
+        var qty = $("#mqty").val();
+        if(isNaN(price) || isNaN(qty)){return;}
+        var cost = price * qty;
+        if (!isNaN(cost)) {
+            $("#cost").val(cost.toFixed(2));
+        }
+        var tax_amt = $("#tax_amt").val();
+        if (!isNaN(tax_amt)) {
+            var total_cost= parseFloat(cost) + parseFloat(tax_amt);
+
+            $("#total_cost").val(total_cost.toFixed(2));
+        }
+    })
     /**
      * Code for submit model form data
      */
@@ -134,7 +161,7 @@ jQuery(document).ready(function ($) {
                 formData.append("action","update");
             }
             $.ajax({
-                url: "../controller/bommaterialsController.php",
+                url: "../controller/saleOrderProductsController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
@@ -155,7 +182,6 @@ jQuery(document).ready(function ($) {
                         $("#msg").fadeOut("slow");
                         $("#userForm").trigger("reset");
                         $("#modelid").val('');
-                        update_bom_cost();
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
@@ -163,40 +189,19 @@ jQuery(document).ready(function ($) {
         }
     });
 
-function update_bom_cost(){
-    var total_cost = $("#totalcost").text();
-    if(!isNaN(total_cost) && total_cost>0.00){
-        var bomid = $("#bomid").val();
-        $.ajax({
-            url: "../controller/bommaterialsController.php",
-            type: "POST",
-            data: { action: "update_totalcost", bomid: bomid, total_cost: total_cost },
-            success: function (result) {
-                if (result == 1) {
-                    console.log("Success! bom cost updated successfully");
-                } 
-                else{
-                    console.log("Error! bom cost not updated");
-                }
-            }
-        });
-    }
-}    
     //Code delete record from table
     $(document).on("click", ".unitDelete", function () {
         var uid = $(this).data("id");
         var uaction = "delete";
         var element = this;
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/saleOrderProductsController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
                 if (result == 1) {
                     $(element).closest("tr").fadeOut();
                     load_table();
-                    update_bom_cost();
-
                 } else {
                     alert("can't delete");
                 }
@@ -211,7 +216,7 @@ function update_bom_cost(){
         var uaction = "edit";
         console.log("product id "+ uid);
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/saleOrderProductsController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
@@ -219,14 +224,14 @@ function update_bom_cost(){
                 var cat_id = arr['category_id']; 
                 $("#category").val(arr['category_id']);
                 $.ajax({
-                    url: "../controller/bommaterialsController.php",
+                    url: "../controller/saleOrderProductsController.php",
                     type: "POST",
                     data: { action: 'load_subcategories', category_id: cat_id },
                     success: function (list) {
                         $("#subcategory").html(list);
                         $("#subcategory").val(arr['subcategory_id']);
                         $.ajax({
-                            url: "../controller/bommaterialsController.php",
+                            url: "../controller/saleOrderProductsController.php",
                             type: "POST",
                             data: { action: 'load_products', subcategory_id: arr['subcategory_id'] },
                             success: function (product_list) {
@@ -237,13 +242,14 @@ function update_bom_cost(){
                     }
                 });
                 $("#modalid").val(arr['id']);
-                // $("#logo_image").attr('src',arr['image']);
-                // $("#bomname").val(arr['bom_name']);
-                // $("#category").val(arr['category_id']);
+                $("#brand").val(arr['brand_id']);
                 $("#munit").val(arr['unit_id']);
                 $("#mrate").val(arr['rate']);
                 $("#mqty").val(arr['qty']);
                 $("#cost").val(arr['cost']);
+                $("#tax_id").val(arr['tax_id']);
+                $("#tax_amt").val(arr['tax_amt']);
+                $("#total_cost").val(arr['total_cost']);
                 $("#status").val(arr['status']);
                 // $("#myModal").modal('show');
             }
@@ -258,12 +264,12 @@ function update_bom_cost(){
         var search_term = $(this).val();
         var eventaction = "search";
         $.ajax({
-            url: "../controller/bommaterialsController.php",
+            url: "../controller/saleOrderProductsController.php",
         type: "POST",
         data: { action: eventaction, search : search_term },
         success : function(data){
-            $("#bommaterialsTableContents").html(data);
-            var total_records = $("#bommaterialsTableContents tr").length;
+            $("#saleOrderProductsTableContents").html(data);
+            var total_records = $("#saleOrderProductsTableContents tr").length;
             // $('#total_records').html("<h6><b>Total Records: "+total_records+"</b></h6>");
             $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
 
