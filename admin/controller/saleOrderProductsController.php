@@ -60,6 +60,7 @@ if ($_POST['action'] == "load") {
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                            <button class='btn btn-info btn-sm showMaterials' title='Check Material stock' data-id={$row["id"]}><i class='fa fa-chevron-right aria-hidden='true'>‌</i></button>
                             </td>
 
                         </tr>";
@@ -101,8 +102,12 @@ if($_POST['action'] == "load_products"){
 
 
 if($_POST['action'] == "load_rateunit"){
-    $sql = "Select id,unit_id,price from tbl_products where id={$_POST['product_id']} and status=1";
+    $sql = "select id,unit_id,bom_cost as price from tbl_bom_product where product_id={$_POST['product_id']} and status=1";
     $units = $db->readSingleRecord($sql);
+    if(!isset($units['price']) || $units['price']<=0.00){
+        $sql = "Select id,unit_id,price from tbl_products where id={$_POST['product_id']} and status=1";
+        $units = $db->readSingleRecord($sql);
+    } 
     // $list = "<option value='' selected>Unit..</option>";
     echo json_encode($units);
 }

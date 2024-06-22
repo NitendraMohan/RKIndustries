@@ -217,7 +217,7 @@ if ($_POST['action'] == "update") {
         $sql = "select * from tbl_bom_material where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        $sql = "select id from tbl_bom_material where bom_id=:bomid and product_id=:productid where id!={$id}";
+        $sql = "select id from tbl_bom_material where bom_id=:bomid and product_id=:productid and id!={$id}";
         $params = ['bomid' => $_Session, 'productid' => $productid];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
@@ -289,4 +289,12 @@ if ($_POST['action'] == "search") {
         echo "Connection failed: " . $e->getMessage();
     }
     echo $output;
+}
+if($_POST['action']=="update_totalcost"){
+    $bomid = $_POST['bomid'];
+    $total_cost = $_POST['total_cost'];
+    $sql = "update tbl_bom_product set bom_cost={$total_cost} where id={$bomid}";
+    $recordId = $db->ManageData($sql);
+    echo $recordId ?  1 :  0;
+    
 }
