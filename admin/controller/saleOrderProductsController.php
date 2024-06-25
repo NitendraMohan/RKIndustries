@@ -42,8 +42,9 @@ if ($_POST['action'] == "load") {
         on sop.product_id=bp.product_id
         where sop.saleorder_id={$_POST['saleorder_id']}";
         $saleproducts = $db->readData($sql);
-        $result['sale_order'] = $saleorder;
+        
         $output = "";
+        $total_cost = 0;
         if(isset($saleproducts)){
         foreach ($saleproducts as $row) {
             $output .= "<tr>
@@ -66,10 +67,13 @@ if ($_POST['action'] == "load") {
                             </td>
 
                         </tr>";
+            $total_cost += $row["total_cost"];
             $sr++;
         }
     }
-        $result['sale_products'] = $output;
+    $saleorder['total_cost'] = $total_cost; 
+    $result['sale_order'] = $saleorder;
+    $result['sale_products'] = $output;
     }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();

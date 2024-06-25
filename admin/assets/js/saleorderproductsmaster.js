@@ -18,6 +18,7 @@ jQuery(document).ready(function ($) {
                 $('#bill_no').text(sale_order['bill_no']);
                 $('#order_date').text(sale_order['order_date']);
                 $('#delivery_date').text(sale_order['delivery_date']);
+                $('#title_total_cost').text('Rs. '+sale_order['total_cost']);
                 $("#saleOrderProductsTableContents").html(data['sale_products']);
                 var total_records = $("#saleOrderProductsTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);
@@ -92,6 +93,9 @@ jQuery(document).ready(function ($) {
                     $("#munit").val(data['unit_id']);
                     $("#mrate").val(data['price']);
                     $("#mqty").val(1);
+                    $("#cost").val(data['price']);
+                    $("#tax_amt").val(0.00);
+                    $("#total_cost").val(data['price']);
                 }
             });
         // }
@@ -107,9 +111,15 @@ jQuery(document).ready(function ($) {
             $("#cost").val(cost.toFixed(2));
         }
         var tax_amt = $("#tax_amt").val();
+        var selectedOption = $('#tax_id option:selected');
+        var tax_perc = selectedOption.text();
+        if(!isNaN(tax_perc)){
+            var tax_amt = parseFloat(cost * tax_perc)/100.00;
+            typeof tax_amt == 'number' && $("#tax_amt").val(tax_amt.toFixed(2));
+        }
+        var tax_amt = $("#tax_amt").val();
         if (!isNaN(tax_amt)) {
             var total_cost= parseFloat(cost) + parseFloat(tax_amt);
-
             $("#total_cost").val(total_cost.toFixed(2));
         }
     })
@@ -123,6 +133,12 @@ jQuery(document).ready(function ($) {
             $("#cost").val(cost.toFixed(2));
         }
         var tax_amt = $("#tax_amt").val();
+        var selectedOption = $('#tax_id option:selected');
+        var tax_perc = selectedOption.text();
+        if(!isNaN(tax_perc)){
+            var tax_amt = parseFloat(cost * tax_perc)/100.00;
+            typeof tax_amt == 'number' && $("#tax_amt").val(tax_amt.toFixed(2));
+        }
         if (!isNaN(tax_amt)) {
             var total_cost= parseFloat(cost) + parseFloat(tax_amt);
 
