@@ -853,6 +853,9 @@ ALTER TABLE `bom_other_charges`
 -- Table structure for table `tbl_stock`
 --
 
+use rkindustry;
+
+
 CREATE TABLE `tbl_stock` (
   `id` int(11) NOT NULL,
   `compid` int(11) NOT NULL,

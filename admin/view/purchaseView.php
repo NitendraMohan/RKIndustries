@@ -10,11 +10,9 @@ if(isset($_POST['moduleid'])){
 $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
 $permissions = $db->get_buttons_permissions($params);
 
-$sql = "Select id,category_name from tbl_category where status=1";
-$categories = $db->readData($sql);
+$sql = "select id,vendor_name FROM tbl_vendors where status=1";
+$vendors = $db->readData($sql);
 
-$sql = "Select id,unit from tbl_unit where status=1";
-$units = $db->readData($sql);
 ?>
 <div class="content pb-0">
     <div class="orders">
@@ -59,91 +57,39 @@ $units = $db->readData($sql);
                                 <!-- Modal body -->
                                 <form action="" method="post" id="userForm">
                                     <div class="modal-body">
-
-                                        <input type="hidden" id="modalid" name="modalid" value="" />
-                                        <div class="form-group">
-                                            <label for="bomname">Enter BOM Name</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter BOM Name" id="bomname" name="bomname" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="bomname">Enter BOM Name</label>
-                                            <input class="form-control" type="text" placeholder="Enter BOM Name" id="bomname" name="bomname" required>
-                                        </div>
-                                        <!-- <div class="form-group">
-                                        <label for="autocomplete-input">Search: </label>
-                                        <input type="text" id="autocomplete-input">
-                                        </div> -->
+                                       
+                                        <input type="hidden" id="purchaseHiddenId" name="purchaseHiddenName" value="" />
                                         
-                                        <!-- <label for="autocomplete-input">Search:</label>
-                                        <input type="text" id="autocomplete-input">
-                                        <input type="hidden" id="selected-id">
-                                         -->
                                         <div class="form-group">
-                                            <label for="image">Select Product Image</label>    
-                                            <input class="form-control" type="file" name="image" id="image">
+                                            <label for="billnumber">Enter Bill Number</label>
+                                            <input class="form-control" type="text" placeholder="Enter Bill Number" id="billNumberId" name="billNumberName" required>
                                         </div>
-                                        <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%"/>    
                                         <div class="form-group">
-                                            <label for="category">Select Category</label>
-                                            <select class="form-control modalyearstatus" name="category" id="category">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($categories as $category){
-                                                    echo "<option value='{$category['id']}'>{$category['category_name']}</option>";
-                                                 }?>
+                                            <label for="vaedername">Select Vendor Name</label>
+                                            <!-- <input class="form-control" type="text" placeholder="Enter Vendor Name" id="vendorId" name="vendorName" required> -->
+                                            <select class="form-control" id="vendorId" name="vendorName" required>
+                                                <option value="">Select Vendor Name</option>
+                                                <?php 
+                                                    foreach($vendors as $vendor){
+                                                        echo "<option value='{$vendor['id']}'>{$vendor['vendor_name']}</option>";
+                                                        
+                                                    }
+                                                ?>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="subcategory">Select Sub Category</label>
-                                            <select class="form-control modalyearstatus" name="subcategory" id="subcategory">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($subcategories as $subcategory){
-                                                    echo "<option value='{$subcategory['id']}'>{$subcategory['subcategory_name']}</option>";
-                                                 }?>
-                                            </select>
+                                            <label for="cost">Enter Cost</label>
+                                            <input class="form-control" type="number" placeholder="Enter Cost" id="costId" name="costName" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="product">Select Product</label>
-                                            <select class="form-control modalyearstatus" name="product" id="product">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($products as $product){
-                                                    echo "<option value='{$product['id']}'>{$product['product_name']}</option>";
-                                                 }?>
-                                            </select>
+                                            <label for="tax_amount">Enter Tax Amount</label>
+                                            <input class="form-control" type="number" placeholder="Enter Tax Amount" id="taxId" name="taxName">
                                         </div>
                                         <div class="form-group">
-                                            <label for="brand">Select Brand</label>
-                                            <select class="form-control modalyearstatus" name="brand" id="brand">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($brands as $brand){
-                                                    echo "<option value='{$brand['id']}'>{$brand['brand_name']}</option>";
-                                                 }?>
-                                            </select>
+                                            <label for="totalcost">Total Cost</label>
+                                            <input class="form-control" type="number" placeholder="Total Cost Amount" id="totalCostId" name="totalCostName" readonly>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="unit">Select Unit</label>
-                                            <select class="form-control modalyearstatus" name="unit" id="unit">
-                                                <option value="" selected>Select..</option>
-                                                <?php foreach($units as $unit){
-                                                    echo "<option value='{$unit['id']}'>{$unit['unit']}</option>";
-                                                 }?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="qty">Enter Qty</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Qty" id="qty" name="qty" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="detail">Enter Description</label>
-                                            <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Desc.." id="detail" name="detail" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="Status">Status</label>
-                                            <select class="form-control modalyearstatus" name="status" id="status">
-                                                <option value="" selected>Select</option>
-                                                <option value="1">Active</option>
-                                                <option value="0">Inactive</option>
-                                            </select>
-                                        </div>
+                                        
                                     </div>
 
                                     <!-- Modal footer -->
@@ -157,9 +103,7 @@ $units = $db->readData($sql);
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="myModalUpdate">
-
-                    </div>
+                   
                     <div class="card-body--">    
                         <div class="table-responsive table-container">
                             <table class="table">
@@ -167,45 +111,27 @@ $units = $db->readData($sql);
                                     <tr>
                                         <th class="serial">#</th>
                                         <!-- <th>BOM Name</th> -->
-                                        <th>Product Name</th>
-                                        <th>Brand Name</th>
-                                        <th>Unit</th>
-                                        <th>Qty</th>
-                                        <th>Marerials Cost</th>
-                                        <th>Other Cost</th>
-                                        <th>Total Cost</th>
-                                        <!-- <th>Detail</th> -->
-                                        <th>Image</th>
+                                        <th>BILL NUMBER</th>
+                                        <th>VENDOR NAME</th>
+                                        <th>COST</th>
+                                        <th>TAX</th>
+                                        <th>TOTAL AMOUNT</th>
                                         <th>STATUS</th>
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>
                                 </thead>
-                                <tbody class="tableContents" id="bomsTableContents">
+                                <tbody class="tableContents" id="purchaseTableContents">
 
                                 </tbody>
                             </table>
                             <div class="ui-widget">
- 
-
-
-<!-- <label for="autocomplete-input">Search: </label>
-<input type="text" id="autocomplete-input"> -->
-
-
                         </div>
-                        <!-- <input type="text" id="autocomplete-input1"> -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- <div class="clearfix"></div>
-<footer class="page-footer">
-            <div class="page-inner bg-white">
-               
-            </div>
-         </footer> -->
 <?php require('../template/footer.inc.php') ?>
 <script src="../assets/js/purchasemaster.js" type="text/javascript"></script>
 

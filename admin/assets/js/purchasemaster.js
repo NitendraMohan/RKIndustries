@@ -5,12 +5,12 @@ jQuery(document).ready(function ($) {
  */
     function load_table() {
         $.ajax({
-            url: "../controller/bomsController.php",
+            url: "../controller/purchaseController.php",
             type: "POST",
             data: { action: "load" },
             success: function (result) {
-                $("#bomsTableContents").html(result);
-                var total_records = $("#bomsTableContents tr").length;
+                $("#purchaseTableContents").html(result);
+                var total_records = $("#purchaseTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);
                 $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
             },
@@ -21,127 +21,25 @@ jQuery(document).ready(function ($) {
     }
     load_table();
 
+   function handelBlur(){
+        var cost = parseFloat($("#costId").val()) || 0;
+        var tax = parseFloat($("#taxId").val()) || 0;
+        var totalCost = cost + tax;
+        $("#totalCostId").val(totalCost);
+   }
 
-    // $(function() {
-    //     $('#autocomplete-input').autocomplete({
-    //       source: function(request, response) {
-    //         var availableTags = [
-    //           "ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure",
-    //           "COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java",
-    //           "JavaScript", "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"
-    //         ];
-  
-    //         var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-    //         response($.grep(availableTags, function(item){
-    //           return matcher.test(item);
-    //         }));
-    //       }
-    //     });
-    //   });
-
-    // var studentData = [
-    //     { label: "Alice Johnson", id: 1 },
-    //     { label: "Bob Smith", id: 2 },
-    //     { label: "Charlie Brown", id: 3 },
-    //     { label: "David Lee", id: 4 },
-    //     { label: "Emily Taylor", id: 5 }
-    // ];
-    // // $('#myModal').on('shown.bs.modal', function () {
-    // $('#autocomplete-input').autocomplete({
-    //     source: function(request, response) {
-    //         var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-    //         response($.grep(studentData, function(item) {
-    //             return matcher.test(item.label);
-    //         }));
-    //     },
-    //     select: function(event, ui) {
-    //         console.log(ui);
-    //         $('#autocomplete-input').val(ui.item.label);
-    //         $('#selected-id').val(ui.item.id);
-    //         return false;
-    //     }
-       
-    // });
-// });
-    
-
-    // $('#autocomplete-input').blur(function(){
-    //     alert("ok");
-    // });
-
+   $("#costId, #taxId").blur(handelBlur);
       
-    $('#image').on('change', function(){
-        var file = this.files[0]; // Get the selected file
-        if (file) {
-            var reader = new FileReader(); // Create a new FileReader object
-            reader.onload = function(e) {
-                $('#logo_image').attr('src', e.target.result); // Set the src attribute of the image with the data URL of the selected file
-            };
-            reader.readAsDataURL(file); // Read the selected file as a data URL
-        }
-    });
-
-
-    $("#category").on("change", function(e){
-        e.preventDefault();
-        var category = $(this).val();
-        $("#subcategory").html("<option value='' selected>Select..</option>");
-        console.log(category);
-        // if(category!==''){
-            $.ajax({
-                url: "../controller/bomsController.php",
-                type: "POST",
-                data: { action: 'load_subcategories', category_id: category },
-                success: function (result) {
-                    $("#subcategory").html(result);
-                }
-            });
-        // }
-    })
-
-    $("#subcategory").on("change", function(e){
-        e.preventDefault();
-        var subcategory = $(this).val();
-        $("#product").html("<option value='' selected>Select..</option>");
-        console.log(category);
-        // if(category!==''){
-            $.ajax({
-                url: "../controller/bomsController.php",
-                type: "POST",
-                data: { action: 'load_products', subcategory_id: subcategory },
-                success: function (result) {
-                    $("#product").html(result);
-                }
-            });
-        // }
-    })
-    $("#product").on("change", function(e){
-        e.preventDefault();
-        var product = $(this).val();
-        $("#brand").html("<option value='' selected>Select..</option>");
-        console.log(category);
-        // if(category!==''){
-            $.ajax({
-                url: "../controller/bomsController.php",
-                type: "POST",
-                data: { action: 'load_brands', product_id: product },
-                success: function (result) {
-                    $("#brand").html(result);
-                }
-            });
-        // }
-    })
     /**
      * Code for submit model form data
      */
     $("#userForm").on("submit", function (e) {
         e.preventDefault();
         var action = "";
-        var productname = $("#productname").val();
-        var category = $("#category").val();
-        var subcategory = $("#subcategory").val();
-        var userstatus = $("#status").val();
-        if (productname == "" || userstatus == "" || category == "" || subcategory == "") {
+        var billno = $("#billNumberId").val();
+        var vendor = $("#vendorId").val();
+        // var userstatus = $("#status").val();
+        if (billno == "" || vendor == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -150,7 +48,7 @@ jQuery(document).ready(function ($) {
         } else {
             // var formData = $('#userForm').serialize() + '&action=insert';
             var formData = new FormData(this);
-            var id = $('#modalid').val();
+            var id = $('#purchaseHiddenId').val();
             console.log('id='.id);
             if(id =='' || id == undefined){
                 action = 'insert';
@@ -158,12 +56,12 @@ jQuery(document).ready(function ($) {
             }
             else{
                 action = 'update';
-                var currentImage =  $("#logo_image").attr('src') ?? '';
-                formData.append("image",currentImage);
+                // var currentImage =  $("#logo_image").attr('src') ?? '';
+                // formData.append("image",currentImage);
                 formData.append("action","update");
             }
             $.ajax({
-                url: "../controller/bomsController.php",
+                url: "../controller/purchaseController.php",
                 type: "POST",
                 data: formData,
                 dataType: 'json',
@@ -197,7 +95,7 @@ jQuery(document).ready(function ($) {
         var uaction = "delete";
         var element = this;
         $.ajax({
-            url: "../controller/bomsController.php",
+            url: "../controller/purchaseController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
@@ -216,52 +114,47 @@ jQuery(document).ready(function ($) {
     $(document).on("click", ".unitEdit", function () {
         var uid = $(this).data("id");
         var uaction = "edit";
-        console.log("product id "+ uid);
+        // console.log("product id "+ uid);
         $.ajax({
-            url: "../controller/bomsController.php",
+            url: "../controller/purchaseController.php",
             type: "POST",
             data: { action: uaction, id: uid },
             success: function (result) {
                 var arr = JSON.parse(result);
-                var cat_id = arr['category_id']; 
-                console.log('category id:'+ cat_id);
-                console.log(arr['product_name']);
-                $.ajax({
-                    url: "../controller/bomsController.php",
-                    type: "POST",
-                    data: { action: 'load_subcategories', category_id: cat_id },
-                    success: function (list) {
-                        $("#subcategory").html(list);
-                        $("#subcategory").val(arr['subcategory_id']);
-                        $.ajax({
-                            url: "../controller/bomsController.php",
-                            type: "POST",
-                            data: { action: 'load_products', subcategory_id: arr['subcategory_id'] },
-                            success: function (product_list) {
-                                $("#product").html(product_list);
-                                $("#product").val(arr['product_id']);
-                                $.ajax({
-                                    url: "../controller/bomsController.php",
-                                    type: "POST",
-                                    data: { action: 'load_brands', product_id: arr['product_id'] },
-                                    success: function (result) {
-                                        $("#brand").html(result);
-                                        $("#brand").val(arr['brand_id']);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-                $("#modalid").val(arr['id']);
-                $("#logo_image").attr('src',arr['image']);
-                $("#bomname").val(arr['bom_name']);
-                $("#category").val(arr['category_id']);
-                $("#brand").val(arr['brand_id']);
-                $("#unit").val(arr['unit_id']);
-                $("#qty").val(arr['qty']);
-                $("#detail").val(arr['detail']);
-                $("#status").val(arr['status']);
+                console.log(arr);
+                // $.ajax({
+                //     url: "../controller/purchaseController.php",
+                //     type: "POST",
+                //     data: { action: 'load_subcategories', category_id: cat_id },
+                //     success: function (list) {
+                //         $("#subcategory").html(list);
+                //         $("#subcategory").val(arr['subcategory_id']);
+                //         $.ajax({
+                //             url: "../controller/purchaseController.php",
+                //             type: "POST",
+                //             data: { action: 'load_products', subcategory_id: arr['subcategory_id'] },
+                //             success: function (product_list) {
+                //                 $("#product").html(product_list);
+                //                 $("#product").val(arr['product_id']);
+                //                 $.ajax({
+                //                     url: "../controller/purchaseController.php",
+                //                     type: "POST",
+                //                     data: { action: 'load_brands', product_id: arr['product_id'] },
+                //                     success: function (result) {
+                //                         $("#brand").html(result);
+                //                         $("#brand").val(arr['brand_id']);
+                //                     }
+                //                 });
+                //             }
+                //         });
+                //     }
+                // });
+                $("#purchaseHiddenId").val(arr['id']);
+                $("#billNumberId").val(arr['billno']);
+                $("#vendorId").val(arr['vendorid']);
+                $("#costId").val(arr['cost']);
+                $("#taxId").val(arr['tax_amount']);
+                $("#totalCostId").val(arr['total_cost']);
                 $("#myModal").modal('show');
             }
         });
@@ -275,12 +168,12 @@ jQuery(document).ready(function ($) {
         var search_term = $(this).val();
         var eventaction = "search";
         $.ajax({
-            url: "../controller/bomsController.php",
+            url: "../controller/purchaseController.php",
         type: "POST",
         data: { action: eventaction, search : search_term },
         success : function(data){
-            $("#bomsTableContents").html(data);
-            var total_records = $("#bomsTableContents tr").length;
+            $("#purchaseTableContents").html(data);
+            var total_records = $("#purchaseTableContents tr").length;
             // $('#total_records').html("<h6><b>Total Records: "+total_records+"</b></h6>");
             $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>"+total_records+"</span></b></h6>");
 
@@ -289,18 +182,18 @@ jQuery(document).ready(function ($) {
     });
 
     //show material records
-    $(document).on("click", ".material", function () {
+    $(document).on("click", ".purchaseitem", function () {
 
         var uid = $(this).data("id");
         console.log(uid);
         // var uaction = "show_material";
         // var element = this;
-        link = '../view/bommaterialsView.php';
+        link = '../view/purchaseItemsView.php';
         $.ajax({
             url: link,
             type: "POST",
             data: {
-               bomid: uid,
+               purchaseId: uid,
             },
             success: function() {
                window.location.href = link;
