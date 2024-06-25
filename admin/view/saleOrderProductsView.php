@@ -57,20 +57,25 @@ $units = $db->readData($sql);
                         </div>
                     </div>
                     <div class="row">
-                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                             <div class="card-body">
                                 Party Name: <h3 class="box-title" id="party_name" name="party_name"></h3>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>
-                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                        <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
                             <div class="card-body">
                                 Order Date: <h3 class="box-title" id="order_date" name="order_date"></h3>
                             </div>
                         </div>
-                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+                        <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
                             <div class="card-body">
                                 Delivery Date: <h3 class="box-title" id="delivery_date" name="delivery_date"></h3>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+                            <div class="card-body">
+                                Total Cost: <h3 class="box-title" id="title_total_cost" name="title_total_cost"></h3>
                             </div>
                         </div>
                     </div>
