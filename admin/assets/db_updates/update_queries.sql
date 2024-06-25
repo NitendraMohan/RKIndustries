@@ -1001,3 +1001,101 @@ ALTER TABLE `tbl_sale_order_products`
 --
 ALTER TABLE `tbl_sale_order_products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Table structure for table `tbl_purchase`
+--
+
+CREATE TABLE `tbl_purchase` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `billno` int(11) NOT NULL,
+  `vendorid` int(11) NOT NULL,
+  `cost` decimal(10,2) NOT NULL,
+  `tax_amount` decimal(10,2) NOT NULL,
+  `total_cost` decimal(10,2) NOT NULL,
+  `status` decimal(10,0) NOT NULL DEFAULT 1,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_purchase`
+--
+
+INSERT INTO `tbl_purchase` (`id`, `compid`, `billno`, `vendorid`, `cost`, `tax_amount`, `total_cost`, `status`, `createdat`, `updatedat`) VALUES
+(1, 1, 1, 1, 500.50, 200.00, 700.50, 1, '2024-06-22 10:59:23', '2024-06-22 10:59:23'),
+(9, 1, 101, 2, 800.00, 30.00, 830.00, 1, '2024-06-23 12:10:16', '2024-06-23 12:10:16');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_purchase`
+--
+ALTER TABLE `tbl_purchase`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_purchase`
+--
+ALTER TABLE `tbl_purchase`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+COMMIT;
+--
+-- Table structure for table `tbl_purchase_item`
+--
+
+CREATE TABLE `tbl_purchase_item` (
+  `id` int(11) NOT NULL,
+  `compid` int(11) NOT NULL,
+  `purchase_id` int(11) NOT NULL,
+  `prod_id` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `unit_id` int(255) NOT NULL,
+  `qty` decimal(10,2) NOT NULL,
+  `cost` decimal(10,2) NOT NULL,
+  `tax_perc` decimal(10,2) NOT NULL,
+  `tax_amt` decimal(10,2) NOT NULL,
+  `total_cost` decimal(10,2) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `createdat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedat` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_purchase_item`
+--
+
+INSERT INTO `tbl_purchase_item` (`id`, `compid`, `purchase_id`, `prod_id`, `price`, `unit_id`, `qty`, `cost`, `tax_perc`, `tax_amt`, `total_cost`, `status`, `createdat`, `updatedat`) VALUES
+(1, 1, 101, 2, 30.00, 75, 2.00, 60.00, 5.00, 3.00, 63.00, 1, '2024-06-24 10:40:26', '2024-06-24 10:40:26'),
+(2, 1, 101, 17, 4.25, 91, 10.00, 42.50, 2.00, 0.85, 43.35, 1, '2024-06-24 10:41:37', '2024-06-24 10:41:37'),
+(3, 1, 101, 1, 31.00, 91, 1.00, 31.00, 0.00, 0.00, 31.00, 1, '2024-06-24 10:54:04', '2024-06-24 10:54:04'),
+(5, 1, 1, 8, 1500.00, 75, 1.00, 1500.00, 2.00, 30.00, 1530.00, 1, '2024-06-25 06:06:10', '2024-06-25 06:06:10'),
+(6, 1, 101, 11, 128.00, 91, 2.00, 256.00, 2.00, 5.12, 261.12, 1, '2024-06-25 06:07:31', '2024-06-25 06:07:31');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_purchase_item`
+--
+ALTER TABLE `tbl_purchase_item`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_purchase_item`
+--
+ALTER TABLE `tbl_purchase_item`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+COMMIT;
