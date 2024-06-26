@@ -8,7 +8,7 @@ if(isset($username)){
     $db = new dbConnector();
     if($_POST['action'] =="create"){
     $sql = "insert into financial_years(year_from,year_to,status) values(:year_from,:year_to,:status)";
-    $params = ["year_from"=>$_POST["year_from"],"year_to"=>$_POST["year_to"],"status"=>$_POST["status"]];
+    $params = ["year_from"=>$_POST["year_from"],"year_to"=>$_POST["year_to"],"status"=>1];
     $newRecordId = $db->insertData($sql,$params);
     if(!empty($newRecordId)){
         log_user_action($_SESSION['userid'], $_POST['action'], "financial_years", $newRecordId, $_SESSION["username"]);
@@ -58,8 +58,8 @@ if(isset($username)){
     $params = ["id"=>$_POST["id"]];
     $oldRecord = $db->readSingleRecord($sql, $params);
     //apply changes
-    $sql = "update financial_years set year_from=:year_from,year_to=:year_to,status=:status where id=:id";
-    $params = ["id"=>$_POST["id"],"year_from"=>$_POST["year_from"],"year_to"=>$_POST["year_to"],"status"=>$_POST["status"]];
+    $sql = "update financial_years set year_from=:year_from,year_to=:year_to where id=:id";
+    $params = ["id"=>$_POST["id"],"year_from"=>$_POST["year_from"],"year_to"=>$_POST["year_to"]];
     $RecordId = $db->ManageData($sql,$params);
     //add change log
     log_user_action($_SESSION['userid'], $_POST['action'], "financial_years", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));

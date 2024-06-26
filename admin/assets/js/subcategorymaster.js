@@ -157,7 +157,6 @@ jQuery(document).ready(function ($) {
                 $("#categoryName").val(arr['category_name']);
                 $("#categoryName").data("id",arr['category_id'])
                 $("#subcategoryName").val(arr['subcategory_name']);
-                $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
         });

@@ -47,8 +47,8 @@ $(document).ready(function ()  {
     function save() {
         params = "";
         let isDuplicateFound = false;
-        if ($("#year_from").val() == '' || $("#year_to").val() == '' || $("#status").val() == ''){
-            alert('Error !From is not completed filled');
+        if ($("#year_from").val() == '' || $("#year_to").val() == ''){            
+            alert('Error !All Fields are mendatory');
             return false;
           
         }
@@ -73,9 +73,9 @@ $(document).ready(function ()  {
         if ($("#year_to").val() != '') {
             params += "&" + $("#year_to").attr('id') + "=" + $("#year_to").val();
         }
-        if ($("#status").val() != '') {
-            params += "&" + $("#status").attr('id') + "=" + $("#status").val();
-        }
+        // if ($("#status").val() != '') {
+        //     params += "&" + $("#status").attr('id') + "=" + $("#status").val();
+        // }
         if (params != "") {
             params += "&action=create";
             console.log(params);
@@ -125,9 +125,9 @@ $(document).ready(function ()  {
         if ($("#year_to").val() != '') {
             params += "&" + $("#year_to").attr('id') + "=" + $("#year_to").val();
         }
-        if ($("#status").val() != '') {
-            params += "&" + $("#status").attr('id') + "=" + $("#status").val();
-        }
+        // if ($("#status").val() != '') {
+        //     params += "&" + $("#status").attr('id') + "=" + $("#status").val();
+        // }
         if (params != "") {
             params += "&action=update";
             console.log(params);
@@ -220,7 +220,7 @@ function setModelValues(row = '') {
         var jsArray = JSON.parse(row);
         $('.modalyearfrom').val(jsArray['year_from']);
         $('.modalyearto').val(jsArray['year_to']);
-        $('.modalyearstatus').val(jsArray['status']);
+        // $('.modalyearstatus').val(jsArray['status']);
         $('#modalid').val(jsArray['id']);
         $(".modal-title").text("Update Financial Year");
         $(".modalsubmit").attr("data-id", "update");
@@ -228,7 +228,7 @@ function setModelValues(row = '') {
     else {
         $('.modalyearfrom').val('');
         $('.modalyearto').val('');
-        $('.modalyearstatus').val('');
+        // $('.modalyearstatus').val('');
         $('#modalid').val('');
         $(".modal-title").text("Add Financial Year");
         $(".modalsubmit").attr("data-id", "save");

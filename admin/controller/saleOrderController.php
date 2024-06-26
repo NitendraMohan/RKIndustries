@@ -55,7 +55,6 @@ if ($_POST['action'] == "insert") {
     try {
         // print_r($_POST);
         $bill_no = strtoupper($_POST['bill_no']);
-        $ustatus = $_POST['status'];
         $sql = "select id from tbl_sale_order where bill_no=:bill_no";
         $params = ['bill_no' => $bill_no];
         $result = $db->readSingleRecord($sql, $params);
@@ -63,7 +62,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_sale_order(compid,party_id,bill_no,order_date,delivery_date,voucher_no,payment_mode,delivery_address,terms,other_detail,status) values((select id from company_master),:party_id,:bill_no,:order_date,:delivery_date,:voucher_no,:payment_mode,:delivery_address,:terms,:other_detail,:status)";
-            $params = ['party_id'=>$_POST['party_id'],'bill_no'=>$_POST['bill_no'],'order_date'=>$_POST['order_date'],'delivery_date'=>$_POST['delivery_date'],'voucher_no'=>$_POST['voucher_no'],'payment_mode'=>$_POST['payment_mode'],'delivery_address'=>$_POST['delivery_address'],'terms'=>$_POST['terms'],'other_detail'=>$_POST['other_detail'],'status'=>$_POST['status']];
+            $params = ['party_id'=>$_POST['party_id'],'bill_no'=>$_POST['bill_no'],'order_date'=>$_POST['order_date'],'delivery_date'=>$_POST['delivery_date'],'voucher_no'=>$_POST['voucher_no'],'payment_mode'=>$_POST['payment_mode'],'delivery_address'=>$_POST['delivery_address'],'terms'=>$_POST['terms'],'other_detail'=>$_POST['other_detail'],'status'=>1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_sale_order", $newRecordId, $_SESSION["username"]);
@@ -124,8 +123,8 @@ if ($_POST['action'] == "update") {
         $params = ["id" => $_POST["userHiddenName"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
 
-        $sql = "update tbl_sale_order set party_id=:party_id,bill_no=:bill_no,order_date=:order_date,delivery_date=:delivery_date,voucher_no=:voucher_no,payment_mode=:payment_mode,delivery_address=:delivery_address,terms=:terms,other_detail=:other_detail,status=:status where id=:id";
-        $params = ['id' => $id, 'party_id' => $_POST['party_id'], 'bill_no' => $_POST['bill_no'], 'order_date' => $_POST['order_date'], 'delivery_date' => $_POST['delivery_date'], 'voucher_no' => $_POST['voucher_no'], 'payment_mode' => $_POST['payment_mode'], 'delivery_address' => $_POST['delivery_address'], 'terms' => $_POST['terms'], 'other_detail' => $_POST['other_detail'], 'status' => $_POST['status']];
+        $sql = "update tbl_sale_order set party_id=:party_id,bill_no=:bill_no,order_date=:order_date,delivery_date=:delivery_date,voucher_no=:voucher_no,payment_mode=:payment_mode,delivery_address=:delivery_address,terms=:terms,other_detail=:other_detail where id=:id";
+        $params = ['id' => $id, 'party_id' => $_POST['party_id'], 'bill_no' => $_POST['bill_no'], 'order_date' => $_POST['order_date'], 'delivery_date' => $_POST['delivery_date'], 'voucher_no' => $_POST['voucher_no'], 'payment_mode' => $_POST['payment_mode'], 'delivery_address' => $_POST['delivery_address'], 'terms' => $_POST['terms'], 'other_detail' => $_POST['other_detail']];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_sale_order", $_POST['userHiddenName'], $_SESSION["username"], json_encode($oldRecord));

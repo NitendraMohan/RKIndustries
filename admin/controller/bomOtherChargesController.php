@@ -104,7 +104,6 @@ if ($_POST['action'] == "insert") {
         $saveRecord = true;
         $bomid = $_SESSION['bomid'];
         $chargeid= $_POST['expanse_name'];
-        $ustatus = $_POST['status'];
         $is_percentage = isset($_POST['is_percentage'])?$_POST['is_percentage']:0;
         $apply_on_material = isset($_POST['apply_on_material'])?$_POST['apply_on_material']:0;
         $sql = "select id from bom_other_charges where bom_id=:bomid and charge_id=:chargeid";
@@ -114,7 +113,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into bom_other_charges(compid,bom_id,charge_id,is_percentage,apply_on_material,charge_value,status) values((select id from company_master),:bom_id,:charge_id,:is_percentage,:apply_on_material,:charge_value,:status)";
-            $params = [ 'bom_id' => $bomid,'charge_id'=>$chargeid, 'is_percentage' => $is_percentage,'apply_on_material' => $apply_on_material,'charge_value' => $_POST['charge_value'], 'status' => $_POST['status']];
+            $params = [ 'bom_id' => $bomid,'charge_id'=>$chargeid, 'is_percentage' => $is_percentage,'apply_on_material' => $apply_on_material,'charge_value' => $_POST['charge_value'], 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "bom_other_charges", $newRecordId, $_SESSION["username"]);

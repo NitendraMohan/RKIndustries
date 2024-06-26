@@ -28,8 +28,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         var action = "";
         var categoryname = $("#categoryname").val();
-        var status = $("#status").val();
-        if (categoryname == "" || status == "") {
+        if (categoryname == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -114,7 +113,6 @@ jQuery(document).ready(function ($) {
                 console.log(arr['category_name']);
                 $("#categoryHiddenId").val(arr['id']);
                 $("#categoryname").val(arr['category_name']);
-                $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
         });

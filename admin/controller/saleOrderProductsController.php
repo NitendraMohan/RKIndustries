@@ -144,7 +144,6 @@ if ($_POST['action'] == "insert") {
         $munitid = $_POST['munit'];
         $mqty = $_POST['mqty'];
         $cost = $_POST['cost'];
-        $ustatus = $_POST['status'];
         $sql = "select id from tbl_sale_order_products where saleorder_id=:saleorder_id and product_id=:productid";
         $params = ['saleorder_id' => $saleorder_id, 'productid' => $productid];
         $result = $db->readSingleRecord($sql, $params);
@@ -152,7 +151,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_sale_order_products(compid,saleorder_id,brand_id,product_id,unit_id,rate,qty,tax_id,tax_amt,cost,total_cost,status) values((select id from company_master),:saleorder_id,:brand_id,:product_id,:unit_id,:rate,:qty,:tax_id,:tax_amt,:cost,:total_cost,:status)";
-            $params = [ 'saleorder_id' => $saleorder_id,'brand_id'=>$_POST['brand'],'product_id' => $productid,'unit_id'=>$munitid, 'rate' => $mrate, 'qty'=>$mqty,'tax_id'=>$_POST['tax_id'],'tax_amt'=>$_POST['tax_amt'], 'cost' => $cost, 'total_cost' => $_POST['total_cost'], 'status' => $_POST['status']];
+            $params = [ 'saleorder_id' => $saleorder_id,'brand_id'=>$_POST['brand'],'product_id' => $productid,'unit_id'=>$munitid, 'rate' => $mrate, 'qty'=>$mqty,'tax_id'=>$_POST['tax_id'],'tax_amt'=>$_POST['tax_amt'], 'cost' => $cost, 'total_cost' => $_POST['total_cost'], 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_sale_order_products", $newRecordId, $_SESSION["username"]);

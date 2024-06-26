@@ -71,7 +71,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_subcategory(compid,category_id,subcategory_name,status) values((select id from company_master),:categoryId,:subcategoryName,:status)";
-            $params = ['categoryId' => $_POST['categoryId'], 'subcategoryName' =>  strtoupper($subcategoryName),'status' => $_POST['status']];
+            $params = ['categoryId' => $_POST['categoryId'], 'subcategoryName' =>  strtoupper($subcategoryName),'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_subcategory", $newRecordId, $_SESSION["username"]);
@@ -142,8 +142,8 @@ if ($_POST['action'] == "update") {
             echo json_encode(array('duplicate' => true));
         } else {
         
-        $sql = "update tbl_subcategory set category_id=:categoryId, subcategory_name=:subcategoryname,status=:status where id=:id";
-        $params = ['id'=>$id, 'categoryId' => $_POST['categoryId'],'subcategoryname' => $_POST['subcategoryName'], 'status' => $_POST['status']];
+        $sql = "update tbl_subcategory set category_id=:categoryId, subcategory_name=:subcategoryname where id=:id";
+        $params = ['id'=>$id, 'categoryId' => $_POST['categoryId'],'subcategoryname' => $_POST['subcategoryName']];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_subcategory", $_POST['subcat'], $_SESSION["username"], json_encode($oldRecord));

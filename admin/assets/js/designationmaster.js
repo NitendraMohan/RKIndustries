@@ -29,8 +29,7 @@ jQuery(document).ready(function ($) {
     $("#designationForm").on("submit", function (e) {
         e.preventDefault();
         var designationId = $("#designationId").val();
-        var designationStatus = $("#status").val();
-        if (designationId == "" || designationStatus == "") {
+        if (designationId == "" ) {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -111,7 +110,6 @@ jQuery(document).ready(function ($) {
                 console.log($arr);
                 $("#designationHiddenId").val($arr['id']);
                 $("#designationId").val($arr['designation_name']);
-                $("#status").val($arr['status']);
                 $("#myModal").modal('show');
             }
         });

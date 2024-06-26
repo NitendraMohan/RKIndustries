@@ -48,7 +48,6 @@ if ($_POST['action'] == "insert") {
         // print_r($_POST);
         // die();
         $branchname = strtoupper($_POST['branchname']);
-        $ustatus = $_POST['status'];
         $sql = "select id from tbl_branch where branch_name=:branchname";
     //    die();
         $params = ['branchname' => $branchname];
@@ -57,7 +56,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_branch(compid,branch_name,address,pincode,status) values((select id from company_master),:branchname,:address,:pincode,:status)";
-            $params = [ 'branchname' => $branchname, 'address' => $_POST['address'],'pincode' => $_POST['pincode'], 'status' => $_POST['status']];
+            $params = [ 'branchname' => $branchname, 'address' => $_POST['address'],'pincode' => $_POST['pincode'], 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_branch", $newRecordId, $_SESSION["username"]);
@@ -125,8 +124,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_branch set branch_name=:branchname,address=:address,pincode=:pincode,status=:status where id=:id";
-            $params = ['id'=>$id, 'branchname' => $_POST['branchname'],'address' => $_POST['address'],'pincode' => $_POST['pincode'], 'status' => $_POST['status']];
+            $sql = "update tbl_branch set branch_name=:branchname,address=:address,pincode=:pincode where id=:id";
+            $params = ['id'=>$id, 'branchname' => $_POST['branchname'],'address' => $_POST['address'],'pincode' => $_POST['pincode']];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
                 log_user_action($_SESSION['userid'], $_POST['action'], "tbl_branch", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));

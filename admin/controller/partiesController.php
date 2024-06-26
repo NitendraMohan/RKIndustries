@@ -69,7 +69,6 @@ if ($_POST['action'] == "insert") {
             }
         }
         $partyname = strtoupper($_POST['partyname']);
-        $ustatus = $_POST['status'];
         $sql = "select mobile from tbl_parties where party_name=:partyname";
         $params = ['partyname' => $partyname];
         $result = $db->readSingleRecord($sql, $params);
@@ -77,7 +76,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_parties(compid,party_name,comp_name,gstno,mobile,email,address,image,status) values((select id from company_master),:partyname,:compname,:gstno,:mobile,:email,:address,:image,:status)";
-            $params = [ 'partyname' => $partyname,'compname' => $_POST['compname'], 'gstno' => $_POST['gstno'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile ?? '../images/favicon.png', 'status' => $_POST['status']];
+            $params = [ 'partyname' => $partyname,'compname' => $_POST['compname'], 'gstno' => $_POST['gstno'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile ?? '../images/favicon.png', 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_parties", $newRecordId, $_SESSION["username"]);
@@ -168,8 +167,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_parties set party_name=:partyname,comp_name=:compname,gstno=:gstno,mobile=:mobile,email=:email,address=:address,image=:image,status=:status where id=:id";
-            $params = ['id'=>$id, 'partyname' => $_POST['partyname'],'compname' => $_POST['compname'], 'gstno' => $_POST['gstno'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile, 'status' => $_POST['status']];
+            $sql = "update tbl_parties set party_name=:partyname,comp_name=:compname,gstno=:gstno,mobile=:mobile,email=:email,address=:address,image=:image where id=:id";
+            $params = ['id'=>$id, 'partyname' => $_POST['partyname'],'compname' => $_POST['compname'], 'gstno' => $_POST['gstno'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
                 log_user_action($_SESSION['userid'], $_POST['action'], "tbl_parties", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));

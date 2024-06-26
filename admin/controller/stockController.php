@@ -19,7 +19,7 @@ if ($_POST['action'] == "load") {
         $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
-        $sql = "select s.id,d.dept_name, p.product_name, u.unit, s.rate, s.qty,s.status 
+        $sql = "select s.id,d.dept_name, p.product_name, u.unit, s.rate, s.qty,s.status, truncate((s.rate*s.qty),2) as cost 
         from tbl_stock s 
         inner join tbl_products p 
         on s.prod_id=p.id
@@ -40,6 +40,7 @@ if ($_POST['action'] == "load") {
                         <td>{$row["rate"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
+                        <td>{$row["cost"]}</td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_stock' style='width:70px;'>Active</button>" 
                         : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_stock' style='width:70px;'>Deactive</button>") . "</td>
@@ -117,7 +118,6 @@ if ($_POST['action'] == "insert") {
         $munitid = $_POST['munit'];
         $mqty = $_POST['mqty'];
         $cost = $_POST['cost'];
-        $ustatus = $_POST['status'];
         $sql = "select id from tbl_stock where dept_id=:deptid and prod_id=:productid";
         $params = ['deptid' => $deptid, 'productid' => $productid];
         $result = $db->readSingleRecord($sql, $params);
@@ -125,7 +125,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_stock(compid,prod_id,dept_id,unit_id,rate,qty,status) values((select id from company_master),:prod_id,:dept_id,:unit_id,:rate,:qty,:status)";
-            $params = [ 'dept_id' => $deptid,'prod_id' => $productid,'unit_id'=>$munitid, 'rate' => $mrate, 'qty'=>$mqty, 'status' => $_POST['status']];
+            $params = [ 'dept_id' => $deptid,'prod_id' => $productid,'unit_id'=>$munitid, 'rate' => $mrate, 'qty'=>$mqty, 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_stock", $newRecordId, $_SESSION["username"]);

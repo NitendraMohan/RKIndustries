@@ -29,8 +29,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         var action = "";
         var brandname = $("#brandname").val();
-        var status = $("#status").val();
-        if (brandname == "" || status == "") {
+        if (brandname == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -112,7 +111,6 @@ jQuery(document).ready(function ($) {
                 var arr = JSON.parse(result);
                 $("#modalid").val(arr['id']);
                 $("#brandname").val(arr['brand_name']);
-                $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
         });

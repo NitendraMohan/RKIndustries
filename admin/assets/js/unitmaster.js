@@ -29,8 +29,8 @@ jQuery(document).ready(function ($) {
     $("#unitForm").on("submit", function (e) {
         e.preventDefault();
         var unitname = $("#unitname").val();
-        var unitstatus = $("#status").val();
-        if (unitname == "" || unitstatus == "") {
+        // var unitstatus = $("#status").val();
+        if (unitname == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -111,7 +111,6 @@ jQuery(document).ready(function ($) {
                 console.log($arr);
                 $("#modalid").val($arr['id']);
                 $("#unitname").val($arr['unit']);
-                $("#status").val($arr['status']);
                 $("#myModal").modal('show');
             }
         });

@@ -67,7 +67,6 @@ if ($_POST['action'] == "insert") {
         // print_r($_POST);
         // die();  
         $designation = strtoupper($_POST['designationName']);
-        $ustatus = $_POST['status'];
         $sql = "select * from tbl_designation where designation_name=:designationName";
         $params = ['designationName' => $designation];
         $result = $db->readSingleRecord($sql, $params);
@@ -75,7 +74,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true ));
         } else {
             $sql = "insert into tbl_designation(designation_name,status) values(:designation,:status)";
-            $params = ['designation' => $designation, 'status' => $ustatus];
+            $params = ['designation' => $designation, 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_designation", $newRecordId, $_SESSION["username"]);
@@ -146,8 +145,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_designation set designation_name =:designation_name, status=:status where id=:id";
-            $params = ['designation_name' => $designation_name, 'status' =>  $_POST['status'], 'id' => $id];
+            $sql = "update tbl_designation set designation_name =:designation_name where id=:id";
+            $params = ['designation_name' => $designation_name, 'id' => $id];
             $recordId = $db->ManageData($sql, $params);
             // echo json_encode(array("success"=>true,"msg"=>$recordId));
             // exit;

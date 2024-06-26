@@ -91,7 +91,7 @@ $units = $db->readData($sql);
 
                                         <div class="form-group">
                                             <label for="productname">Product Name</label>
-                                            <input class="form-control" type="text" placeholder="Enter Product Name" id="productname" name="productname" required>
+                                            <input class="form-control uppercase-input" type="text" placeholder="Enter Product Name" id="productname" name="productname" required>
                                         </div>
 
                                         <div class="form-group">
@@ -124,14 +124,14 @@ $units = $db->readData($sql);
                                             <input class="form-control" type="number" placeholder="Enter Max Limit" id="maxLimitId" name="maxLimitName">
                                         </div>
 
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label for="Status">Status</label>
                                             <select class="form-control" name="status" id="status">
                                                 <option value="" selected>Select</option>
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
                                             </select>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <!-- Modal footer -->
                                     <div class="modal-footer">

@@ -73,7 +73,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true ));
         } else {
             $sql = "insert into tbl_unit(unit,status) values(:unit,:status)";
-            $params = ['unit' => $unit, 'status' => $ustatus];
+            $params = ['unit' => $unit, 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_unit", $newRecordId, $_SESSION["username"]);
@@ -144,8 +144,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_unit set unit =:unit, status=:status where id=:id";
-            $params = ['unit' => $unit, 'status' =>  $_POST['status'], 'id' => $id];
+            $sql = "update tbl_unit set unit =:unit where id=:id";
+            $params = ['unit' => $unit, 'id' => $id];
             $recordId = $db->ManageData($sql, $params);
             // echo json_encode(array("success"=>true,"msg"=>$recordId));
             // exit;

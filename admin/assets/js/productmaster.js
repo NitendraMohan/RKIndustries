@@ -60,8 +60,7 @@ jQuery(document).ready(function ($) {
         var categoryId = $("#categoryName").data("id");
         var subcategory = $("#subcategoryInput").val();
         var subcategoryId = $("#subcategoryInput").data("id");
-        var userstatus = $("#status").val();
-        if (productname == "" || userstatus == "" || category == "" || subcategory == "") {
+        if (productname == "" || category == "" || subcategory == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -161,7 +160,6 @@ jQuery(document).ready(function ($) {
                 $("#minLimitId").val(arr['min_limit']);
                 $("#maxLimitId").val(arr['max_limit']);
                 $("#price").val(arr['price']);
-                $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
         });

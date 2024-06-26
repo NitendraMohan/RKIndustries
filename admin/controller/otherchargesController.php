@@ -46,7 +46,6 @@ if ($_POST['action'] == "load") {
 if ($_POST['action'] == "insert") {
     try {
         $expanse_name = strtoupper($_POST['expanse_name']);
-        $ustatus = $_POST['status'];
         // $is_percentage = $_POST['is_percentage'] =='on'?1:0;
         $sql = "select * from tbl_other_charges where expanse_name=:expanse_name";
         $params = ['expanse_name' => $expanse_name];
@@ -55,7 +54,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true ));
         } else {
             $sql = "insert into tbl_other_charges(compid,expanse_name,detail,status) values((select id from company_master),:expanse_name,:detail,:status)";
-            $params = ['expanse_name' => $expanse_name, 'detail'=>$_POST['detail'], 'status' => $ustatus];
+            $params = ['expanse_name' => $expanse_name, 'detail'=>$_POST['detail'], 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_other_charges", $newRecordId, $_SESSION["username"]);
@@ -123,8 +122,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_other_charges set expanse_name =:expanse_name,detail=:detail, status=:status where id=:id";
-            $params = ['expanse_name' => $_POST['expanse_name'],'detail'=>$_POST['detail'], 'status' =>  $_POST['status'], 'id' => $id];
+            $sql = "update tbl_other_charges set expanse_name =:expanse_name,detail=:detail where id=:id";
+            $params = ['expanse_name' => $_POST['expanse_name'],'detail'=>$_POST['detail'], 'id' => $id];
             $recordId = $db->ManageData($sql, $params);
             // echo json_encode(array("success"=>true,"msg"=>$recordId));
             // exit;

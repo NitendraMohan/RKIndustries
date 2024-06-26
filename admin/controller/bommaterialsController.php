@@ -147,7 +147,6 @@ if ($_POST['action'] == "insert") {
         $munitid = $_POST['munit'];
         $mqty = $_POST['mqty'];
         $cost = $_POST['cost'];
-        $ustatus = $_POST['status'];
         $sql = "select id from tbl_bom_material where bom_id=:bomid and product_id=:productid";
         $params = ['bomid' => $bomid, 'productid' => $productid];
         $result = $db->readSingleRecord($sql, $params);
@@ -155,7 +154,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_bom_material(compid,bom_id,category_id,subcategory_id,product_id,unit_id,rate,qty,cost,status) values((select id from company_master),:bom_id,:category_id,:subcategory_id,:product_id,:unit_id,:rate,:qty,:cost,:status)";
-            $params = [ 'bom_id' => $bomid,'category_id' => $categoryid,'subcategory_id' => $subcategoryid,'product_id' => $productid,'unit_id'=>$munitid, 'rate' => $mrate, 'qty'=>$mqty, 'cost' => $cost, 'status' => $_POST['status']];
+            $params = [ 'bom_id' => $bomid,'category_id' => $categoryid,'subcategory_id' => $subcategoryid,'product_id' => $productid,'unit_id'=>$munitid, 'rate' => $mrate, 'qty'=>$mqty, 'cost' => $cost, 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_bom_material", $newRecordId, $_SESSION["username"]);

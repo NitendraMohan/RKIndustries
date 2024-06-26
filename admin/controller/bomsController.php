@@ -143,7 +143,6 @@ if ($_POST['action'] == "insert") {
         $unitid = $_POST['unit'];
         $qty = $_POST['qty'];
         $detail = $_POST['detail'];
-        $ustatus = $_POST['status'];
         $sql = "select id from tbl_bom_product where bom_name=:bomname";
         $params = ['bomname' => $bomname];
         $result = $db->readSingleRecord($sql, $params);
@@ -151,7 +150,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_bom_product(compid,bom_name,category_id,subcategory_id,product_id,brand_id,unit_id,qty,bom_cost,image,detail,status) values((select id from company_master),:bomname,:category,:subcategory,:product,:brand,:unit,:qty,0.00,:image,:detail,:status)";
-            $params = [ 'bomname' => $bomname,'category' => $categoryid,'subcategory' => $subcategoryid,'product' => $productid,'brand' => $brandid, 'unit'=>$unitid, 'qty'=>$qty, 'status' => $_POST['status'], 'detail' => $detail, 'image' => $targetFile ?? '../images/favicon.png'];
+            $params = [ 'bomname' => $bomname,'category' => $categoryid,'subcategory' => $subcategoryid,'product' => $productid,'brand' => $brandid, 'unit'=>$unitid, 'qty'=>$qty, 'status' => 1, 'detail' => $detail, 'image' => $targetFile ?? '../images/favicon.png'];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_bom_product", $newRecordId, $_SESSION["username"]);
@@ -234,14 +233,14 @@ if ($_POST['action'] == "update") {
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
         $bomname = strtoupper($_POST['bomname']);
-        $sql = "select id from tbl_bom_product where bom_name=:bomname";
+        $sql = "select id from tbl_bom_product where bom_name=:bomname and id!={$id}";
         $params = ['bomname' => $bomname];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_bom_product set bom_name=:bomname, category_id=:category,subcategory_id=:subcategory, product_id=:product, brand_id=:brand,unit_id=:unit,qty=:qty,image=:image,status=:status where id=:id";
-            $params = ['id'=>$id, 'bomname' => $_POST['bomname'], 'category' => $_POST['category'],'subcategory' => $_POST['subcategory'],'product' => $_POST['product'], 'brand' => $_POST['brand'], 'unit' => $_POST['unit'], 'qty' => $_POST['qty'], 'status' => $_POST['status'], 'image' => $targetFile ?? '../images/favicon.png'];
+            $sql = "update tbl_bom_product set bom_name=:bomname, category_id=:category,subcategory_id=:subcategory, product_id=:product, brand_id=:brand,unit_id=:unit,qty=:qty,image=:image,detail=:detail where id=:id";
+            $params = ['id'=>$id, 'bomname' => $_POST['bomname'], 'category' => $_POST['category'],'subcategory' => $_POST['subcategory'],'product' => $_POST['product'], 'brand' => $_POST['brand'], 'unit' => $_POST['unit'], 'qty' => $_POST['qty'], 'detail' => $_POST['detail'], 'image' => $targetFile ?? '../images/favicon.png'];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
                 log_user_action($_SESSION['userid'], $_POST['action'], "tbl_bom_product", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));

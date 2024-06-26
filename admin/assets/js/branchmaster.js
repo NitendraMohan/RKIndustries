@@ -114,7 +114,6 @@ jQuery(document).ready(function ($) {
                 $("#branchname").val(arr['branch_name']);
                 $("#address").val(arr['address']);
                 $("#pincode").val(arr['pincode']);
-                $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
         });

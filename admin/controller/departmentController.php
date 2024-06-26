@@ -46,7 +46,6 @@ if ($_POST['action'] == "insert") {
     try {
         $branchname = $_POST['branchname'];
         $departmentname = strtoupper($_POST['departmentname']);
-        $ustatus = $_POST['status'];
         $sql = "select id from tbl_deparment where dept_name=:departmentname and branchid={$_POST['branchname']}";
         $params = ['departmentname' => $departmentname];
         $result = $db->readSingleRecord($sql, $params);
@@ -54,7 +53,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into  tbl_deparment(compid,branchid,dept_name,status) values((select id from company_master),:branchid,:departmentname,:status)";
-            $params = [ 'branchid' => $branchname,'departmentname' => $departmentname, 'status' => $_POST['status']];
+            $params = [ 'branchid' => $branchname,'departmentname' => $departmentname, 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_department", $newRecordId, $_SESSION["username"]);
@@ -120,8 +119,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_deparment set branchid=:branchid, dept_name=:deptname,status=:status where id=:id";
-            $params = ['id'=>$id, 'branchid' => $_POST['branchname'],'deptname' =>strtoupper($_POST['departmentname']), 'status' => $_POST['status']];
+            $sql = "update tbl_deparment set branchid=:branchid, dept_name=:deptname where id=:id";
+            $params = ['id'=>$id, 'branchid' => $_POST['branchname'],'deptname' =>strtoupper($_POST['departmentname'])];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
                 log_user_action($_SESSION['userid'], $_POST['action'], "tbl_deparment", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));

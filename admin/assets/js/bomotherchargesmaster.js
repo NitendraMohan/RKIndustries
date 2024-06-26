@@ -46,8 +46,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         var action = "";
         var username = $("#expanse_name").val();
-        var userstatus = $("#status").val();
-        if (username == "" || userstatus == "") {
+        if (username == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -165,7 +164,6 @@ jQuery(document).ready(function ($) {
                     $("#apply_on_material").prop('checked',false);
                 }
                 $("#charge_value").val(arr['charge_value']);
-                $("#status").val(arr['status']);
             }
         });
     });

@@ -68,14 +68,14 @@ $permissions = $db->get_buttons_permissions($params);
                                             <input class="form-control yearlimit modalyearfrom" type="tel" placeholder="Enter Pincode Name" id="pincode" name="pincode" pattern="[0-9]{6}" required>
                                             <small id="mobileHelp" class="form-text text-muted">Please enter 6 digits pincode.</small>
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label for="Status">Status</label>
                                             <select class="form-control modalyearstatus" name="status" id="status">
                                                 <option value="" selected>Select</option>
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
                                             </select>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                     <!-- Modal footer -->

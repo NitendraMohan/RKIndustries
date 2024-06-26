@@ -66,16 +66,16 @@ $permissions = $db->get_buttons_permissions($params);
                                         <input type="hidden" id="modalid" name="id" value="" />
                                         <div class="form-group">
                                             <label for="brandname">Brand Name</label>
-                                            <input class="form-control" type="text" placeholder="Enter Brand" id="brandname" name="brandname" required>
+                                            <input class="form-control uppercase-input" type="text" placeholder="Enter Brand" id="brandname" name="brandname" required>
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label for="Status">Status</label>
                                             <select class="form-control modalyearstatus" name="status" id="status">
                                                 <option value="" selected>Select</option>
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
                                             </select>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                     <!-- Modal footer -->

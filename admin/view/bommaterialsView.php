@@ -116,11 +116,11 @@ $units = $db->readData($sql);
                                 <input class="form-control" type="number" placeholder="Rate" id="mrate" name="mrate" required step="any" style="width: 100px;">
                                 <input class="form-control" type="number" placeholder="Qty" id="mqty" name="mqty" required step="any" style="width: 100px;">
                                 <input class="form-control decimalplaces" type="text" readonly placeholder="0" id="cost" name="cost" required style="width: 100px;">
-                                <select class="form-control modalyearstatus" name="status" id="status">
+                                <!-- <select class="form-control modalyearstatus" name="status" id="status">
                                     <option value="" selected>Select</option>
                                     <option value="1">Active</option>
                                     <option value="0">Inactive</option>
-                                </select>
+                                </select> -->
                                 <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save"><i class="fa fa-plus"></i></button>
                                 <!-- <button type="button" class="btn btn-secondary modalClose" id="btnClose" data-dismiss="modal">Close</button> -->
                             </div>

@@ -89,7 +89,6 @@ if ($_POST['action'] == "insert") {
         $productCode = $_POST['productCodeName'];
         $unitid = $_POST['unit'];
         $price = $_POST['price'];
-        $ustatus = $_POST['status'];
         $minLimit = $_POST['minLimitName'];
         $maxLimit = $_POST['maxLimitName'];
         $sql = "select id from tbl_products where product_name=:productname";
@@ -99,7 +98,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_products(compid,brand_id,category_id,subcategory_id,product_name,product_code,unit_id,price,min_limit,max_limit,image,status) values((select id from company_master),:brandId,:category,:subcategory,:productname,:productCode,:unit,:price,:minLimit,:maxLimit,:image,:status)";
-            $params = ['brandId' => $brandId, 'category' => $categoryid, 'subcategory' => $subcategoryid, 'productname' => $productname, 'productCode' => $productCode, 'unit' => $unitid, 'price' => $price, 'minLimit' => $minLimit, 'maxLimit' => $maxLimit, 'status' => $_POST['status'], 'image' => $targetFile ?? '../images/favicon.png'];
+            $params = ['brandId' => $brandId, 'category' => $categoryid, 'subcategory' => $subcategoryid, 'productname' => $productname, 'productCode' => $productCode, 'unit' => $unitid, 'price' => $price, 'minLimit' => $minLimit, 'maxLimit' => $maxLimit, 'status' => 1, 'image' => $targetFile ?? '../images/favicon.png'];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_products", $newRecordId, $_SESSION["username"]);
@@ -208,8 +207,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_products set brand_id=:brandId, category_id=:categoryId, subcategory_id=:subcategoryId, product_name=:productname, product_code=:productCode, unit_id=:unit,price=:price,image=:image,min_limit=:minLimit,max_limit=:maxLimit,status=:status where id=:id";
-            $params = ['id' => $id, 'brandId' => $_POST['brandName'], 'categoryId' => $_POST['categoryId'], 'subcategoryId' => $_POST['subcategoryId'], 'productname' => strtoupper($_POST['productname']), 'productCode' => strtoupper($_POST['productCodeName']), 'unit' => $_POST['unit'], 'price' => $_POST['price'], 'minLimit' => $_POST['minLimitName'], 'maxLimit' => $_POST['maxLimitName'], 'status' => $_POST['status'], 'image' => $targetFile ?? '../images/favicon.png'];
+            $sql = "update tbl_products set brand_id=:brandId, category_id=:categoryId, subcategory_id=:subcategoryId, product_name=:productname, product_code=:productCode, unit_id=:unit,price=:price,image=:image,min_limit=:minLimit,max_limit=:maxLimit where id=:id";
+            $params = ['id' => $id, 'brandId' => $_POST['brandName'], 'categoryId' => $_POST['categoryId'], 'subcategoryId' => $_POST['subcategoryId'], 'productname' => strtoupper($_POST['productname']), 'productCode' => strtoupper($_POST['productCodeName']), 'unit' => $_POST['unit'], 'price' => $_POST['price'], 'minLimit' => $_POST['minLimitName'], 'maxLimit' => $_POST['maxLimitName'], 'image' => $targetFile ?? '../images/favicon.png'];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
                 log_user_action($_SESSION['userid'], $_POST['action'], "tbl_products", $_POST['productHiddenId'], $_SESSION["username"], json_encode($oldRecord));

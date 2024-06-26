@@ -75,7 +75,7 @@ if ($_POST['action'] == "insert") {
             }
         }
         $username = strtoupper($_POST['username']);
-        $ustatus = $_POST['status'];
+        // $ustatus = $_POST['status'];
         $sql = "select mobile from tbl_users where username=:username";
         $params = ['username' => $username];
         $result = $db->readSingleRecord($sql, $params);
@@ -83,7 +83,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_users(compid,role,dept_id,designation_id,username,gender,dob,mobile,email,address,image,password,status) values((select id from company_master),:role,:deptid,:designation_Id,:username,:gender,:dob,:mobile,:email,:address,:image,:password,:status)";
-            $params = ['role' => $_POST['role'], 'deptid' => $_POST['departmentname'], 'designation_Id' => $_POST['designation'], 'username' => $username, 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile ?? '../images/favicon.png', 'password' => $_POST['password'], 'status' => $_POST['status']];
+            $params = ['role' => $_POST['role'], 'deptid' => $_POST['departmentname'], 'designation_Id' => $_POST['designation'], 'username' => $username, 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile ?? '../images/favicon.png', 'password' => $_POST['password'], 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_users", $newRecordId, $_SESSION["username"]);
@@ -165,8 +165,8 @@ if ($_POST['action'] == "update") {
         $params = ["id" => $_POST["userHiddenName"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
 
-        $sql = "update tbl_users set role=:role,dept_id=:deptid,designation_id=:designation_Id,username=:username,gender=:gender,dob=:dob,mobile=:mobile,email=:email,address=:address,image=:image,status=:status,password=:password where id=:id";
-        $params = ['id' => $id, 'deptid' => $_POST['departmentname'], 'designation_Id' => $_POST['designation'], 'role' => $_POST['role'], 'username' => $_POST['username'], 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'password' => $_POST['password'], 'image' => $targetFile, 'status' => $_POST['status']];
+        $sql = "update tbl_users set role=:role,dept_id=:deptid,designation_id=:designation_Id,username=:username,gender=:gender,dob=:dob,mobile=:mobile,email=:email,address=:address,image=:image,password=:password where id=:id";
+        $params = ['id' => $id, 'deptid' => $_POST['departmentname'], 'designation_Id' => $_POST['designation'], 'role' => $_POST['role'], 'username' => strtoupper($_POST['username']), 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'password' => $_POST['password'], 'image' => $targetFile];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_users", $_POST['userHiddenName'], $_SESSION["username"], json_encode($oldRecord));

@@ -91,8 +91,7 @@ jQuery(document).ready(function ($) {
         var productname = $("#productname").val();
         var category = $("#category").val();
         var subcategory = $("#subcategory").val();
-        var userstatus = $("#status").val();
-        if (productname == "" || userstatus == "" || category == "" || subcategory == "") {
+        if (productname == "" || category == "" || subcategory == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -212,7 +211,6 @@ jQuery(document).ready(function ($) {
                 $("#unit").val(arr['unit_id']);
                 $("#qty").val(arr['qty']);
                 $("#detail").val(arr['detail']);
-                $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
         });

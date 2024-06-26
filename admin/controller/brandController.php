@@ -51,7 +51,6 @@ if ($_POST['action'] == "load") {
 if ($_POST['action'] == "insert") {
     try {
         $brand = strtoupper($_POST['brandname']);
-        $ustatus = $_POST['status'];
         $sql = "select * from tbl_brand where brand_name=:brand";
         $params = ['brand' => $brand];
         $result = $db->readSingleRecord($sql, $params);
@@ -59,7 +58,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_brand(compid,brand_name,status) values((select id from company_master),:brand,:status)";
-            $params = ['brand' => $brand, 'status' => $ustatus];
+            $params = ['brand' => $brand, 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_brand", $newRecordId, $_SESSION["username"]);
@@ -115,7 +114,6 @@ if ($_POST['action'] == "edit") {
 if ($_POST['action'] == "update") {
     try {
         $id = $_POST['id'];
-        $status = $_POST['status'];
         //get old record for user log
         $sql = "select brand_name,status from tbl_brand where id=:id";
         $params = ["id" => $_POST["id"]];
@@ -127,8 +125,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_brand set brand_name =:brand, status=:status where id=:id";
-            $params = ['brand' => strtoupper($_POST['brandname']),'status' => $status, 'id' => $id];
+            $sql = "update tbl_brand set brand_name =:brand where id=:id";
+            $params = ['brand' => strtoupper($_POST['brandname']), 'id' => $id];
             $recordId = $db->ManageData($sql, $params);
             // echo json_encode(array("success"=>true,"msg"=>$recordId));
             // exit;

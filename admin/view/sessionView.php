@@ -62,14 +62,14 @@ require('../template/top.inc.php');
                                                     <label for="yearTo">Year to</label>
                                                     <input class="yearlimit form-control modalyearto" type="number" min="1900" max="2100" step="1" placeholder="Year To" id="year_to" name="year_to" readonly tabindex="-1" required>
                                                 </div>
-                                                <div class="form-group">
+                                                <!-- <div class="form-group">
                                                     <label for="Status">Status</label>
                                                     <select class="form-control modalyearstatus" name="status" id="status">
                                                         <option value="" selected>Select</option>
                                                         <option value="1">Active</option>
                                                         <option value="0">Inactive</option>
                                                     </select>
-                                                </div>
+                                                </div> -->
 
                                             </div>
                                         </form>

@@ -41,8 +41,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         var action = "";
         var username = $("#username").val();
-        var userstatus = $("#status").val();
-        if (username == "" || userstatus == "") {
+        if (username == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -136,7 +135,6 @@ jQuery(document).ready(function ($) {
                 $("#email").val(arr['email']);
                 $("#address").val(arr['address']);
                 $("#password").val(arr['password']);
-                $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
         });

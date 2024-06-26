@@ -45,7 +45,6 @@ if ($_POST['action'] == "load") {
 if ($_POST['action'] == "insert") {
     try {
         $taxname = strtoupper($_POST['taxname']);
-        $ustatus = $_POST['status'];
         $sql = "select id from tbl_taxes where tax_name=:taxname";
         $params = ['taxname' => $taxname];
         $result = $db->readSingleRecord($sql, $params);
@@ -53,7 +52,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_taxes(tax_name,tax_percentage,status) values(:taxname,:taxpercentage,:status)";
-            $params = [ 'taxname' => $taxname, 'taxpercentage' => $_POST['taxpercentage'], 'status' => $_POST['status']];
+            $params = [ 'taxname' => $taxname, 'taxpercentage' => $_POST['taxpercentage'], 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_taxes", $newRecordId, $_SESSION["username"]);
@@ -141,8 +140,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_taxes set tax_name=:taxname,status=:status,tax_percentage=:taxpercentage where id=:id";
-            $params = ['id'=>$id, 'taxname' => strtoupper($_POST['taxname']),'taxpercentage' => $_POST['taxpercentage'], 'status' => $_POST['status']];
+            $sql = "update tbl_taxes set tax_name=:taxname,tax_percentage=:taxpercentage where id=:id";
+            $params = ['id'=>$id, 'taxname' => strtoupper($_POST['taxname']),'taxpercentage' => $_POST['taxpercentage']];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_taxes", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));

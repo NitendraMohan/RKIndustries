@@ -44,7 +44,6 @@ if ($_POST['action'] == "load") {
 if ($_POST['action'] == "insert") {
     try {
         $categoryname = strtoupper($_POST['categoryname']);
-        $ustatus = $_POST['status'];
         $sql = "select id from tbl_category where category_name=:categoryname";
         $params = ['categoryname' => $categoryname];
         $result = $db->readSingleRecord($sql, $params);
@@ -52,7 +51,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_category(compid,category_name,status) values((select id from company_master),:categoryname,:status)";
-            $params = [ 'categoryname' => $categoryname, 'status' => $_POST['status']];
+            $params = [ 'categoryname' => $categoryname, 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_category", $newRecordId, $_SESSION["username"]);
@@ -120,8 +119,8 @@ if ($_POST['action'] == "update") {
             echo json_encode(array('duplicate' => true));     
         }else{
             
-            $sql = "update tbl_category set category_name=:categoryname,status=:status where id=:id";
-            $params = ['id'=>$id, 'categoryname' => strtoupper($_POST['categoryname']), 'status' => $_POST['status']];
+            $sql = "update tbl_category set category_name=:categoryname where id=:id";
+            $params = ['id'=>$id, 'categoryname' => strtoupper($_POST['categoryname'])];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
                 log_user_action($_SESSION['userid'], $_POST['action'], "tbl_category", $_POST['categoryHiddenName'], $_SESSION["username"], json_encode($oldRecord));

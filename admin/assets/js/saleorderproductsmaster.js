@@ -154,8 +154,7 @@ jQuery(document).ready(function ($) {
         var productname = $("#productname").val();
         var category = $("#category").val();
         var subcategory = $("#subcategory").val();
-        var userstatus = $("#status").val();
-        if (productname == "" || userstatus == "" || category == "" || subcategory == "") {
+        if (productname == "" || category == "" || subcategory == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -266,8 +265,6 @@ jQuery(document).ready(function ($) {
                 $("#tax_id").val(arr['tax_id']);
                 $("#tax_amt").val(arr['tax_amt']);
                 $("#total_cost").val(arr['total_cost']);
-                $("#status").val(arr['status']);
-                // $("#myModal").modal('show');
             }
         });
     });

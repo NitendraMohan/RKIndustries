@@ -111,8 +111,7 @@ jQuery(document).ready(function ($) {
         var productname = $("#productname").val();
         var category = $("#category").val();
         var subcategory = $("#subcategory").val();
-        var userstatus = $("#status").val();
-        if (productname == "" || userstatus == "" || category == "" || subcategory == "") {
+        if (productname == "" || category == "" || subcategory == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -237,15 +236,10 @@ function update_bom_cost(){
                     }
                 });
                 $("#modalid").val(arr['id']);
-                // $("#logo_image").attr('src',arr['image']);
-                // $("#bomname").val(arr['bom_name']);
-                // $("#category").val(arr['category_id']);
                 $("#munit").val(arr['unit_id']);
                 $("#mrate").val(arr['rate']);
                 $("#mqty").val(arr['qty']);
                 $("#cost").val(arr['cost']);
-                $("#status").val(arr['status']);
-                // $("#myModal").modal('show');
             }
         });
     });

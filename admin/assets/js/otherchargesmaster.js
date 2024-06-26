@@ -40,8 +40,7 @@ jQuery(document).ready(function ($) {
     $("#unitForm").on("submit", function (e) {
         e.preventDefault();
         var expanse_name = $("#expanse_name").val();
-        var status = $("#status").val();
-        if (expanse_name == "" || status == "") {
+        if (expanse_name == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -130,7 +129,6 @@ jQuery(document).ready(function ($) {
                 }
                 $("#expanse_value").val($arr['value']);
                 $("#detail").val($arr['detail']);
-                $("#status").val($arr['status']);
                 $("#myModal").modal('show');
             }
         });
