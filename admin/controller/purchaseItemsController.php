@@ -239,15 +239,12 @@ if ($_POST['action'] == "search") {
         elseif( $search_value == 'inactive' ){
             $statusSearch = 0;
         }
+        $sql = "SELECT pi.*,pr.product_name 
+        FROM tbl_purchase_item pi
+        JOIN tbl_purchase p ON pi.purchase_id = p.billno
+        JOIN tbl_products pr ON pi.prod_id = pr.id
+        where pi.purchase_id = {$_SESSION['purchaseId']} AND pr.product_name like '%{$search_value}%' ;";
         // $conn = new PDO($this->dsn, $this->productname, $this->password);
-        $sql = "select b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty,b.detail,b.image,b.status 
-        from tbl_bom_product b 
-        inner join tbl_products p 
-        on b.product_id=p.id
-        inner join tbl_unit u
-        on b.unit_id=u.id
-        inner join tbl_brand br
-        on b.brand_id=br.id where p.product_name like '%{$search_value}%' or b.bom_name like '%{$search_value}%' or br.brand_name like '%{$search_value}%' or u.unit like '%{$search_value}%' or b.qty like '%{$search_value}%' order by p.product_name";
         if($statusSearch!=''){
             $sql.="or status={$statusSearch}";
         }
@@ -257,21 +254,25 @@ if ($_POST['action'] == "search") {
         $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
-        foreach ($result as $row) {
+        if(isset($result)) foreach ($result as $row) {
             $output .= "<tr>
             <td>{$sr}</td>
-            <td>{$row["bom_name"]}</td>
             <td>{$row["product_name"]}</td>
-            <td>{$row["brand_name"]}</td>
-            <td>{$row["unit"]}</td>
+            <td>{$row["price"]}</td>
+            <td>{$row["unit_id"]}</td>
             <td>{$row["qty"]}</td>
-            <td>{$row["detail"]}</td>
-            <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
-            <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='bom_material' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='bom_material' style='width:70px;'>Deactive</button>") . "</td>
+            <td>{$row["cost"]}</td>
+            <td>{$row["tax_perc"]}</td>
+            <td>{$row["tax_amt"]}</td>
+            <td>{$row["total_cost"]}</td>
+            <td>" . ($row['status'] == 1 
+            ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_purchase_item' style='width:70px;'>Active</button>" 
+            : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_purchase_item' style='width:70px;'>Deactive</button>") . "</td>
             <td>
                 <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                 <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
                 </td>
+
             </tr>";
             $sr++;
         }

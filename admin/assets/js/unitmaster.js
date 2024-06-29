@@ -130,6 +130,9 @@ jQuery(document).ready(function ($) {
             data: { action: eventaction, search: search_term },
             success: function (data) {
                 $("#unitTableContents").html(data);
+                var total_records = $("#unitTableContents tr").length;
+                // $('#total_records').html("Total Records: "+total_records);
+                $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");
             }
         });
     });

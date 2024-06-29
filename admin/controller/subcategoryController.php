@@ -183,7 +183,7 @@ if ($_POST['action'] == "search") {
         $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
-        foreach ($result as $row) {
+        if(isset($result)) foreach ($result as $row) {
             $output .= "<tr>
             <td>{$sr}</td>
             <td>{$row["category_name"]}</td>

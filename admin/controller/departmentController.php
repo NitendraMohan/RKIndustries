@@ -148,7 +148,7 @@ if ($_POST['action'] == "search") {
             $statusSearch = 0;
         }
         // $conn = new PDO($this->dsn, $this->subcategoryname, $this->password);
-        echo $sql = "SELECT d.*,b.branch_name FROM tbl_deparment d join tbl_branch b on d.branchid=b.id 
+        $sql = "SELECT d.*,b.branch_name FROM tbl_deparment d join tbl_branch b on d.branchid=b.id 
         where d.dept_name like '%{$search_value}%' or b.branch_name like '%{$search_value}%' ";
         if($statusSearch!=''){
             $sql.="or status={$statusSearch}";
@@ -159,7 +159,7 @@ if ($_POST['action'] == "search") {
         $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
-        foreach ($result as $row) {
+        if(isset($result)) foreach ($result as $row) {
             $output .= "<tr>
             <td>{$sr}</td>
                         <td>{$row["branch_name"]}</td>

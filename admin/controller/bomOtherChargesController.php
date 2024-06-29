@@ -270,25 +270,42 @@ if ($_POST['action'] == "search") {
         elseif( $search_value == 'inactive' ){
             $statusSearch = 0;
         }
-        // $conn = new PDO($this->dsn, $this->username, $this->password);
-        $sql = "SELECT * FROM tbl_user_permissions where username like '%{$search_value}%' or role like '%{$search_value}%' or gender like '%{$search_value}%' or mobile like '%{$search_value}%' or address like '%{$search_value}%' or email like '%{$search_value}%'";
+        $sql = "SELECT oc.id as charge_id, oc.expanse_name, bom.id,
+        COALESCE(bom.is_percentage, 0) AS is_percentage, 
+        COALESCE(bom.apply_on_material, 0) AS apply_on_material,
+        COALESCE(bom.charge_value, 0) AS charge_value,
+        COALESCE(bom.status, 0) AS status 
+        FROM tbl_other_charges oc JOIN bom_other_charges bom 
+        ON oc.id = bom.charge_id and bom.bom_id='{$_SESSION['bomid']}'
+        where oc.expanse_name like '%{$search_value}%' order by oc.expanse_name ";
+        
         if($statusSearch!=''){
             $sql.="or status={$statusSearch}";
         }
         $result = $db->readData($sql);
         // print_r($result);
         // $result = $conn->query($sql);
+        $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
+        $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
-        foreach ($result as $row) {
+        if(isset($result)) foreach ($result as $row) {
+            $is_percentage = $row['is_percentage']==1?'Yes':'No';
+            $apply_on_material = $row['apply_on_material']==1?'Yes':'No';
             $output .= "<tr>
-            <input type='hidden' class='module_id' value='{$row['module_id']}'>
-            <td>{$sr}</td>
-            <td>{$row["module_name"]}</td>
-            <td><input type='checkbox' class='chkBox' id='insert' value='{$row['insert_record']}' {$disable_all_checkboxes} {$insert_checked} /></td>
-            <td><input type='checkbox' class='chkBox' id='update' value='{$row['update_record']}' {$disable_all_checkboxes} {$update_checked} /></td>
-            <td><input type='checkbox' class='chkBox' id='delete' value='{$row['delete_record']}' {$disable_all_checkboxes} {$delete_checked} /></td>
-            <td>" . ($row['status'] == 1 ? 'Active' : 'Inactive') . "</td>
-            </tr>";
+                        <input type='hidden' class='charge_id' value='{$row['charge_id']}'>
+                        <td>{$sr}</td>
+                        <td>{$row["expanse_name"]}</td>
+                        <td>{$is_percentage}</td>
+                        <td>{$apply_on_material}</td>
+                        <td>{$row['charge_value']}</td>
+                        <td>" . ($row['status'] == 1 ? 
+                        "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='bom_other_charges' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='bom_other_charges' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>
+                        <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]}><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                        <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} ><i class='fa fa-trash' aria-hidden='true'></i></button>
+                        </td>
+                        </tr>";
             $sr++;
         }
     } catch (PDOException $e) {

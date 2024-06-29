@@ -22,7 +22,7 @@ jQuery(document).ready(function ($) {
                 $('#totalcost').text(bomdata['total_cost']);
                 $("#usersTableContents").html(data['charges_data']);
                 var total_records = $("#usersTableContents tr").length;
-                $('#total_records').html("Total Records: "+total_records);
+                $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");
                 
             },
             error: function (xhr, status, error) {
@@ -182,7 +182,7 @@ jQuery(document).ready(function ($) {
         success : function(data){
             $("#usersTableContents").html(data);
             var total_records = $("#usersTableContents tr").length;
-            $('#total_records').html("Total Records: "+total_records);
+            $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");
         }
         });
     });

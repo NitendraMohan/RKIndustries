@@ -21,7 +21,6 @@ if ($_POST['action'] == "load") {
             foreach ($result as $row) {
                 $output .= "<tr>
                         <td>{$sr}</td>
-                        <td>{$row["id"]}</td>
                         <td>{$row["brand_name"]}</td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_brand' style='width:70px;'>Active</button>" 
@@ -155,10 +154,9 @@ if ($_POST['action'] == "search") {
         print_r($result);
         // $result = $conn->query($sql);
         $sr = 1;
-        foreach ($result as $row) {
+        if(isset($result)) foreach ($result as $row) {
             $output .= "<tr>
                         <td>{$sr}</td>
-                        <td>{$row["id"]}</td>
                         <td>{$row["brand_name"]}</td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_brand' style='width:70px;'>Active</button>" 

@@ -178,17 +178,19 @@ if ($_POST['action'] == "search") {
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_sale_order' style='width:70px;'>Active</button>" 
                         : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_sale_order' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
-                        <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
-                        <button class='btn btn-warning unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                        <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                            <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                            <button class='btn btn-info btn-sm showProducts' title='Products' data-id={$row["id"]}><i class='fa fa-chevron-right aria-hidden='true'>‌</i></button>
                         </td>
                         </tr>";
                 $sr++;
             }
-        } else {
-            $output =   "<tr>
-                            <td colspan = '10'><h4><span style='color:red;'>Attention:</span> The record cannot be located using the provided value.</h4></td>
-                        </tr>";
-        }
+        } 
+        // else {
+        //     $output =   "<tr>
+        //                     <td colspan = '10'><h4><span style='color:red;'>Attention:</span> The record cannot be located using the provided value.</h4></td>
+        //                 </tr>";
+        // }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }

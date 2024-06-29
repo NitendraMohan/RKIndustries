@@ -12,7 +12,6 @@ jQuery(document).ready(function ($) {
                 // Assuming the result returned by controller/brandController.php is the HTML table content
                 $("#brandTableContents").html(result);
                 var total_records = $("#brandTableContents tr").length;
-                // $('#total_records').html("Total Records: "+total_records);
                 $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");
             },
             error: function (xhr, status, error) {
@@ -130,6 +129,8 @@ jQuery(document).ready(function ($) {
             data: { action: eventaction, search: search_term },
             success: function (data) {
                 $("#brandTableContents").html(data);
+                var total_records = $("#brandTableContents tr").length;
+                $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");
             }
         });
     });

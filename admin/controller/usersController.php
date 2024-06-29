@@ -211,7 +211,7 @@ if ($_POST['action'] == "search") {
             $params = ['userid' => $_SESSION['userid'], 'moduleid' => $_SESSION['moduleid']];
             $permissions = $db->get_buttons_permissions($params);
             $sr = 1;
-            foreach ($result as $row) {
+            if(isset($result)) foreach ($result as $row) {
                 $output .= "<tr>
                         <td>{$sr}</td>
                         <td>{$row["username"]}</td>
@@ -234,11 +234,12 @@ if ($_POST['action'] == "search") {
                         </tr>";
                 $sr++;
             }
-        } else {
-            $output =   "<tr>
-                            <td colspan = '10'><h4><span style='color:red;'>Attention:</span> The record cannot be located using the provided value.</h4></td>
-                        </tr>";
         }
+        //  else {
+        //     $output =   "<tr>
+        //                     <td colspan = '10'><h4><span style='color:red;'>Attention:</span> The record cannot be located using the provided value.</h4></td>
+        //                 </tr>";
+        // }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }

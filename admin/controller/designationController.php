@@ -175,7 +175,7 @@ if ($_POST['action'] == "search") {
         print_r($result);
         // $result = $conn->query($sql);
         $sr = 1;
-        foreach ($result as $row) {
+    if(isset($result)) foreach ($result as $row) {
             $output .= "<tr>
                         <td>{$sr}</td>
                         <td>{$row["designation_name"]}</td>

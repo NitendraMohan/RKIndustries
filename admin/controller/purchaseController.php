@@ -170,7 +170,8 @@ if ($_POST['action'] == "search") {
         }
         // $conn = new PDO($this->dsn, $this->productname, $this->password);
         $sql = "select p.*,v.vendor_name from tbl_purchase as p JOIN tbl_vendors as v ON p.vendorid=v.id
-                        where p.billno like '%{$search_value}%' or v.vendor_name like '%{$search_value}%' or p.cost like '%{$search_value}%'";        if($statusSearch!=''){
+            where p.billno like '%{$search_value}%' or v.vendor_name like '%{$search_value}%' or p.cost like '%{$search_value}%'";       
+        if($statusSearch!=''){
             $sql.="or status={$statusSearch}";
         }
         $result = $db->readData($sql);
@@ -179,7 +180,7 @@ if ($_POST['action'] == "search") {
         $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
-        foreach ($result as $row) {
+        if(isset($result)) foreach ($result as $row) {
             $output .= "<tr>
                        <td>{$sr}</td>
                         <td>{$row["billno"]}</td>
@@ -191,11 +192,11 @@ if ($_POST['action'] == "search") {
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='bom_product' style='width:70px;'>Active</button>" 
                         : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='bom_product' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
-                            <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                           <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
-                            <button class='btn btn-info btn-sm material' title='Materials' data-id={$row["id"]}><i class='fa fa-chevron-right aria-hidden='true'>‌</i></button>
-                            <button class='btn btn-primary btn-sm material' title='Other Charges' data-id={$row["id"]}><i class='fa fa-inr' aria-hidden='true'></i></button>
-                            </td>
+                            <button class='btn btn-info btn-sm purchaseitem' title='Purchase Items' data-id={$row["billno"]}><i class='fa fa-chevron-right aria-hidden='true'>‌</i></button>
+                            <button class='btn btn-primary btn-sm charges' title='Other Charges' data-id={$row["id"]}><i class='fa fa-inr' aria-hidden='true'></i></button>
+                        </td>
 
                         </tr>";
             $sr++;
