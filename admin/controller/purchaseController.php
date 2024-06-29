@@ -28,8 +28,8 @@ if ($_POST['action'] == "load") {
                         <td>{$row["tax_amount"]}</td>
                         <td>{$row["total_cost"]}</td>
                         <td>" . ($row['status'] == 1 
-                        ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_purchase' style='width:70px;'>Active</button>" 
-                        : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_purchase' style='width:70px;'>Deactive</button>") . "</td>
+                        ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_purchase' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_purchase' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
@@ -187,7 +187,9 @@ if ($_POST['action'] == "search") {
                         <td>{$row["cost"]}</td>
                         <td>{$row["tax_amount"]}</td>
                         <td>{$row["total_cost"]}</td>
-                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='bom_product' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='bom_product' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>" . ($row['status'] == 1 
+                        ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='bom_product' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='bom_product' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>

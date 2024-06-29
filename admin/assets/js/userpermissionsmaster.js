@@ -154,6 +154,7 @@ jQuery(document).ready(function ($) {
         var insert_status = $row.find("#insert").is(":checked")?1:0;
         var update_status = $row.find("#update").is(":checked")?1:0;
         var delete_status = $row.find("#delete").is(":checked")?1:0;
+        var status_status = $row.find("#status").is(":checked")?1:0;
         var user_id = $('#selected_user').val();
         console.log('user id:'+user_id+',module id:'+module_id+',insert:'+insert_status+',update:'+update_status+',delete:'+delete_status);
         $.ajax({
@@ -164,7 +165,8 @@ jQuery(document).ready(function ($) {
                 moduleid : module_id, 
                 insertstatus: insert_status,
                 updatestatus: update_status,
-                deletestatus: delete_status
+                deletestatus: delete_status,
+                status: status_status
             },
         success : function(data){
             console.log(data);

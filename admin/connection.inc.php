@@ -120,9 +120,10 @@ class dbConnector{
     $permission_values = [0=>'disabled',1=>''];
     $permissions = [];
     if(isset($data)){
-        $permissions["insert"]=$permission_values[$data["insert_record"]];
-        $permissions["update"]=$permission_values[$data["update_record"]];
-        $permissions["delete"]=$permission_values[$data["delete_record"]];
+      $permissions["insert"]=$permission_values[$data["insert_record"]];
+      $permissions["update"]=$permission_values[$data["update_record"]];
+      $permissions["delete"]=$permission_values[$data["delete_record"]];
+      $permissions["status"]=$permission_values[$data["status"]];
     }
     return $permissions;
   }
