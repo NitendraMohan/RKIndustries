@@ -90,7 +90,7 @@ if ($_POST['action'] == "load") {
 if($_POST['action'] == "load_subcategories"){
     $sql = "Select id,subcategory_name from tbl_subcategory where category_id={$_POST['category_id']} and status=1";
     $subcategories = $db->readData($sql);
-    $list = "<option value='' selected>Select..</option>";
+    $list = "<option value='' selected>Subcategory..</option>";
     if(isset($subcategories)){
         foreach($subcategories as $subcategory){
             $list.="<option value='{$subcategory['id']}'>{$subcategory['subcategory_name']}</option>";
@@ -102,7 +102,7 @@ if($_POST['action'] == "load_subcategories"){
 if($_POST['action'] == "load_products"){
     $sql = "Select id,product_name from tbl_products where subcategory_id={$_POST['subcategory_id']} and status=1";
     $products = $db->readData($sql);
-    $list = "<option value='' selected>Select..</option>";
+    $list = "<option value='' selected>Product..</option>";
     if(isset($products)){
         foreach($products as $product){
             $list.="<option value='{$product['id']}'>{$product['product_name']}</option>";
@@ -125,7 +125,7 @@ if($_POST['action'] == "load_rateunit"){
 if($_POST['action'] == "load_brands"){
     $sql = "Select b.id,b.brand_name from tbl_brand b inner join tbl_brandproduct bp on b.id=bp.brandid where bp.productid={$_POST['product_id']} and bp.status=1";
     $products = $db->readData($sql);
-    $list = "<option value='' selected>Select..</option>";
+    $list = "<option value='' selected>Brand..</option>";
     if(isset($products)){
         foreach($products as $product){
             $list.="<option value='{$product['id']}'>{$product['brand_name']}</option>";
@@ -212,12 +212,14 @@ if ($_POST['action'] == "update") {
         $targetFile = "";
         $saveRecord = true;
         $id = $_POST['modalid'];
+        $bomid = $_SESSION['bomid'];
+        $productid = $_POST['product'];
         //get old record for user log
         $sql = "select * from tbl_bom_material where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
         $sql = "select id from tbl_bom_material where bom_id=:bomid and product_id=:productid and id!={$id}";
-        $params = ['bomid' => $_Session, 'productid' => $productid];
+        $params = ['bomid' => $bomid, 'productid' => $productid];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
@@ -289,6 +291,7 @@ if ($_POST['action'] == "search") {
     }
     echo $output;
 }
+
 if($_POST['action']=="update_totalcost"){
     $bomid = $_POST['bomid'];
     $total_cost = $_POST['total_cost'];

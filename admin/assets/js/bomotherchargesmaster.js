@@ -65,6 +65,9 @@ jQuery(document).ready(function ($) {
                 action = 'update';
                 formData.append("action","update");
             }
+            //enable table
+            $("#usersTableContents tr").attr('bgcolor','white');
+            $('.disabled-overlay').hide();
             $.ajax({
                 url: "../controller/bomOtherChargesController.php",
                 type: "POST",
@@ -141,6 +144,14 @@ jQuery(document).ready(function ($) {
     $(document).on("click", ".unitEdit", function () {
         var uid = $(this).data("id");
         var uaction = "edit";
+         //change color of selected row and disable table
+         var $tr = $(this).closest("tr");
+         $tr.attr('bgColor','#87CEEB');
+         $('.disabled-overlay').css({
+             display: 'block',
+             // width: $('.table-container').outerWidth(),
+             height: $('.table-container')[0].scrollHeight
+         });
         $.ajax({
             url: "../controller/bomOtherChargesController.php",
             type: "POST",
@@ -211,6 +222,11 @@ jQuery(document).ready(function ($) {
             load_table();
         }
         });
+    });
+
+    $(document).on("reset", function (e) {
+        $("#usersTableContents tr").attr('bgcolor','white');
+        $('.disabled-overlay').hide();
     });
 });
 

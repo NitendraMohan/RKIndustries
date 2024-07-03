@@ -221,7 +221,7 @@ if ($_POST['action'] == "update") {
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
         $sql = "select id from tbl_sale_order_products where saleorder_id=:saleorder_id and product_id=:productid and id!={$id}";
-        $params = ['saleorder_id' => $_Session['saleorder_id'], 'productid' => $_POST['product_id']];
+        $params = ['saleorder_id' => $_SESSION['saleorder_id'], 'productid' => $_POST['product']];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));

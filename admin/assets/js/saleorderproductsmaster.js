@@ -175,6 +175,9 @@ jQuery(document).ready(function ($) {
                 // formData.append("image",currentImage);
                 formData.append("action","update");
             }
+            //enable table
+            $("#saleOrderProductsTableContents tr").attr('bgcolor','white');
+            $('.disabled-overlay').hide();
             $.ajax({
                 url: "../controller/saleOrderProductsController.php",
                 type: "POST",
@@ -230,6 +233,14 @@ jQuery(document).ready(function ($) {
         var uid = $(this).data("id");
         var uaction = "edit";
         console.log("product id "+ uid);
+        //change color of selected row and disable table
+        var $tr = $(this).closest("tr");
+        $tr.attr('bgColor','#87CEEB');
+        $('.disabled-overlay').css({
+            display: 'block',
+            // width: $('.table-container').outerWidth(),
+            height: $('.table-container')[0].scrollHeight
+        });
         $.ajax({
             url: "../controller/saleOrderProductsController.php",
             type: "POST",
@@ -317,5 +328,9 @@ jQuery(document).ready(function ($) {
          });
     });
     //End
+    $(document).on("reset", function (e) {
+        $("#saleOrderProductsTableContents tr").attr('bgcolor','white');
+        $('.disabled-overlay').hide();
+    });
 });
 //End
