@@ -6,7 +6,8 @@ $db = new dbConnector();
 if (isset($_POST['purchaseId'])) {
 
     $_SESSION['purchaseId'] = $_POST['purchaseId'];
-    // echo 'bom id ' . $_SESSION['bomid'];
+    // $_SESSION['pid'] = $_POST['pid'];
+    // echo 'bom id ' . $_SESSION['pid'];
 }
 if (isset($_POST['moduleid'])) {
     $_SESSION['moduleid'] = $_POST['moduleid'];

@@ -82,25 +82,39 @@ if ($_POST['action'] == "insert") {
                 }
             }
         }
-        $productname = strtoupper($_POST['productname']);
-        $brandId = $_POST['brandName'];
-        $categoryid = $_POST['categoryId'];
-        $subcategoryid = $_POST['subcategoryId'];
-        $productCode = $_POST['productCodeName'];
-        $unitid = $_POST['unit'];
-        $price = $_POST['price'];
-        $ustatus = $_POST['status'];
-        $minLimit = $_POST['minLimitName'];
-        $maxLimit = $_POST['maxLimitName'];
+        $productname    = $_POST['productname'];
+        $brandId        = $_POST['brandName'];
+        $categoryid     = $_POST['categoryId'];
+        $subcategoryid  = $_POST['subcategoryId'];
+        $productCode    = $_POST['productCodeName'];
+        $departmentId   = $_POST['departmentName'];
+        $qty            = $_POST['qtyName'];
+        $unitid         = $_POST['unit'];
+        $price          = $_POST['price'];
+        $ustatus        = $_POST['status'];
+        $minLimit       = $_POST['minLimitName'];
+        $maxLimit       = $_POST['maxLimitName'];
         $sql = "select id from tbl_products where product_name=:productname";
         $params = ['productname' => $productname];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "insert into tbl_products(compid,brand_id,category_id,subcategory_id,product_name,product_code,unit_id,price,min_limit,max_limit,image,status) values((select id from company_master),:brandId,:category,:subcategory,:productname,:productCode,:unit,:price,:minLimit,:maxLimit,:image,:status)";
-            $params = ['brandId' => $brandId, 'category' => $categoryid, 'subcategory' => $subcategoryid, 'productname' => $productname, 'productCode' => $productCode, 'unit' => $unitid, 'price' => $price, 'minLimit' => $minLimit, 'maxLimit' => $maxLimit, 'status' => $_POST['status'], 'image' => $targetFile ?? '../images/favicon.png'];
+            $sql = "insert into tbl_products(compid,brand_id,category_id,subcategory_id,product_name,product_code,department_id,qty,unit_id,price,min_limit,max_limit,image,status) values((select id from company_master),:brandId,:category,:subcategory,:productname,:productCode,:departmentId,:qty,:unit,:price,:minLimit,:maxLimit,:image,:status)";
+            $params = ['brandId' => $brandId, 'category' => $categoryid, 'subcategory' => $subcategoryid, 'productname' => $productname, 'productCode' => $productCode, 'departmentId' => $departmentId, 'qty' => $qty,   'unit' => $unitid, 'price' => $price, 'minLimit' => $minLimit, 'maxLimit' => $maxLimit, 'status' => $_POST['status'], 'image' => $targetFile ?? '../images/favicon.png'];
             $newRecordId = $db->insertData($sql, $params);
+
+            //fetch product id for stock
+            $sql = "select id from tbl_products where product_name = :productName";
+            $params = ['productName' =>  $productname];
+            $proId = $db->getID($sql, $params);
+            //end
+            //product insert in stock
+            $sql = "INSERT INTO tbl_stock(compid,prod_id,dept_id,qty,unit_id,rate) VALUES((select id from company_master),:prodId,:deptId,:qty,:unitId,:rate)";
+            $params = ['prodId' => $proId, 'deptId' => $departmentId, 'qty' => $qty,  'unitId' => $unitid, 'rate' => $price];
+            $newStockRecordId = $db->insertData($sql, $params);
+            //end
+
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_products", $newRecordId, $_SESSION["username"]);
                 echo json_encode(array('success' => true, 'msg' => 'Success! New record added successfully'));
@@ -126,6 +140,11 @@ if ($_POST['action'] == "delete") {
         $params = ['id' => $id];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
+            //delete product from stock
+            $sql = "DELETE from tbl_stock WHERE prod_id =:proId";
+            $params = ['proId' => $id];
+            $recordStockId = $db->ManageData($sql, $params);
+            //end
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_products", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
             echo 1;
         } else {
@@ -208,10 +227,15 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_products set brand_id=:brandId, category_id=:categoryId, subcategory_id=:subcategoryId, product_name=:productname, product_code=:productCode, unit_id=:unit,price=:price,image=:image,min_limit=:minLimit,max_limit=:maxLimit,status=:status where id=:id";
+            $sql = "update tbl_products set brand_id=:brandId, category_id=:categoryId, subcategory_id=:subcategoryId, product_name=:productname, product_code=:productCode, department_id=:departmentId, qty=:qty, unit_id=:unit,price=:price,image=:image,min_limit=:minLimit,max_limit=:maxLimit,status=:status where id=:id";
             $params = ['id' => $id, 'brandId' => $_POST['brandName'], 'categoryId' => $_POST['categoryId'], 'subcategoryId' => $_POST['subcategoryId'], 'productname' => strtoupper($_POST['productname']), 'productCode' => strtoupper($_POST['productCodeName']), 'unit' => $_POST['unit'], 'price' => $_POST['price'], 'minLimit' => $_POST['minLimitName'], 'maxLimit' => $_POST['maxLimitName'], 'status' => $_POST['status'], 'image' => $targetFile ?? '../images/favicon.png'];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
+                //update product in stock
+                $sql = "UPDATE tbl_stock set unit_id=:unitId WHERE prod_id = :id";
+                $params = ['id' => $id, 'unitId' => $_POST['unit']];
+                $recordStockId = $db->ManageData($sql, $params);
+                //end
                 log_user_action($_SESSION['userid'], $_POST['action'], "tbl_products", $_POST['productHiddenId'], $_SESSION["username"], json_encode($oldRecord));
                 echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
             } else {
@@ -250,7 +274,7 @@ if ($_POST['action'] == "search") {
             $sql .= "or status={$statusSearch}";
         }
         $result = $db->readData($sql);
-       print_r($result);
+        print_r($result);
         // $result = $conn->query($sql);
         $params = ['userid' => $_SESSION['userid'], 'moduleid' => $_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);

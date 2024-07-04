@@ -61,10 +61,19 @@ class dbConnector{
    * function to insert, update and delete in table
    */
   public function ManageData($qry, $params = []){
-    $stmt = $this->conn->prepare($qry);
-    $stmt->execute($params);
-    // $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $stmt->rowCount();
+    // $stmt = $this->conn->prepare($qry);
+    // $stmt->execute($params);
+    // // $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // return $stmt->rowCount();
+    try {
+      $stmt = $this->conn->prepare($qry);
+      $stmt->execute($params);
+      return $stmt->rowCount();
+  } catch(PDOException $e) {
+      // Handle PDO exceptions (e.g., database errors)
+      echo "Error: " . $e->getMessage();
+      return false; // or handle the error in a different way
+  }
   }
   /**
    * function to get total count of rows in table
@@ -82,7 +91,7 @@ class dbConnector{
     $stmt = $this->conn->prepare($qry);
     $stmt->execute($params);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    if(isset($result)){
+    if(isset($result) && !empty($result)){
       return $result['id'];
     }
     return 0;
@@ -95,7 +104,7 @@ class dbConnector{
     $stmt = $this->conn->prepare($qry);
     $stmt->execute($params);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    if(isset($result)){
+    if(isset($result) && !empty($result)){
       $idValue = array_values($result)[0];
       return $idValue;
     }

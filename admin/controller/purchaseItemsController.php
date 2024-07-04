@@ -15,7 +15,7 @@ if ($_POST['action'] == "load") {
         // print_r($_POST['purchaseId']);
         // die();
         $sql = "SELECT 
-        p.billno,
+        p.id,p.billno,
         v.vendor_name as vname, 
         sum(coalesce(pi.cost,0)) as cost,
         sum(COALESCE(pi.tax_perc,0)) as taxper,
@@ -23,8 +23,8 @@ if ($_POST['action'] == "load") {
         sum(COALESCE(pi.total_cost,0)) as totalcost
         FROM tbl_purchase p
         JOIN tbl_vendors v ON p.vendorid = v.id
-        JOIN tbl_purchase_item pi on p.billno = pi.purchase_id
-        where p.billno = {$_POST['purchaseId']} and pi.status = 1";
+        JOIN tbl_purchase_item pi on p.id = pi.purchase_id
+        where p.id = {$_POST['purchaseId']} and pi.status = 1";
         
         
         $purchaseData = $db->readSingleRecord($sql);
@@ -37,7 +37,7 @@ if ($_POST['action'] == "load") {
         $sr = 1;
         $sql = "SELECT pi.*,pr.product_name 
         FROM tbl_purchase_item pi
-        JOIN tbl_purchase p ON pi.purchase_id = p.billno
+        JOIN tbl_purchase p ON pi.purchase_id = p.id
         JOIN tbl_products pr ON pi.prod_id = pr.id
         where pi.purchase_id = {$_POST['purchaseId']} ;";
         $purchaseItems = $db->readData($sql);
@@ -77,20 +77,20 @@ if ($_POST['action'] == "load") {
 }
 //End
 
-if($_POST['action'] == "load_subcategories"){
-    $sql = "Select id,subcategory_name from tbl_subcategory where category_id={$_POST['category_id']} and status=1";
-    $subcategories = $db->readData($sql);
-    $list = "<option value='' selected>Select..</option>";
-    if(isset($subcategories)){
-        foreach($subcategories as $subcategory){
-            $list.="<option value='{$subcategory['id']}'>{$subcategory['subcategory_name']}</option>";
-        }
-    }
-    echo $list;
-}
+// if($_POST['action'] == "load_subcategories"){
+//     $sql = "Select id,subcategory_name from tbl_subcategory where category_id={$_POST['category_id']} and status=1";
+//     $subcategories = $db->readData($sql);
+//     $list = "<option value='' selected>Select..</option>";
+//     if(isset($subcategories)){
+//         foreach($subcategories as $subcategory){
+//             $list.="<option value='{$subcategory['id']}'>{$subcategory['subcategory_name']}</option>";
+//         }
+//     }
+//     echo $list;
+// }
 
 if($_POST['action'] == "load_products"){
-    $sql = "Select id,product_name from tbl_products where subcategory_id={$_POST['subcategory_id']} and status=1";
+    $sql = "Select id,product_name from tbl_products where status=1";
     $products = $db->readData($sql);
     $list = "<option value='' selected>Select..</option>";
     if(isset($products)){
@@ -127,9 +127,8 @@ if($_POST['action'] == "load_brands"){
 //Insert data into database
 if ($_POST['action'] == "insert") {
     try {
-        // print_r($_POST);
-        // die();
         $purchaseId =  $_SESSION['purchaseId'];
+        // $pId = $_POST['pid'];
         $productId = $_POST['productName'];
         $mrate = $_POST['mrateName'];
         $munitid = $_POST['munitName'];
@@ -146,8 +145,36 @@ if ($_POST['action'] == "insert") {
         } else {
             $sql = "insert into tbl_purchase_item(compid,purchase_id,prod_id,price,unit_id,qty,cost,tax_perc,tax_amt,total_cost,status) values((select id from company_master),:purchase_id,:prod_id,:price,:unit_id,:qty,:cost,:tax_perc,:tax_amt,:total_cost,1)";
             $params = [ 'purchase_id' => $purchaseId,'prod_id' => $productId,'price' => $mrate,'unit_id' => $munitid,'qty'=>$pqty, 'cost' => $cost, 'tax_perc'=>$taxPer, 'tax_amt' => $taxAmt, 'total_cost' => $totalCost];
+            
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
+                
+            //update query for tbl_puchase on the basis to tbl_purchase_item    
+                $sql = "UPDATE tbl_purchase SET 
+                cost = cost + :costAmount, 
+                tax_amount = tax_amount + :taxAmount, 
+                total_cost = total_cost + :totalCost 
+                WHERE id = :purchaseId";
+                $params = ['costAmount' => $cost, 'taxAmount' => $taxAmt, 'totalCost' =>  $totalCost, 'purchaseId' => $purchaseId];
+                $db->ManageData($sql,$params);
+                //end
+                // echo $productId;
+                // die();
+                $sql = "SELECT id FROM tbl_stock WHERE prod_id = :proId";
+                $params = ['proId' => $productId];
+                $stockId = $db->getID($sql,$params);
+
+                    // if($sid>0){
+                //product qty updated in stock
+                    $sql = "UPDATE tbl_stock set qty = qty + :pqty WHERE id = :sid";
+                    $params = ['pqty' => $pqty, 'sid' => $stockId];
+                    $db->ManageData($sql,$params);
+                //end
+                    // }else{
+                    //     $sql = "INSERT INTO tbl_stock(compid,prod_id,dept_id,unit_id,rate,qty,status) VALUES((select id from company_master), :prod_id, :dept_id, :unit_id, :rate, :qty, )";
+                    //     $params = ['prod_id' => $productId,'dept_id' => 14,'unit_id' =>  $munitid,'rate' => $mrate ,'qty' => $pqty ,1];
+                    //     $db->insertData($sql,$params);
+                    // }
                 log_user_action($_SESSION['userid'], 'create', "tbl_purchase_item", $newRecordId, $_SESSION["username"]);
                 echo json_encode(array('success' => true, 'msg'=>'Success! New record added successfully'));
             } else {
@@ -168,15 +195,66 @@ if ($_POST['action'] == "delete") {
         $sql = "select * from tbl_purchase_item where id=:id";
         $params = ["id" => $_POST["id"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        $sql = "delete from tbl_purchase_item where id =:id";
-        $params = ['id' => $id];
-        $recordId = $db->ManageData($sql, $params);
+        //end
+
+        //these field required for update purchase record
+        $purchaseId = $oldRecord['purchase_id'];
+        $cost       = $oldRecord['cost'];
+        $taxAmt     = $oldRecord['tax_amt'];
+        $totalCost  = $oldRecord['total_cost'];
+        //end
+        
+        $oldQty = $oldRecord['qty'];
+        $productId =$oldRecord['prod_id'];
+        $sql = "SELECT qty FROM tbl_stock WHERE prod_id = {$productId};";
+        $stockRecord = $db->readSingleRecord($sql);
+        $stockQty = $stockRecord['qty'];
+
+        if($stockQty >= $oldQty){
+            //stock update
+            $sql = "UPDATE tbl_stock set qty = qty - :pqty WHERE prod_id = :podId";
+            $params = ['pqty' => $oldQty, 'podId' => $productId];
+            $db->ManageData($sql,$params);
+            //end
+
+            //purchase table update
+            $sql = "UPDATE tbl_purchase SET 
+            cost = cost - :costAmount, 
+            tax_amount = tax_amount - :taxAmount, 
+            total_cost = total_cost - :totalCost 
+            WHERE id = :purchaseId";
+            $params = ['costAmount' => $cost, 'taxAmount' => $taxAmt, 'totalCost' =>  $totalCost, 'purchaseId' => $purchaseId];
+            $db->ManageData($sql,$params);
+            //end
+
+            //delete from purchase item
+            $sql = "delete from tbl_purchase_item where id =:id";
+            $params = ['id' => $id];
+            $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_purchase_item", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
             echo 1;
-        } else {
+        } 
+        
+        else {
             echo 0;
         }
+        }else{
+            echo 0; 
+        }
+
+
+        // $sql = "delete from tbl_purchase_item where id =:id";
+        // $params = ['id' => $id];
+        // $recordId = $db->ManageData($sql, $params);
+        // if ($recordId) {
+        //     log_user_action($_SESSION['userid'], $_POST['action'], "tbl_purchase_item", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
+        //     echo 1;
+        // } 
+        
+        // else {
+        //     echo 0;
+        // }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
@@ -202,26 +280,48 @@ if ($_POST['action'] == "update") {
     try {
         $targetFile = "";
         $saveRecord = true;
-        $id = $_POST['modalid'];
+        $purchaseItemId = $_POST['modalid'];
+        // print_r($_POST);
+        // die();
         //get old record for user log
         $sql = "select * from tbl_purchase_item where id=:id";
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        $sql = "select id from tbl_purchase_item where bom_id=:bomid and product_id=:productid and id!={$id}";
-        $params = ['bomid' => $_Session, 'productid' => $productid];
+        //end
+       
+       
+        $purchaseId = $oldRecord['purchase_id'];
+        $oldQty = $oldRecord['qty'];
+
+        $sql = "select id from tbl_purchase_item where purchase_id=:purchaseId and prod_id=:productId and id!=:id";
+        $params = ['purchaseId' =>  $purchaseId, 'productId' => $_POST['productName'], 'id' =>$purchaseItemId];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_purchase_item set category_id=:category, subcategory_id=:subcategory, product_id=:product, unit_id=:unit, rate=:rate, qty=:qty, cost=:cost where id=:id";
-            $params = ['id'=>$id, 'category' => $_POST['category'], 'subcategory' => $_POST['subcategory'], 'product' => $_POST['product'], 'unit' => $_POST['munit'], 'rate' => $_POST['mrate'], 'qty' => $_POST['mqty'], 'cost' =>$_POST['cost']];
+            
+            $sql = "SELECT id,qty FROM tbl_stock WHERE prod_id =:productId";
+            $params = ['productId' => $_POST['productName']];
+            $res = $db->readSingleRecord($sql,$params);
+           if ($res['qty'] > $oldQty)
+                       {
+            $sql = "update tbl_purchase_item set prod_id=:prodId,price=:price,unit_id=:unitId,qty=:qty,cost=:cost,tax_perc=:taxPer,tax_amt=:taxAmt,total_cost=:totalCost  where id=:id";
+            $params = ['prodId' => $_POST['productName'], 'price' => $_POST['mrateName'], 'unitId' => $_POST['munitName'], 'qty' => $_POST['mqtyName'], 'cost' => $_POST['costName'], 'taxPer' => $_POST['taxPerName'], 'taxAmt' =>$_POST['taxAmtName'], 'totalCost' => $_POST['totalCostName'],'id'=>$purchaseItemId];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
                 log_user_action($_SESSION['userid'], $_POST['action'], "tbl_purchase_item", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
                 echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
             } else {
                 echo json_encode(array("success" => false, "msg" => "Record not updated"));
-            }
+            }               
+        } else {
+            echo json_encode(array("success" => false, "msg" => "This product's record cannot be updated at this time."));
+        }
+
+            
+            
+            
+           
         }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();

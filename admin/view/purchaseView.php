@@ -13,6 +13,8 @@ $permissions = $db->get_buttons_permissions($params);
 $sql = "select id,vendor_name FROM tbl_vendors where status=1";
 $vendors = $db->readData($sql);
 
+$sql = "SELECT id,dept_name FROM tbl_deparment WHERE status = 1";
+$departments = $db->readData($sql);
 ?>
 <div class="content pb-0">
     <div class="orders">
@@ -62,7 +64,7 @@ $vendors = $db->readData($sql);
                                         
                                         <div class="form-group">
                                             <label for="billnumber">Enter Bill Number</label>
-                                            <input class="form-control" type="text" placeholder="Enter Bill Number" id="billNumberId" name="billNumberName" required>
+                                            <input class="form-control" type="number" placeholder="Enter Bill Number" id="billNumberId" name="billNumberName" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="vaedername">Select Vendor Name</label>
@@ -78,6 +80,18 @@ $vendors = $db->readData($sql);
                                             </select>
                                         </div>
                                         <div class="form-group">
+                                            <label for="departmentname">Select Department Name</label>
+                                            <select class="form-control" id="departmentId" name="departmentName" required>
+                                                <option value="">Select Department Name</option>
+                                                <?php 
+                                                    foreach($departments as $department){
+                                                        echo "<option value='{$department['id']}'>{$department['dept_name']}</option>";
+                                                        
+                                                    }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <!-- <div class="form-group">
                                             <label for="cost">Enter Cost</label>
                                             <input class="form-control" type="number" placeholder="Enter Cost" id="costId" name="costName" required>
                                         </div>
@@ -88,7 +102,7 @@ $vendors = $db->readData($sql);
                                         <div class="form-group">
                                             <label for="totalcost">Total Cost</label>
                                             <input class="form-control" type="number" placeholder="Total Cost Amount" id="totalCostId" name="totalCostName" readonly>
-                                        </div>
+                                        </div> -->
                                         
                                     </div>
 
@@ -111,11 +125,12 @@ $vendors = $db->readData($sql);
                                     <tr>
                                         <th class="serial">#</th>
                                         <!-- <th>BOM Name</th> -->
-                                        <th>BILL NUMBER</th>
-                                        <th>VENDOR NAME</th>
-                                        <th>COST</th>
-                                        <th>TAX</th>
-                                        <th>TOTAL AMOUNT</th>
+                                        <th style="width: 8%;">DEPARTMENT</th>
+                                        <th style="width: 8%;">BILL NO</th>
+                                        <th style="width: 17%;">VENDOR NAME</th>
+                                        <th style="width: 15%;">AMOUNT</th>
+                                        <th style="width: 10%;">TAX</th>
+                                        <th style="width: 17%;">TOTAL AMOUNT</th>
                                         <th>STATUS</th>
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>

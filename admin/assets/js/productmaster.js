@@ -157,6 +157,8 @@ jQuery(document).ready(function ($) {
                 $("#subcategoryInput").data("id",arr['subcategory_id']);
                 $("#productname").val(arr['product_name']);
                 $("#productCodeId").val(arr['product_code']);
+                $("#departmentId").val(arr['department_id']);
+                $("#qtyId").val(arr['qty']);
                 $("#unit").val(arr['unit_id']);
                 $("#minLimitId").val(arr['min_limit']);
                 $("#maxLimitId").val(arr['max_limit']);

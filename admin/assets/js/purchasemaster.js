@@ -121,37 +121,12 @@ jQuery(document).ready(function ($) {
             data: { action: uaction, id: uid },
             success: function (result) {
                 var arr = JSON.parse(result);
-                console.log(arr);
-                // $.ajax({
-                //     url: "../controller/purchaseController.php",
-                //     type: "POST",
-                //     data: { action: 'load_subcategories', category_id: cat_id },
-                //     success: function (list) {
-                //         $("#subcategory").html(list);
-                //         $("#subcategory").val(arr['subcategory_id']);
-                //         $.ajax({
-                //             url: "../controller/purchaseController.php",
-                //             type: "POST",
-                //             data: { action: 'load_products', subcategory_id: arr['subcategory_id'] },
-                //             success: function (product_list) {
-                //                 $("#product").html(product_list);
-                //                 $("#product").val(arr['product_id']);
-                //                 $.ajax({
-                //                     url: "../controller/purchaseController.php",
-                //                     type: "POST",
-                //                     data: { action: 'load_brands', product_id: arr['product_id'] },
-                //                     success: function (result) {
-                //                         $("#brand").html(result);
-                //                         $("#brand").val(arr['brand_id']);
-                //                     }
-                //                 });
-                //             }
-                //         });
-                //     }
-                // });
+                // console.log(arr);
                 $("#purchaseHiddenId").val(arr['id']);
                 $("#billNumberId").val(arr['billno']);
+                // $("#billNumberId").prop('readonly', true);
                 $("#vendorId").val(arr['vendorid']);
+                $("#departmentId").val(arr['departmentid']);
                 $("#costId").val(arr['cost']);
                 $("#taxId").val(arr['tax_amount']);
                 $("#totalCostId").val(arr['total_cost']);
@@ -185,6 +160,7 @@ jQuery(document).ready(function ($) {
     $(document).on("click", ".purchaseitem", function () {
 
         var uid = $(this).data("id");
+        // var pid = $(this).data("pid");
         console.log(uid);
         // var uaction = "show_material";
         // var element = this;
@@ -194,6 +170,7 @@ jQuery(document).ready(function ($) {
             type: "POST",
             data: {
                purchaseId: uid,
+            //    pid: pid,
             },
             success: function() {
                window.location.href = link;

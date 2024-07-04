@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
             type: "POST",
             data: { action: "load", purchaseId: purchaseId },
             success: function (result) {
-                console.log(result);
+                // console.log(result);
                 data = JSON.parse(result);
                 var purchaseData = data['purchaseData'];
                 $('#vendorId').text(purchaseData['vname']);
@@ -86,18 +86,49 @@ jQuery(document).ready(function ($) {
         // }
     });
 
+
+    $("#mrateId").on("input",function(e) {
+        e.preventDefault();
+        var price = parseFloat($("#mrateId").val());
+        var qty = parseFloat($("#mqtyId").val());
+        var per = parseFloat($("#taxPerId").val()) || 0;
+        // var taxAmt = parseFloat($("#taxAmtId").val()) || 0;
+        if(isNaN(price) || isNaN(qty)){
+            $("#mrateId").val('Rate ');
+            $("#costId").val('Cost ');
+            $("#totalCostId").val('Total Cost');
+            return;
+        }
+            var cost = price * qty;
+            var taxAmt = (cost * per) / 100;
+            var totalCost = cost + taxAmt;
+            if (!isNaN(cost)) {
+                $("#costId").val(cost.toFixed(2));
+                $("#taxAmtId").val(taxAmt.toFixed(2));
+                $("#totalCostId").val(totalCost.toFixed(2));
+            }
+        
+        
+    });
+
     $("#mqtyId").on('input', function(){
         var price = parseFloat($("#mrateId").val());
         var qty = parseFloat($("#mqtyId").val());
-        var taxAmt = parseFloat($("#taxAmtId").val()) || 0;
+        var per = parseFloat($("#taxPerId").val()) || 0;
+        // var taxAmt = parseFloat($("#taxAmtId").val()) || 0;
         if(isNaN(price) || isNaN(qty)){
             $("#costId").val('Cost ');
+            $("#taxAmtId").val(taxAmt.toFixed(2));
             $("#totalCostId").val('Total Cost');
-            return;}
+            return;
+        }
         var cost = price * qty;
+        var taxAmt = (cost * per) / 100;
         var totalCost = cost + taxAmt;
         if (!isNaN(cost)) {
             $("#costId").val(cost.toFixed(2));
+            $("#taxAmtId").val(taxAmt.toFixed(2));
+
             $("#totalCostId").val(totalCost.toFixed(2));
         }
     });
@@ -127,11 +158,12 @@ jQuery(document).ready(function ($) {
         var rateId = $("#mrateId").val();
         var unitId = $("#munitId").val();
         var qtyId = $("#mqtyId").val();
+        // var pid = $('#pHiddenId').val();
         
-        var dataPid = $('#btnSave').data('pid');
+        // var dataPid = $('#btnSave').data('pid');
         
         // Log data-pid value (replace with your logic)
-        console.log('data-pid value:', dataPid);
+        // console.log('data-pid value:', dataPid);
         if (productId == "" || rateId == "" || unitId == "" || qtyId == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
@@ -144,6 +176,7 @@ jQuery(document).ready(function ($) {
             var id = $('#modalid').val();
             console.log('id='.id);
             if(id =='' || id == undefined){
+                
                 action = 'insert';
                 formData.append("action","insert");
             }
@@ -218,7 +251,7 @@ function update_bom_cost(){
                     update_bom_cost();
 
                 } else {
-                    alert("can't delete");
+                    alert("The deletion of this record is currently not possible.");
                 }
             }
         });
@@ -236,15 +269,16 @@ function update_bom_cost(){
             data: { action: uaction, id: uid },
             success: function (result) {
                 var arr = JSON.parse(result);
-                var cat_id = arr['category_id']; 
-                $("#category").val(arr['category_id']);
-                $.ajax({
-                    url: "../controller/purchaseItemsController.php",
-                    type: "POST",
-                    data: { action: 'load_subcategories', category_id: cat_id },
-                    success: function (list) {
-                        $("#subcategory").html(list);
-                        $("#subcategory").val(arr['subcategory_id']);
+                console.log(arr);
+                // var cat_id = arr['category_id']; 
+                // $("#category").val(arr['category_id']);
+                // $.ajax({
+                //     url: "../controller/purchaseItemsController.php",
+                //     type: "POST",
+                //     data: { action: 'load_subcategories', category_id: cat_id },
+                    // success: function (list) {
+                    //     $("#subcategory").html(list);
+                    //     $("#subcategory").val(arr['subcategory_id']);
                         $.ajax({
                             url: "../controller/purchaseItemsController.php",
                             type: "POST",
@@ -254,16 +288,19 @@ function update_bom_cost(){
                                 $("#product").val(arr['product_id']);
                             }
                         });
-                    }
-                });
+                    
+            // });
                 $("#modalid").val(arr['id']);
                 // $("#logo_image").attr('src',arr['image']);
                 // $("#bomname").val(arr['bom_name']);
-                // $("#category").val(arr['category_id']);
-                $("#munit").val(arr['unit_id']);
-                $("#mrate").val(arr['rate']);
-                $("#mqty").val(arr['qty']);
-                $("#cost").val(arr['cost']);
+                $("#productId").val(arr['prod_id']);
+                $("#munitId").val(arr['unit_id']);
+                $("#mrateId").val(arr['price']);
+                $("#mqtyId").val(arr['qty']);
+                $("#costId").val(arr['cost']);
+                $("#taxPerId").val(arr['tax_perc']);
+                $("#taxAmtId").val(arr['tax_amt']);
+                $("#totalCostId").val(arr['total_cost']);
                 $("#status").val(arr['status']);
                 // $("#myModal").modal('show');
             }

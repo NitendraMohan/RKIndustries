@@ -11,36 +11,39 @@ $username = checkUserSession();
 
 if ($_POST['action'] == "load") {
     try {
-        $sql = "select p.*,v.vendor_name from tbl_purchase as p JOIN tbl_vendors as v ON p.vendorid=v.id";
+        $sql = "SELECT p.*,v.vendor_name,d.dept_name
+                FROM tbl_purchase p
+                JOIN tbl_vendors v ON p.vendorid = v.id
+                JOIN tbl_deparment d ON p.departmentid = d.id;";
         $result = $db->readData($sql);
         if (isset($result)) {
-        $rowCounts = count($result);
-        $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
-        $permissions = $db->get_buttons_permissions($params);
-        $sr = 1;
-        $output = "";
-        foreach ($result as $row) {
-            $output .= "<tr>
+            $rowCounts = count($result);
+            $params = ['userid' => $_SESSION['userid'], 'moduleid' => $_SESSION['moduleid']];
+            $permissions = $db->get_buttons_permissions($params);
+            $sr = 1;
+            $output = "";
+            foreach ($result as $row) {
+                $output .= "<tr>
                         <td>{$sr}</td>
+                        <td>{$row["dept_name"]}</td>
                         <td>{$row["billno"]}</td>
                         <td>{$row["vendor_name"]}</td>
                         <td>{$row["cost"]}</td>
                         <td>{$row["tax_amount"]}</td>
                         <td>{$row["total_cost"]}</td>
-                        <td>" . ($row['status'] == 1 
-                        ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_purchase' style='width:70px;'>Active</button>" 
-                        : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_purchase' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>" . ($row['status'] == 1
+                    ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_purchase' style='width:70px;'>Active</button>"
+                    : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_purchase' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
-                            <button class='btn btn-info btn-sm purchaseitem' title='Purchase Items' data-id={$row["billno"]}><i class='fa fa-chevron-right aria-hidden='true'>‌</i></button>
-                            <button class='btn btn-primary btn-sm charges' title='Other Charges' data-id={$row["id"]}><i class='fa fa-inr' aria-hidden='true'></i></button>
+                            <button class='btn btn-info btn-sm purchaseitem' title='Purchase Items' data-id={$row["id"]} data-pid={$row["id"]}><i class='fa fa-chevron-right aria-hidden='true'>‌</i></button>
                             </td>
 
                         </tr>";
-            $sr++;
+                $sr++;
+            }
         }
-    }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }
@@ -48,39 +51,27 @@ if ($_POST['action'] == "load") {
 }
 //End
 
-if($_POST['action'] == "show_material"){
-    header('Location: /employeeinfo-organization?'.$_SERVER['QUERY_STRING']);
-      die();
+if ($_POST['action'] == "show_material") {
+    header('Location: /employeeinfo-organization?' . $_SERVER['QUERY_STRING']);
+    die();
 }
 //Insert data into database
 if ($_POST['action'] == "insert") {
     try {
-        // print_r($_POST);
-        // die();
-        
-        // $bomname = strtoupper($_POST['bomname']);
-        // $categoryid = $_POST['category'];
-        // $subcategoryid = $_POST['subcategory'];
-        // $productid = $_POST['product'];
-        // $brandid = $_POST['brand'];
-        // $unitid = $_POST['unit'];
-        // $qty = $_POST['qty'];
-        // $detail = $_POST['detail'];
-        // $ustatus = $_POST['status'];
         $sql = "select id from tbl_purchase where billno=:billno";
         $params = ['billno' => $_POST['billNumberName']];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "insert into tbl_purchase(compid,billno,vendorid,cost,tax_amount,total_cost) values((select id from company_master),:billno,:vendorid,:cost,:tax_amount,:total_cost)";
-            $params = [ 'billno' => $_POST['billNumberName'],'vendorid' => $_POST['vendorName'],'cost' => $_POST['costName'],'tax_amount' => $_POST['taxName'],'total_cost' => $_POST['totalCostName']];
+            $sql = "insert into tbl_purchase(compid,billno,vendorid,departmentid) values((select id from company_master),:billno,:vendorid,:departmentid)";
+            $params = ['billno' => $_POST['billNumberName'], 'vendorid' => $_POST['vendorName'], 'departmentid' => $_POST['departmentName']];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_purchase", $newRecordId, $_SESSION["username"]);
-                echo json_encode(array('success' => true, 'msg'=>'Success! New record added successfully'));
+                echo json_encode(array('success' => true, 'msg' => 'Success! New record added successfully'));
             } else {
-                echo json_encode(array('success' => false, 'msg'=>'Error! New record not added'));
+                echo json_encode(array('success' => false, 'msg' => 'Error! New record not added'));
             }
         }
     } catch (PDOException $e) {
@@ -97,14 +88,39 @@ if ($_POST['action'] == "delete") {
         $sql = "select * from tbl_purchase where id=:id";
         $params = ["id" => $_POST["id"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
-        $sql = "delete from tbl_purchase where id =:id";
-        $params = ['id' => $id];
-        $recordId = $db->ManageData($sql, $params);
-        if ($recordId) {
-            log_user_action($_SESSION['userid'], $_POST['action'], "tbl_purchase", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
-            echo 1;
-        } else {
+
+        $sql = "SELECT pi.prod_id, pi.qty, s.qty as stockqty
+                FROM tbl_purchase_item pi
+                JOIN tbl_stock s ON s.prod_id = pi.prod_id
+                WHERE s.qty < pi.qty AND pi.purchase_id = {$id};";
+        $res = $db->readData($sql);
+        if ($res) {
             echo 0;
+        } else {
+            //update stock by purchase_item qty    
+            $sql  = "UPDATE tbl_stock s
+                JOIN tbl_purchase_item pi ON s.prod_id = pi.prod_id
+                SET s.qty = s.qty - pi.qty
+                WHERE pi.purchase_id = {$id};";
+            $db->ManageData($sql);
+            //end
+
+            //delete record from tbl_purchase    
+            $sql = "delete from tbl_purchase_item where purchase_id =:pid";
+            $params = ['pid' => $id];
+            $recordId = $db->ManageData($sql, $params);
+            //end
+
+            //delete record from tbl_purchase_item    
+            $sql = "delete from tbl_purchase where id =:id";
+            $params = ['id' => $id];
+            $recordId = $db->ManageData($sql, $params);
+            if ($recordId) {
+                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_purchase", $_POST['id'], $_SESSION["username"], json_encode($oldRecord));
+                echo 1;
+            } else {
+                echo 0;
+            }
         }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
@@ -142,8 +158,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_purchase set id=:id, billno=:billno, vendorid=:vendorid, cost=:cost, tax_amount=:tax_amount, total_cost=:total_cost where id=:id";
-            $params = ['id'=>$id, 'billno' => $_POST['billNumberName'], 'vendorid' => $_POST['vendorName'],'cost' => $_POST['costName'],'tax_amount' => $_POST['taxName'], 'total_cost' => $_POST['totalCostName']];
+            $sql = "update tbl_purchase set id=:id, billno=:billno, vendorid=:vendorid, departmentid=:departmentid  where id=:id";
+            $params = ['id' => $id, 'billno' => $_POST['billNumberName'], 'vendorid' => $_POST['vendorName'], 'departmentid' => $_POST['departmentName']];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
                 log_user_action($_SESSION['userid'], $_POST['action'], "tbl_purchase", $_POST['purchaseHiddenName'], $_SESSION["username"], json_encode($oldRecord));
@@ -162,32 +178,39 @@ if ($_POST['action'] == "search") {
         $output = "";
         $search_value = $_POST['search'];
         $statusSearch = '';
-        if($search_value == 'active'){
+        if ($search_value == 'active') {
             $statusSearch = 1;
-        }
-        elseif( $search_value == 'inactive' ){
+        } elseif ($search_value == 'inactive') {
             $statusSearch = 0;
         }
         // $conn = new PDO($this->dsn, $this->productname, $this->password);
-        $sql = "select p.*,v.vendor_name from tbl_purchase as p JOIN tbl_vendors as v ON p.vendorid=v.id
-                        where p.billno like '%{$search_value}%' or v.vendor_name like '%{$search_value}%' or p.cost like '%{$search_value}%'";        if($statusSearch!=''){
-            $sql.="or status={$statusSearch}";
+        $sql = "SELECT p.*,v.vendor_name,d.dept_name
+                FROM tbl_purchase p
+                JOIN tbl_vendors v ON p.vendorid = v.id
+                JOIN tbl_deparment d ON p.departmentid = d.id
+                        where p.billno like '%{$search_value}%' or v.vendor_name like '%{$search_value}%' or p.cost like '%{$search_value}%'";
+        if ($statusSearch != '') {
+            $sql .= "or status={$statusSearch}";
         }
         $result = $db->readData($sql);
-        // print_r($result);
-        // $result = $conn->query($sql);
-        $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
-        $permissions = $db->get_buttons_permissions($params);
-        $sr = 1;
-        foreach ($result as $row) {
-            $output .= "<tr>
+        if (isset($result)) {
+            // print_r($result);
+            // $result = $conn->query($sql);
+            $params = ['userid' => $_SESSION['userid'], 'moduleid' => $_SESSION['moduleid']];
+            $permissions = $db->get_buttons_permissions($params);
+            $sr = 1;
+            foreach ($result as $row) {
+                $output .= "<tr>
                        <td>{$sr}</td>
+                        <td>{$row["dept_name"]}</td>
                         <td>{$row["billno"]}</td>
                         <td>{$row["vendor_name"]}</td>
                         <td>{$row["cost"]}</td>
                         <td>{$row["tax_amount"]}</td>
                         <td>{$row["total_cost"]}</td>
-                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='bom_product' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='bom_product' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>" . ($row['status'] == 1
+                    ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_purchase' style='width:70px;'>Active</button>"
+                    : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_purchase' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
@@ -196,7 +219,12 @@ if ($_POST['action'] == "search") {
                             </td>
 
                         </tr>";
-            $sr++;
+                $sr++;
+            }
+        } else {
+            $output =   "<tr>
+                            <td colspan = '10'><h4><span style='color:red;'>Attention:</span> The record cannot be located using the provided value.</h4></td>
+                        </tr>";
         }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();

@@ -15,6 +15,9 @@ $brands = $db->readData($sql);
 
 $sql = "Select id,unit from tbl_unit where status=1";
 $units = $db->readData($sql);
+
+$sql = "SELECT id,dept_name FROM tbl_deparment WHERE status =1;";
+$deparments = $db->readData($sql);
 ?>
 <div class="content pb-0">
     <div class="orders">
@@ -65,8 +68,9 @@ $units = $db->readData($sql);
                                             <input class="form-control" type="file" name="image" id="image">
                                         </div>
                                         <img src="" alt="logo image" id="logo_image" name="logo_image" onerror="this.onerror=null; this.src='../images/favicon.png'" height="20%" width="20%" />
-
-                                        <div class="form-group">
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
                                             <label for="brandname">Select Brand Name</label>
                                             <select class="form-control" id="brandId" name="brandName">
                                                 <option value="" selected>Select..</option>
@@ -76,30 +80,49 @@ $units = $db->readData($sql);
                                             </select>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group col-md-6">
                                             <label for="category">Select Category</label>
                                             <input class="form-control" type="text" placeholder="Select Category" id="categoryName" name="categoryName" autocomplete="off">
                                             <div class="form-group item_list" id="category_list"></div>
                                         </div>
+                                    </div>
 
-                                        <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
                                             <label for="category">Select Sub Category</label>
                                             <input class="form-control" type="text" placeholder="Select Sub Category" id="subcategoryInput" name="subcategoryInput" autocomplete="off">
                                             <div class="form-group item_list" id="subcategoryList"></div>
                                         </div>
 
 
-                                        <div class="form-group">
+                                        <div class="form-group col-md-6">
                                             <label for="productname">Product Name</label>
-                                            <input class="form-control" type="text" placeholder="Enter Product Name" id="productname" name="productname" required>
+                                            <input class="form-control uppercase-input" type="text" placeholder="Enter Product Name" id="productname" name="productname" required>
                                         </div>
-
+                                    </div>
                                         <div class="form-group">
                                             <label for="productcode">Product Code</label>
-                                            <input class="form-control" type="text" placeholder="Enter Product Code" id="productCodeId" name="productCodeName">
+                                            <input class="form-control uppercase-input" type="text" placeholder="Enter Product Code" id="productCodeId" name="productCodeName">
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="department">Select Department</label>
+                                            <select class="form-control" id="departmentId" name="departmentName" >
+                                                <!-- <option value="" selected>Select..</option> -->
+                                                <?php foreach ($deparments as $deparment) {
+                                                    echo "<option value='{$deparment['id']}'>{$deparment['dept_name']}</option>";
+                                                } ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="qty">Enter Qty</label>
+                                            <input class="form-control" type="number" placeholder="Enter Qty" id="qtyId" name="qtyName" step="any">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
                                             <label for="unit">Select Unit</label>
                                             <select class="form-control" name="unit" id="unit">
                                                 <option value="" selected>Select..</option>
@@ -108,22 +131,28 @@ $units = $db->readData($sql);
                                                 } ?>
                                             </select>
                                         </div>
-
-                                        <div class="form-group">
+                                        <div class="form-group col-md-6">
                                             <label for="price">Enter Price</label>
                                             <input class="form-control" type="number" placeholder="Enter Price" id="price" name="price" step="any" required>
                                         </div>
+                                    </div>
+                                    
+                                    
+                                    
 
-                                        <div class="form-group">
+                                   
+                                   
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
                                             <label for="minlimit">Enter Min Limit</label>
                                             <input class="form-control" type="number" placeholder="Enter Min Limit" id="minLimitId" name="minLimitName">
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group col-md-6">
                                             <label for="maxlimit">Enter Max Limit</label>
                                             <input class="form-control" type="number" placeholder="Enter Max Limit" id="maxLimitId" name="maxLimitName">
                                         </div>
-
+                                    </div>                
                                         <div class="form-group">
                                             <label for="Status">Status</label>
                                             <select class="form-control" name="status" id="status">
