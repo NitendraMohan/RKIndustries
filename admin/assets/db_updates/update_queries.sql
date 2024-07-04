@@ -1104,7 +1104,7 @@ ALTER TABLE `tbl_purchase_item`
 --
 -- Table structure for table `tbl_main_menu`
 --
-
+use rkindustry;
 CREATE TABLE `tbl_main_menu` (
   `id` int(11) NOT NULL,
   `main_title` varchar(255) NOT NULL,

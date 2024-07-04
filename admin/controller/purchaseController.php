@@ -220,11 +220,7 @@ if ($_POST['action'] == "search") {
                         </tr>";
                 $sr++;
             }
-        } else {
-            $output =   "<tr>
-                            <td colspan = '10'><h4><span style='color:red;'>Attention:</span> The record cannot be located using the provided value.</h4></td>
-                        </tr>";
-        }
+        
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }

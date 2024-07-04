@@ -280,12 +280,12 @@ if ($_POST['action'] == "update") {
     try {
         $targetFile = "";
         $saveRecord = true;
-        $purchaseItemId = $_POST['modalid'];
+        $purchaseItemId = $_POST['purchaseItemId'];
         // print_r($_POST);
         // die();
         //get old record for user log
         $sql = "select * from tbl_purchase_item where id=:id";
-        $params = ["id" => $_POST["modalid"]];
+        $params = ["id" => $_POST["purchaseItemId"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
         //end
        
@@ -309,7 +309,9 @@ if ($_POST['action'] == "update") {
             $params = ['prodId' => $_POST['productName'], 'price' => $_POST['mrateName'], 'unitId' => $_POST['munitName'], 'qty' => $_POST['mqtyName'], 'cost' => $_POST['costName'], 'taxPer' => $_POST['taxPerName'], 'taxAmt' =>$_POST['taxAmtName'], 'totalCost' => $_POST['totalCostName'],'id'=>$purchaseItemId];
             $recordId = $db->ManageData($sql, $params);
             if ($recordId) {
-                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_purchase_item", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
+
+                
+                log_user_action($_SESSION['userid'], $_POST['action'], "tbl_purchase_item", $_POST['purchaseItemId'], $_SESSION["username"], json_encode($oldRecord));
                 echo json_encode(array("success" => true, "msg" => "Success: record updated successfully."));
             } else {
                 echo json_encode(array("success" => false, "msg" => "Record not updated"));

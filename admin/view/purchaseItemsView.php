@@ -90,7 +90,7 @@ $products = $db->readData($sql);
                     <form action="" class="form-inline" method="post" id="userForm">
                         <!-- <div class="modal-body"> -->
 
-                        <input type="hidden" id="modalid" name="modalid" value="" />
+                        <input type="hidden" id="purchaseItemId" name="purchaseItemId" value="" />
                         <div class="form-row  border border-primary bg-light p-2">
                             <h5 style="color:blue;">Add New Items</h5>
                             <div class="form-group col-md">

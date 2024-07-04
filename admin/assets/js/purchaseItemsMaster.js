@@ -173,7 +173,7 @@ jQuery(document).ready(function ($) {
         } else {
             // var formData = $('#userForm').serialize() + '&action=insert';
             var formData = new FormData(this);
-            var id = $('#modalid').val();
+            var id = $('#purchaseItemId').val();
             console.log('id='.id);
             if(id =='' || id == undefined){
                 
@@ -299,7 +299,7 @@ function update_bom_cost(){
                         });
                     
             // });
-                $("#modalid").val(arr['id']);
+                $("#purchaseItemId").val(arr['id']);
                 // $("#logo_image").attr('src',arr['image']);
                 // $("#bomname").val(arr['bom_name']);
                 $("#productId").val(arr['prod_id']);
