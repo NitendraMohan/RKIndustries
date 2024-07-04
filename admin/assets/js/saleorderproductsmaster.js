@@ -154,8 +154,7 @@ jQuery(document).ready(function ($) {
         var productname = $("#productname").val();
         var category = $("#category").val();
         var subcategory = $("#subcategory").val();
-        var userstatus = $("#status").val();
-        if (productname == "" || userstatus == "" || category == "" || subcategory == "") {
+        if (productname == "" || category == "" || subcategory == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -176,6 +175,9 @@ jQuery(document).ready(function ($) {
                 // formData.append("image",currentImage);
                 formData.append("action","update");
             }
+            //enable table
+            $("#saleOrderProductsTableContents tr").attr('bgcolor','white');
+            $('.disabled-overlay').hide();
             $.ajax({
                 url: "../controller/saleOrderProductsController.php",
                 type: "POST",
@@ -231,6 +233,14 @@ jQuery(document).ready(function ($) {
         var uid = $(this).data("id");
         var uaction = "edit";
         console.log("product id "+ uid);
+        //change color of selected row and disable table
+        var $tr = $(this).closest("tr");
+        $tr.attr('bgColor','#87CEEB');
+        $('.disabled-overlay').css({
+            display: 'block',
+            // width: $('.table-container').outerWidth(),
+            height: $('.table-container')[0].scrollHeight
+        });
         $.ajax({
             url: "../controller/saleOrderProductsController.php",
             type: "POST",
@@ -266,8 +276,6 @@ jQuery(document).ready(function ($) {
                 $("#tax_id").val(arr['tax_id']);
                 $("#tax_amt").val(arr['tax_amt']);
                 $("#total_cost").val(arr['total_cost']);
-                $("#status").val(arr['status']);
-                // $("#myModal").modal('show');
             }
         });
     });
@@ -320,5 +328,9 @@ jQuery(document).ready(function ($) {
          });
     });
     //End
+    $(document).on("reset", function (e) {
+        $("#saleOrderProductsTableContents tr").attr('bgcolor','white');
+        $('.disabled-overlay').hide();
+    });
 });
 //End

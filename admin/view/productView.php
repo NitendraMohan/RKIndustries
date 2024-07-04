@@ -160,7 +160,7 @@ $deparments = $db->readData($sql);
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
                                             </select>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <!-- Modal footer -->
                                     <div class="modal-footer">

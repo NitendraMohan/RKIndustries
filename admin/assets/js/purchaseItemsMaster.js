@@ -182,10 +182,11 @@ jQuery(document).ready(function ($) {
             }
             else{
                 action = 'update';
-                // var currentImage =  $("#logo_image").attr('src') ?? '';
-                // formData.append("image",currentImage);
                 formData.append("action","update");
             }
+            //enable table
+            $("#bommaterialsTableContents tr").attr('bgcolor','white');
+            $('.disabled-overlay').hide();
             $.ajax({
                 url: "../controller/purchaseItemsController.php",
                 type: "POST",
@@ -263,6 +264,14 @@ function update_bom_cost(){
         var uid = $(this).data("id");
         var uaction = "edit";
         console.log("product id "+ uid);
+        //change color of selected row and disable table
+        var $tr = $(this).closest("tr");
+        $tr.attr('bgColor','#87CEEB');
+        $('.disabled-overlay').css({
+            display: 'block',
+            // width: $('.table-container').outerWidth(),
+            height: $('.table-container')[0].scrollHeight
+        });
         $.ajax({
             url: "../controller/purchaseItemsController.php",
             type: "POST",
@@ -326,6 +335,10 @@ function update_bom_cost(){
 
         }
         });
+    });
+    $(document).on("reset", function (e) {
+        $("#bommaterialsTableContents tr").attr('bgcolor','white');
+        $('.disabled-overlay').hide();
     });
 });
 //End

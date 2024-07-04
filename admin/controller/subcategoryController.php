@@ -24,7 +24,9 @@ if ($_POST['action'] == "load") {
                         <td>{$sr}</td>
                         <td>{$row["category_name"]}</td>
                         <td>{$row["subcategory_name"]}</td>
-                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_subcategory' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_subcategory' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>" . ($row['status'] == 1 
+                        ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_subcategory' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_subcategory' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
@@ -71,7 +73,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_subcategory(compid,category_id,subcategory_name,status) values((select id from company_master),:categoryId,:subcategoryName,:status)";
-            $params = ['categoryId' => $_POST['categoryId'], 'subcategoryName' =>  strtoupper($subcategoryName),'status' => $_POST['status']];
+            $params = ['categoryId' => $_POST['categoryId'], 'subcategoryName' =>  strtoupper($subcategoryName),'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_subcategory", $newRecordId, $_SESSION["username"]);
@@ -142,8 +144,8 @@ if ($_POST['action'] == "update") {
             echo json_encode(array('duplicate' => true));
         } else {
         
-        $sql = "update tbl_subcategory set category_id=:categoryId, subcategory_name=:subcategoryname,status=:status where id=:id";
-        $params = ['id'=>$id, 'categoryId' => $_POST['categoryId'],'subcategoryname' => $_POST['subcategoryName'], 'status' => $_POST['status']];
+        $sql = "update tbl_subcategory set category_id=:categoryId, subcategory_name=:subcategoryname where id=:id";
+        $params = ['id'=>$id, 'categoryId' => $_POST['categoryId'],'subcategoryname' => $_POST['subcategoryName']];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_subcategory", $_POST['subcat'], $_SESSION["username"], json_encode($oldRecord));
@@ -181,12 +183,14 @@ if ($_POST['action'] == "search") {
         $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
-        foreach ($result as $row) {
+        if(isset($result)) foreach ($result as $row) {
             $output .= "<tr>
             <td>{$sr}</td>
             <td>{$row["category_name"]}</td>
             <td>{$row["subcategory_name"]}</td>
-            <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_subcategory' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_subcategory' style='width:70px;'>Deactive</button>") . "</td>
+            <td>" . ($row['status'] == 1 
+            ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_subcategory' style='width:70px;'>Active</button>" 
+            : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_subcategory' style='width:70px;'>Deactive</button>") . "</td>
             <td>
                 <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                 <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>

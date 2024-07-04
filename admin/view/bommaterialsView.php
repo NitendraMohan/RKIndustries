@@ -30,7 +30,7 @@ $units = $db->readData($sql);
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
                                 <input type="hidden" id="bomid" name="bomid" value='<?= $_SESSION['bomid'] ?>'>
-                                <h3 class="box-title">BOM Material</h3>
+                                <h3 class="box-title"><a class="nav-link" href="bomView.php" style="display:contents;"> BOM Master </a> >> BOM Material</h3>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>
@@ -85,7 +85,7 @@ $units = $db->readData($sql);
 
                         <input type="hidden" id="modalid" name="modalid" value="" />
                         <div class="form-row  border border-primary bg-light p-2">
-                            <h5 style="color:blue;">Add New Material</h5>
+                            <h5 style="color:blue;">Add/Update Material</h5>
                             <div class="form-group col-md">
                                 <select class="form-control modalyearstatus" name="category" id="category" style="width: 150px;">
                                     <option value="" selected>Category..</option>
@@ -116,12 +116,13 @@ $units = $db->readData($sql);
                                 <input class="form-control" type="number" placeholder="Rate" id="mrate" name="mrate" required step="any" style="width: 100px;">
                                 <input class="form-control" type="number" placeholder="Qty" id="mqty" name="mqty" required step="any" style="width: 100px;">
                                 <input class="form-control decimalplaces" type="text" readonly placeholder="0" id="cost" name="cost" required style="width: 100px;">
-                                <select class="form-control modalyearstatus" name="status" id="status">
+                                <!-- <select class="form-control modalyearstatus" name="status" id="status">
                                     <option value="" selected>Select</option>
                                     <option value="1">Active</option>
                                     <option value="0">Inactive</option>
-                                </select>
+                                </select> -->
                                 <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save"><i class="fa fa-plus"></i></button>
+                                <button type="reset" class="btn btn-danger modalsubmit" id="btnCancel" data-id="cancel" title="reset" value="reset"><i class="fa fa-refresh"></i></button>
                                 <!-- <button type="button" class="btn btn-secondary modalClose" id="btnClose" data-dismiss="modal">Close</button> -->
                             </div>
                         </div>
@@ -148,16 +149,11 @@ $units = $db->readData($sql);
                                         <th NOWRAP>USER ACTION</th>
                                     </tr>
                                 </thead>
-
-
-
-
-
                                 <tbody class="tableContents" id="bommaterialsTableContents">
 
                                 </tbody>
                             </table>
-
+                            <div class="disabled-overlay"></div>
                         </div>
                     </div>
                 </div>

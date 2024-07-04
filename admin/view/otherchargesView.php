@@ -80,14 +80,14 @@ $permissions = $db->get_buttons_permissions($params);
                                             <label for="detail">Details</label>
                                             <input class="form-control yearlimit modalyearfrom" type="text" placeholder="Enter Detail" id="detail" name="detail" required>
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label for="Status">Status</label>
                                             <select class="form-control modalyearstatus" name="status" id="status">
                                                 <option value="" selected>Select</option>
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
                                             </select>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                     <!-- Modal footer -->

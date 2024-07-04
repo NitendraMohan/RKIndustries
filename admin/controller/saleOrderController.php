@@ -32,7 +32,9 @@ if ($_POST['action'] == "load") {
                         <td>{$row["payment_mode"]}</td>
                         <td>{$row["delivery_address"]}</td>
                         <td>{$row["terms"]}</td>
-                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_sale_order' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_sale_order' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>" . ($row['status'] == 1 
+                        ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_sale_order' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_sale_order' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
@@ -55,7 +57,6 @@ if ($_POST['action'] == "insert") {
     try {
         // print_r($_POST);
         $bill_no = strtoupper($_POST['bill_no']);
-        $ustatus = $_POST['status'];
         $sql = "select id from tbl_sale_order where bill_no=:bill_no";
         $params = ['bill_no' => $bill_no];
         $result = $db->readSingleRecord($sql, $params);
@@ -63,7 +64,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_sale_order(compid,party_id,bill_no,order_date,delivery_date,voucher_no,payment_mode,delivery_address,terms,other_detail,status) values((select id from company_master),:party_id,:bill_no,:order_date,:delivery_date,:voucher_no,:payment_mode,:delivery_address,:terms,:other_detail,:status)";
-            $params = ['party_id'=>$_POST['party_id'],'bill_no'=>$_POST['bill_no'],'order_date'=>$_POST['order_date'],'delivery_date'=>$_POST['delivery_date'],'voucher_no'=>$_POST['voucher_no'],'payment_mode'=>$_POST['payment_mode'],'delivery_address'=>$_POST['delivery_address'],'terms'=>$_POST['terms'],'other_detail'=>$_POST['other_detail'],'status'=>$_POST['status']];
+            $params = ['party_id'=>$_POST['party_id'],'bill_no'=>$_POST['bill_no'],'order_date'=>$_POST['order_date'],'delivery_date'=>$_POST['delivery_date'],'voucher_no'=>$_POST['voucher_no'],'payment_mode'=>$_POST['payment_mode'],'delivery_address'=>$_POST['delivery_address'],'terms'=>$_POST['terms'],'other_detail'=>$_POST['other_detail'],'status'=>1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_sale_order", $newRecordId, $_SESSION["username"]);
@@ -124,8 +125,8 @@ if ($_POST['action'] == "update") {
         $params = ["id" => $_POST["userHiddenName"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
 
-        $sql = "update tbl_sale_order set party_id=:party_id,bill_no=:bill_no,order_date=:order_date,delivery_date=:delivery_date,voucher_no=:voucher_no,payment_mode=:payment_mode,delivery_address=:delivery_address,terms=:terms,other_detail=:other_detail,status=:status where id=:id";
-        $params = ['id' => $id, 'party_id' => $_POST['party_id'], 'bill_no' => $_POST['bill_no'], 'order_date' => $_POST['order_date'], 'delivery_date' => $_POST['delivery_date'], 'voucher_no' => $_POST['voucher_no'], 'payment_mode' => $_POST['payment_mode'], 'delivery_address' => $_POST['delivery_address'], 'terms' => $_POST['terms'], 'other_detail' => $_POST['other_detail'], 'status' => $_POST['status']];
+        $sql = "update tbl_sale_order set party_id=:party_id,bill_no=:bill_no,order_date=:order_date,delivery_date=:delivery_date,voucher_no=:voucher_no,payment_mode=:payment_mode,delivery_address=:delivery_address,terms=:terms,other_detail=:other_detail where id=:id";
+        $params = ['id' => $id, 'party_id' => $_POST['party_id'], 'bill_no' => $_POST['bill_no'], 'order_date' => $_POST['order_date'], 'delivery_date' => $_POST['delivery_date'], 'voucher_no' => $_POST['voucher_no'], 'payment_mode' => $_POST['payment_mode'], 'delivery_address' => $_POST['delivery_address'], 'terms' => $_POST['terms'], 'other_detail' => $_POST['other_detail']];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_sale_order", $_POST['userHiddenName'], $_SESSION["username"], json_encode($oldRecord));
@@ -173,19 +174,23 @@ if ($_POST['action'] == "search") {
                         <td>{$row["payment_mode"]}</td>
                         <td>{$row["delivery_address"]}</td>
                         <td>{$row["terms"]}</td>
-                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_sale_order' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_sale_order' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>" . ($row['status'] == 1 
+                        ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_sale_order' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_sale_order' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
-                        <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
-                        <button class='btn btn-warning unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                        <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                            <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                            <button class='btn btn-info btn-sm showProducts' title='Products' data-id={$row["id"]}><i class='fa fa-chevron-right aria-hidden='true'>‌</i></button>
                         </td>
                         </tr>";
                 $sr++;
             }
-        } else {
-            $output =   "<tr>
-                            <td colspan = '10'><h4><span style='color:red;'>Attention:</span> The record cannot be located using the provided value.</h4></td>
-                        </tr>";
-        }
+        } 
+        // else {
+        //     $output =   "<tr>
+        //                     <td colspan = '10'><h4><span style='color:red;'>Attention:</span> The record cannot be located using the provided value.</h4></td>
+        //                 </tr>";
+        // }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }

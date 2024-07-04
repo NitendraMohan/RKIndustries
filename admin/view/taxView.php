@@ -57,21 +57,21 @@ $permissions = $db->get_buttons_permissions($params);
                                         <input type="hidden" id="modalid" name="modalid" value="" />
                                         <div class="form-group">
                                             <label for="taxname">Tax Name</label>
-                                            <input class="form-control uppercase-input auto-select" type="text" placeholder="Enter Tax Name" id="taxname" name="taxname" required>
+                                            <input class="form-control uppercase-input" type="text" placeholder="Enter Tax Name" id="taxname" name="taxname" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="taxpercentage">Tax Percentage</label>
                                             <input class="form-control" type="number" placeholder="Enter Tax Percentage" id="taxpercentage" name="taxpercentage" step="any" required>
                                             <small id="mobileHelp" class="form-text text-muted">Please enter 2 to 3 digits percentage.</small>
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label for="Status">Status</label>
                                             <select class="form-control" name="status" id="status">
                                                 <option value="" selected>Select</option>
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
                                             </select>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                     <!-- Modal footer -->

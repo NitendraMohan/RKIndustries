@@ -112,7 +112,6 @@ jQuery(document).ready(function ($) {
                 $("#modalid").val(arr['id']);
                 $("#taxname").val(arr['tax_name']);
                 $("#taxpercentage").val(arr['tax_percentage']);
-                $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
         });

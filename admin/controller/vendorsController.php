@@ -29,7 +29,9 @@ if ($_POST['action'] == "load") {
                         <td>{$row["email"]}</td>
                         <td>{$row["address"]}</td>
                         <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
-                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_vendors' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_vendors' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>" . ($row['status'] == 1 
+                        ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_vendors' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_vendors' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
@@ -69,7 +71,6 @@ if ($_POST['action'] == "insert") {
             }
         }
         $vendorname = strtoupper($_POST['vendorname']);
-        $ustatus = $_POST['status'];
         $sql = "select mobile from tbl_vendors where vendor_name=:vendorname";
         $params = ['vendorname' => $vendorname];
         $result = $db->readSingleRecord($sql, $params);
@@ -77,7 +78,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_vendors(compid,vendor_name,comp_name,gstno,mobile,email,address,image,status) values((select id from company_master),:vendorname,:compname,:gstno,:mobile,:email,:address,:image,:status)";
-            $params = [ 'vendorname' => $vendorname,'compname' => $_POST['compname'], 'gstno' => $_POST['gstno'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile ?? '../images/favicon.png', 'status' => $_POST['status']];
+            $params = [ 'vendorname' => $vendorname,'compname' => $_POST['compname'], 'gstno' => $_POST['gstno'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile ?? '../images/favicon.png', 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_vendors", $newRecordId, $_SESSION["username"]);
@@ -167,8 +168,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_vendors set vendor_name=:vendorname,comp_name=:compname,gstno=:gstno,mobile=:mobile,email=:email,address=:address,image=:image,status=:status where id=:id";
-            $params = ['id'=>$id, 'vendorname' => $vendorname,'compname' => $_POST['compname'], 'gstno' => $_POST['gstno'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile, 'status' => $_POST['status']];
+            $sql = "update tbl_vendors set vendor_name=:vendorname,comp_name=:compname,gstno=:gstno,mobile=:mobile,email=:email,address=:address,image=:image where id=:id";
+            $params = ['id'=>$id, 'vendorname' => $vendorname,'compname' => $_POST['compname'], 'gstno' => $_POST['gstno'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile];
             $recordId = $db->ManageData($sql, $params);
            if ($recordId) {
                 log_user_action($_SESSION['userid'], $_POST['action'], "tbl_vendors", $_POST['modalid'], $_SESSION["username"], json_encode($oldRecord));
@@ -204,7 +205,7 @@ if ($_POST['action'] == "search") {
         $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
-        foreach ($result as $row) {
+        if(isset($result)) foreach ($result as $row) {
             $output .= "<tr>
                         <td>{$sr}</td>
                         <td>{$row["vendor_name"]}</td>
@@ -214,7 +215,9 @@ if ($_POST['action'] == "search") {
                         <td>{$row["email"]}</td>
                         <td>{$row["address"]}</td>
                         <td><img src='{$row["image"]}' height='40px' width='auto'/></td>
-                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_vendors' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_vendors' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>" . ($row['status'] == 1 
+                        ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_vendors' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_vendors' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                         <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
                         <button class='btn btn-warning unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>

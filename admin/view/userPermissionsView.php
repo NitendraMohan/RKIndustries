@@ -146,7 +146,7 @@ $users_list = $db->readData($sql);
                                         <th>Insert</th>
                                         <th>Update</th>
                                         <th>Delete</th>
-                                        <th>STATUS</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody class="tableContents" id="usersTableContents">

@@ -35,7 +35,9 @@ if ($_POST['action'] == "load") {
                         <td>{$row["email"]}</td>
                         <td>{$row["address"]}</td>
                         <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
-                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_users' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_users' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>" . ($row['status'] == 1 
+                        ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_users' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_users' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
@@ -75,7 +77,7 @@ if ($_POST['action'] == "insert") {
             }
         }
         $username = strtoupper($_POST['username']);
-        $ustatus = $_POST['status'];
+        // $ustatus = $_POST['status'];
         $sql = "select mobile from tbl_users where username=:username";
         $params = ['username' => $username];
         $result = $db->readSingleRecord($sql, $params);
@@ -83,7 +85,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_users(compid,role,dept_id,designation_id,username,gender,dob,mobile,email,address,image,password,status) values((select id from company_master),:role,:deptid,:designation_Id,:username,:gender,:dob,:mobile,:email,:address,:image,:password,:status)";
-            $params = ['role' => $_POST['role'], 'deptid' => $_POST['departmentname'], 'designation_Id' => $_POST['designation'], 'username' => $username, 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile ?? '../images/favicon.png', 'password' => $_POST['password'], 'status' => $_POST['status']];
+            $params = ['role' => $_POST['role'], 'deptid' => $_POST['departmentname'], 'designation_Id' => $_POST['designation'], 'username' => $username, 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'image' => $targetFile ?? '../images/favicon.png', 'password' => $_POST['password'], 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_users", $newRecordId, $_SESSION["username"]);
@@ -165,8 +167,8 @@ if ($_POST['action'] == "update") {
         $params = ["id" => $_POST["userHiddenName"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
 
-        $sql = "update tbl_users set role=:role,dept_id=:deptid,designation_id=:designation_Id,username=:username,gender=:gender,dob=:dob,mobile=:mobile,email=:email,address=:address,image=:image,status=:status,password=:password where id=:id";
-        $params = ['id' => $id, 'deptid' => $_POST['departmentname'], 'designation_Id' => $_POST['designation'], 'role' => $_POST['role'], 'username' => $_POST['username'], 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'password' => $_POST['password'], 'image' => $targetFile, 'status' => $_POST['status']];
+        $sql = "update tbl_users set role=:role,dept_id=:deptid,designation_id=:designation_Id,username=:username,gender=:gender,dob=:dob,mobile=:mobile,email=:email,address=:address,image=:image,password=:password where id=:id";
+        $params = ['id' => $id, 'deptid' => $_POST['departmentname'], 'designation_Id' => $_POST['designation'], 'role' => $_POST['role'], 'username' => strtoupper($_POST['username']), 'gender' => $_POST['gender'], 'dob' => $_POST['dob'], 'mobile' => $_POST['mobile'], 'email' => $_POST['email'], 'address' => $_POST['address'], 'password' => $_POST['password'], 'image' => $targetFile];
         $recordId = $db->ManageData($sql, $params);
         if ($recordId) {
             log_user_action($_SESSION['userid'], $_POST['action'], "tbl_users", $_POST['userHiddenName'], $_SESSION["username"], json_encode($oldRecord));
@@ -209,7 +211,7 @@ if ($_POST['action'] == "search") {
             $params = ['userid' => $_SESSION['userid'], 'moduleid' => $_SESSION['moduleid']];
             $permissions = $db->get_buttons_permissions($params);
             $sr = 1;
-            foreach ($result as $row) {
+            if(isset($result)) foreach ($result as $row) {
                 $output .= "<tr>
                         <td>{$sr}</td>
                         <td>{$row["username"]}</td>
@@ -222,7 +224,9 @@ if ($_POST['action'] == "search") {
                         <td>{$row["email"]}</td>
                         <td>{$row["address"]}</td>
                         <td><img src='{$row["image"]}' height='40px' width='auto'/></td>
-                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_users' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_users' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>" . ($row['status'] == 1 
+                        ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_users' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_users' style='width:70px;'>Deactive</button>") . "</td>
                         <td>
                         <button class='btn btn-success unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
                         <button class='btn btn-warning unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
@@ -230,11 +234,12 @@ if ($_POST['action'] == "search") {
                         </tr>";
                 $sr++;
             }
-        } else {
-            $output =   "<tr>
-                            <td colspan = '10'><h4><span style='color:red;'>Attention:</span> The record cannot be located using the provided value.</h4></td>
-                        </tr>";
         }
+        //  else {
+        //     $output =   "<tr>
+        //                     <td colspan = '10'><h4><span style='color:red;'>Attention:</span> The record cannot be located using the provided value.</h4></td>
+        //                 </tr>";
+        // }
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
     }

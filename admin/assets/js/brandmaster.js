@@ -12,7 +12,6 @@ jQuery(document).ready(function ($) {
                 // Assuming the result returned by controller/brandController.php is the HTML table content
                 $("#brandTableContents").html(result);
                 var total_records = $("#brandTableContents tr").length;
-                // $('#total_records').html("Total Records: "+total_records);
                 $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");
             },
             error: function (xhr, status, error) {
@@ -29,8 +28,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         var action = "";
         var brandname = $("#brandname").val();
-        var status = $("#status").val();
-        if (brandname == "" || status == "") {
+        if (brandname == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -112,7 +110,6 @@ jQuery(document).ready(function ($) {
                 var arr = JSON.parse(result);
                 $("#modalid").val(arr['id']);
                 $("#brandname").val(arr['brand_name']);
-                $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
         });
@@ -132,6 +129,8 @@ jQuery(document).ready(function ($) {
             data: { action: eventaction, search: search_term },
             success: function (data) {
                 $("#brandTableContents").html(data);
+                var total_records = $("#brandTableContents tr").length;
+                $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");
             }
         });
     });

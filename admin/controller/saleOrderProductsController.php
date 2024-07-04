@@ -144,7 +144,6 @@ if ($_POST['action'] == "insert") {
         $munitid = $_POST['munit'];
         $mqty = $_POST['mqty'];
         $cost = $_POST['cost'];
-        $ustatus = $_POST['status'];
         $sql = "select id from tbl_sale_order_products where saleorder_id=:saleorder_id and product_id=:productid";
         $params = ['saleorder_id' => $saleorder_id, 'productid' => $productid];
         $result = $db->readSingleRecord($sql, $params);
@@ -152,7 +151,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true));
         } else {
             $sql = "insert into tbl_sale_order_products(compid,saleorder_id,brand_id,product_id,unit_id,rate,qty,tax_id,tax_amt,cost,total_cost,status) values((select id from company_master),:saleorder_id,:brand_id,:product_id,:unit_id,:rate,:qty,:tax_id,:tax_amt,:cost,:total_cost,:status)";
-            $params = [ 'saleorder_id' => $saleorder_id,'brand_id'=>$_POST['brand'],'product_id' => $productid,'unit_id'=>$munitid, 'rate' => $mrate, 'qty'=>$mqty,'tax_id'=>$_POST['tax_id'],'tax_amt'=>$_POST['tax_amt'], 'cost' => $cost, 'total_cost' => $_POST['total_cost'], 'status' => $_POST['status']];
+            $params = [ 'saleorder_id' => $saleorder_id,'brand_id'=>$_POST['brand'],'product_id' => $productid,'unit_id'=>$munitid, 'rate' => $mrate, 'qty'=>$mqty,'tax_id'=>$_POST['tax_id'],'tax_amt'=>$_POST['tax_amt'], 'cost' => $cost, 'total_cost' => $_POST['total_cost'], 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_sale_order_products", $newRecordId, $_SESSION["username"]);
@@ -222,7 +221,7 @@ if ($_POST['action'] == "update") {
         $params = ["id" => $_POST["modalid"]];
         $oldRecord = $db->readSingleRecord($sql, $params);
         $sql = "select id from tbl_sale_order_products where saleorder_id=:saleorder_id and product_id=:productid and id!={$id}";
-        $params = ['saleorder_id' => $_Session['saleorder_id'], 'productid' => $_POST['product_id']];
+        $params = ['saleorder_id' => $_SESSION['saleorder_id'], 'productid' => $_POST['product']];
         $result = $db->readSingleRecord($sql, $params);
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
@@ -253,15 +252,17 @@ if ($_POST['action'] == "search") {
         elseif( $search_value == 'inactive' ){
             $statusSearch = 0;
         }
-        // $conn = new PDO($this->dsn, $this->productname, $this->password);
-        $sql = "select b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty,b.detail,b.image,b.status 
-        from tbl_bom_product b 
+        $sql = "select sop.id,sop.product_id,COALESCE(bp.id, 0) AS bomid,b.brand_name, p.product_name, u.unit, sop.rate, sop.qty,sop.tax_amt,sop.cost,sop.total_cost,sop.status 
+        from tbl_sale_order_products sop 
         inner join tbl_products p 
-        on b.product_id=p.id
+        on sop.product_id=p.id
+        inner join tbl_brand b 
+        on sop.brand_id=b.id
         inner join tbl_unit u
-        on b.unit_id=u.id
-        inner join tbl_brand br
-        on b.brand_id=br.id where p.product_name like '%{$search_value}%' or b.bom_name like '%{$search_value}%' or br.brand_name like '%{$search_value}%' or u.unit like '%{$search_value}%' or b.qty like '%{$search_value}%' order by p.product_name";
+        on sop.unit_id=u.id
+        left join tbl_bom_product bp
+        on sop.product_id=bp.product_id
+        where sop.saleorder_id={$_SESSION['saleorder_id']} and (p.product_name like '%{$search_value}%' or b.brand_name like '%{$search_value}%')";
         if($statusSearch!=''){
             $sql.="or status={$statusSearch}";
         }
@@ -271,22 +272,27 @@ if ($_POST['action'] == "search") {
         $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
-        foreach ($result as $row) {
+        if(isset($result)) foreach ($result as $row) {
             $output .= "<tr>
-            <td>{$sr}</td>
-            <td>{$row["bom_name"]}</td>
-            <td>{$row["product_name"]}</td>
-            <td>{$row["brand_name"]}</td>
-            <td>{$row["unit"]}</td>
-            <td>{$row["qty"]}</td>
-            <td>{$row["detail"]}</td>
-            <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
-            <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='bom_material' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='bom_material' style='width:70px;'>Deactive</button>") . "</td>
-            <td>
-                <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
-                <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
-                </td>
-            </tr>";
+                        <td>{$sr}</td>
+                        <td>{$row["brand_name"]}</td>
+                        <td>{$row["product_name"]}</td>
+                        <td>Rs. {$row["rate"]}</td>
+                        <td>{$row["unit"]}</td>
+                        <td>{$row["qty"]}</td>
+                        <td>Rs. {$row["cost"]}</td>
+                        <td>Rs. {$row["tax_amt"]}</td>
+                        <td>Rs. {$row["total_cost"]}</td>
+                        <td>" . ($row['status'] == 1 
+                        ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_sale_order_products' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_sale_order_products' style='width:70px;'>Deactive</button>") . "</td>
+                        <td>
+                            <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal' data-id={$row['id']} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                            <button class='btn btn-warning btn-sm unitDelete' data-id={$row['id']} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                            <button class='btn btn-info btn-sm showMaterials' title='Check Material stock' data-id={$row['product_id']} data-bomid={$row['bomid']}><i class='fa fa-chevron-right aria-hidden='true'>‌</i></button>
+                            </td>
+
+                        </tr>";
             $sr++;
         }
     } catch (PDOException $e) {

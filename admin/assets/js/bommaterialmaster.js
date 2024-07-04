@@ -111,8 +111,7 @@ jQuery(document).ready(function ($) {
         var productname = $("#productname").val();
         var category = $("#category").val();
         var subcategory = $("#subcategory").val();
-        var userstatus = $("#status").val();
-        if (productname == "" || userstatus == "" || category == "" || subcategory == "") {
+        if (productname == "" || category == "" || subcategory == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -133,6 +132,10 @@ jQuery(document).ready(function ($) {
                 // formData.append("image",currentImage);
                 formData.append("action","update");
             }
+            //enable table
+            $("#bommaterialsTableContents tr").attr('bgcolor','white');
+            $('.disabled-overlay').hide();
+            
             $.ajax({
                 url: "../controller/bommaterialsController.php",
                 type: "POST",
@@ -156,6 +159,7 @@ jQuery(document).ready(function ($) {
                         $("#userForm").trigger("reset");
                         $("#modelid").val('');
                         update_bom_cost();
+                        
                         if(action == 'update') $("#myModal").modal("hide");
                     }, 2000);
                 }
@@ -208,6 +212,16 @@ function update_bom_cost(){
     //Edit record from table
     $(document).on("click", ".unitEdit", function () {
         var uid = $(this).data("id");
+
+        //change color of selected row and disable table
+        var $tr = $(this).closest("tr");
+        $tr.attr('bgColor','#87CEEB');
+        $('.disabled-overlay').css({
+            display: 'block',
+            // width: $('.table-container').outerWidth(),
+            height: $('.table-container')[0].scrollHeight
+        });
+
         var uaction = "edit";
         console.log("product id "+ uid);
         $.ajax({
@@ -237,15 +251,10 @@ function update_bom_cost(){
                     }
                 });
                 $("#modalid").val(arr['id']);
-                // $("#logo_image").attr('src',arr['image']);
-                // $("#bomname").val(arr['bom_name']);
-                // $("#category").val(arr['category_id']);
                 $("#munit").val(arr['unit_id']);
                 $("#mrate").val(arr['rate']);
                 $("#mqty").val(arr['qty']);
                 $("#cost").val(arr['cost']);
-                $("#status").val(arr['status']);
-                // $("#myModal").modal('show');
             }
         });
     });
@@ -269,6 +278,11 @@ function update_bom_cost(){
 
         }
         });
+    });
+
+    $(document).on("reset", function (e) {
+        $("#bommaterialsTableContents tr").attr('bgcolor','white');
+        $('.disabled-overlay').hide();
     });
 });
 //End

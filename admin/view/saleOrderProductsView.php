@@ -36,7 +36,7 @@ $units = $db->readData($sql);
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
                                 <input type="hidden" id="saleorder_id" name="saleorder_id" value='<?= $_SESSION['saleorder_id'] ?>'>
-                                <h3 class="box-title">Sale Order Products</h3>
+                                <h3 class="box-title"><a class="nav-link" href="saleOrderView.php" style="display:contents;"> Sale Order </a> >>Sale Order Products</h3>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>
@@ -131,13 +131,13 @@ $units = $db->readData($sql);
                                 </select>
                                 <input class="form-control" type="text" placeholder="0.00" id="tax_amt" name="tax_amt" step="any" style="width: 100px;">
                                 <input class="form-control decimalplaces" type="text" readonly placeholder="0" id="total_cost" name="total_cost" required style="width: 100px;">
-                                <select class="form-control modalyearstatus" name="status" id="status">
+                                <!-- <select class="form-control modalyearstatus" name="status" id="status">
                                     <option value="" selected>Select</option>
                                     <option value="1">Active</option>
                                     <option value="0">Inactive</option>
-                                </select>
+                                </select> -->
                                 <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save"><i class="fa fa-plus"></i></button>
-                                <!-- <button type="button" class="btn btn-secondary modalClose" id="btnClose" data-dismiss="modal">Close</button> -->
+                                <button type="reset" class="btn btn-danger modalsubmit" id="btnCancel" data-id="cancel" title="reset" value="reset"><i class="fa fa-refresh"></i></button>
                             </div>
                         </div>
 
@@ -175,7 +175,7 @@ $units = $db->readData($sql);
 
                                 </tbody>
                             </table>
-
+                            <div class="disabled-overlay"></div>
                         </div>
                     </div>
                 </div>

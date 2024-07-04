@@ -24,7 +24,9 @@ if ($_POST['action'] == "load") {
                         // <td>{$checked}</td>
                         // <td>{$row["value"]}</td>
                 $output .= "<td width='30%'>{$row["detail"]}</td>
-                        <td width='20%'>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_other_charges' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_other_charges' style='width:70px;'>Deactive</button>") . "</td>
+                        <td width='20%'>" . ($row['status'] == 1 
+                        ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_other_charges' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_other_charges' style='width:70px;'>Deactive</button>") . "</td>
                         <td width='20%'>
                             <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
                             <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
@@ -46,7 +48,6 @@ if ($_POST['action'] == "load") {
 if ($_POST['action'] == "insert") {
     try {
         $expanse_name = strtoupper($_POST['expanse_name']);
-        $ustatus = $_POST['status'];
         // $is_percentage = $_POST['is_percentage'] =='on'?1:0;
         $sql = "select * from tbl_other_charges where expanse_name=:expanse_name";
         $params = ['expanse_name' => $expanse_name];
@@ -55,7 +56,7 @@ if ($_POST['action'] == "insert") {
             echo json_encode(array('duplicate' => true ));
         } else {
             $sql = "insert into tbl_other_charges(compid,expanse_name,detail,status) values((select id from company_master),:expanse_name,:detail,:status)";
-            $params = ['expanse_name' => $expanse_name, 'detail'=>$_POST['detail'], 'status' => $ustatus];
+            $params = ['expanse_name' => $expanse_name, 'detail'=>$_POST['detail'], 'status' => 1];
             $newRecordId = $db->insertData($sql, $params);
             if ($newRecordId) {
                 log_user_action($_SESSION['userid'], 'create', "tbl_other_charges", $newRecordId, $_SESSION["username"]);
@@ -123,8 +124,8 @@ if ($_POST['action'] == "update") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "update tbl_other_charges set expanse_name =:expanse_name,detail=:detail, status=:status where id=:id";
-            $params = ['expanse_name' => $_POST['expanse_name'],'detail'=>$_POST['detail'], 'status' =>  $_POST['status'], 'id' => $id];
+            $sql = "update tbl_other_charges set expanse_name =:expanse_name,detail=:detail where id=:id";
+            $params = ['expanse_name' => $_POST['expanse_name'],'detail'=>$_POST['detail'], 'id' => $id];
             $recordId = $db->ManageData($sql, $params);
             // echo json_encode(array("success"=>true,"msg"=>$recordId));
             // exit;
@@ -148,19 +149,22 @@ if ($_POST['action'] == "search") {
         // $conn = new PDO($this->dsn, $this->username, $this->password);
         $sql = "SELECT * FROM tbl_other_charges where expanse_name like '%{$search_value}%'";
         $result = $db->readData($sql);
-        print_r($result);
-        // $result = $conn->query($sql);
         $sr = 1;
-        foreach ($result as $row) {
+    
+        if(isset($result)) foreach ($result as $row) {
             $output .= "<tr>
-                        <td>{$sr}</td>
-                        <td>{$row["expanse_name"]}</td>
-                        <td>{$row["detail"]}</td>
-                        <td>" . ($row['status'] == 1 ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_other_charges' style='width:70px;'>Active</button>" : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_other_charges' style='width:70px;'>Deactive</button>") . "</td>
-                        <td>
-                        <button class='btn btn-success expanse_nameEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} ><i class='fa fa-pencil' aria-hidden='true'></i></button>
-                        <button class='btn btn-warning expanse_nameDelete' data-id={$row["id"]}><i class='fa fa-trash' aria-hidden='true'></i></button>
-                        </td>
+                        <td width='10%'>{$sr}</td>
+                        <td width='20%'>{$row["expanse_name"]}</td>";
+                        // <td>{$checked}</td>
+                        // <td>{$row["value"]}</td>
+                $output .= "<td width='30%'>{$row["detail"]}</td>
+                        <td width='20%'>" . ($row['status'] == 1 
+                        ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_other_charges' style='width:70px;'>Active</button>" 
+                        : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_other_charges' style='width:70px;'>Deactive</button>") . "</td>
+                        <td width='20%'>
+                            <button class='btn btn-success btn-sm unitEdit' data-toggle='modal' data-target='#myModal1' data-id={$row["id"]} {$permissions['update']}><i class='fa fa-pencil' aria-hidden='true'></i></button>
+                            <button class='btn btn-warning btn-sm unitDelete' data-id={$row["id"]} {$permissions['delete']}><i class='fa fa-trash' aria-hidden='true'></i></button>
+                         </td>
                         </tr>";
             $sr++;
         }

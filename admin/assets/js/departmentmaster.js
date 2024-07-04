@@ -113,7 +113,7 @@ jQuery(document).ready(function ($) {
                 $("#modalid").val(arr['id']);
                 $("#branchname").val(arr['branchid']);
                 $("#departmentname").val(arr['dept_name']);
-                $("#status").val(arr['status']);
+                // $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
         });

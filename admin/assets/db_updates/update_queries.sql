@@ -1098,4 +1098,117 @@ ALTER TABLE `tbl_purchase_item`
 --
 ALTER TABLE `tbl_purchase_item`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-COMMIT;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_main_menu`
+--
+
+CREATE TABLE `tbl_main_menu` (
+  `id` int(11) NOT NULL,
+  `main_title` varchar(255) NOT NULL,
+  `detail` varchar(500) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_main_menu`
+--
+
+INSERT INTO `tbl_main_menu` (`id`, `main_title`, `detail`, `status`) VALUES
+(1, 'Utility', 'fundamental modules used in most of other modules', 1),
+(2, 'Company', 'focused to other modules', 1),
+(3, 'User', 'user related all modules', 1),
+(4, 'Business Persons', 'vendors and parties', 1),
+(5, 'Product', 'product related all masters', 1),
+(6, 'BOM', 'BOOK OF MATERIAL', 1),
+(7, 'Sale', 'sale related all modules', 1),
+(8, 'Purchase', 'purchase related all modules', 1);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_main_menu`
+--
+ALTER TABLE `tbl_main_menu`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_main_menu`
+--
+ALTER TABLE `tbl_main_menu`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_modules`
+--
+drop table 'tbl_modules';
+CREATE TABLE `tbl_modules` (
+  `id` int(11) NOT NULL,
+  `main_id` int(11) NOT NULL,
+  `order_no` int(11) NOT NULL,
+  `module_name` varchar(255) NOT NULL,
+  `file_path` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_modules`
+--
+
+INSERT INTO `tbl_modules` (`id`, `main_id`, `order_no`, `module_name`, `file_path`) VALUES
+(1, 2, 1, 'Session Master', '../view/sessionView.php'),
+(2, 2, 2, 'Company Master', '../view/companyView.php'),
+(3, 2, 4, 'Department Master', '../view/departmentView.php'),
+(4, 3, 1, 'User Master', '../view/usersView.php'),
+(5, 3, 3, 'User Permissions', '../view/userPermissionsView.php'),
+(6, 1, 0, 'Unit Master', '../view/unitView.php'),
+(7, 4, 1, 'Vendor Master', '../view/vendorView.php'),
+(8, 4, 2, 'Party Master', '../view/partyView.php'),
+(9, 1, 0, 'Tax Master', '../view/taxView.php'),
+(10, 5, 2, 'Category Master', '../view/categoryView.php'),
+(11, 2, 3, 'Branch Master', '../view/branchView.php'),
+(12, 6, 1, 'BOM Master', '../view/bomView.php'),
+(13, 8, 1, 'PO Generation', '../view/POGeneration.php'),
+(14, 8, 2, 'Purchase', '../view/purchaseView.php'),
+(15, 8, 3, 'Purchase Return', '../view/purchaseReturnView.php'),
+(16, 2, 5, 'Transfer', '../view/transferView.php'),
+(17, 7, 2, 'Sale', '../view/saleView.php'),
+(18, 7, 3, 'Sale Return', '../view/saleReturnView.php'),
+(19, 3, 2, 'User Log', '../view/usersLogView.php'),
+(20, 5, 3, 'Product Sub Category', '../view/subcategoryView.php'),
+(21, 5, 1, 'Brand Master', '../view/brandView.php'),
+(22, 5, 5, 'Brand Product Master', '../view/brandproductView.php'),
+(23, 5, 4, 'Product Master', '../view/productView.php'),
+(24, 1, 0, 'Designation Master', '../view/designationView.php'),
+(25, 6, 2, 'Other Charges Master', '../view/otherchargesView.php'),
+(26, 5, 6, 'Stock Master', '../view/stockView.php'),
+(27, 7, 1, 'Sale Order', '../view/saleOrderView.php');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tbl_modules`
+--
+ALTER TABLE `tbl_modules`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_modules`
+--
+ALTER TABLE `tbl_modules`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;

@@ -29,8 +29,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         var action = "";
         var bill_no = $("#bill_no").val();
-        var userstatus = $("#status").val();
-        if (bill_no == "" || userstatus == "") {
+        if (bill_no == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -120,7 +119,6 @@ jQuery(document).ready(function ($) {
                 $("#delivery_address").val(arr['delivery_address']);
                 $("#terms").val(arr['terms']);
                 $("#other_detail").val(arr['other_detail']);
-                $("#status").val(arr['status']);
                 $("#myModal").modal('show');
             }
         });

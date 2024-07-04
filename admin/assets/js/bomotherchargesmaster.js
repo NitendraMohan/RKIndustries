@@ -22,7 +22,7 @@ jQuery(document).ready(function ($) {
                 $('#totalcost').text(bomdata['total_cost']);
                 $("#usersTableContents").html(data['charges_data']);
                 var total_records = $("#usersTableContents tr").length;
-                $('#total_records').html("Total Records: "+total_records);
+                $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");
                 
             },
             error: function (xhr, status, error) {
@@ -46,8 +46,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
         var action = "";
         var username = $("#expanse_name").val();
-        var userstatus = $("#status").val();
-        if (username == "" || userstatus == "") {
+        if (username == "") {
             $("#msg").fadeIn();
             $("#msg").removeClass('sucess-msg').addClass('error-msg').html('All fields are required.');
             setTimeout(function () {
@@ -66,6 +65,9 @@ jQuery(document).ready(function ($) {
                 action = 'update';
                 formData.append("action","update");
             }
+            //enable table
+            $("#usersTableContents tr").attr('bgcolor','white');
+            $('.disabled-overlay').hide();
             $.ajax({
                 url: "../controller/bomOtherChargesController.php",
                 type: "POST",
@@ -142,6 +144,14 @@ jQuery(document).ready(function ($) {
     $(document).on("click", ".unitEdit", function () {
         var uid = $(this).data("id");
         var uaction = "edit";
+         //change color of selected row and disable table
+         var $tr = $(this).closest("tr");
+         $tr.attr('bgColor','#87CEEB');
+         $('.disabled-overlay').css({
+             display: 'block',
+             // width: $('.table-container').outerWidth(),
+             height: $('.table-container')[0].scrollHeight
+         });
         $.ajax({
             url: "../controller/bomOtherChargesController.php",
             type: "POST",
@@ -165,7 +175,6 @@ jQuery(document).ready(function ($) {
                     $("#apply_on_material").prop('checked',false);
                 }
                 $("#charge_value").val(arr['charge_value']);
-                $("#status").val(arr['status']);
             }
         });
     });
@@ -184,7 +193,7 @@ jQuery(document).ready(function ($) {
         success : function(data){
             $("#usersTableContents").html(data);
             var total_records = $("#usersTableContents tr").length;
-            $('#total_records').html("Total Records: "+total_records);
+            $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");
         }
         });
     });
@@ -213,6 +222,11 @@ jQuery(document).ready(function ($) {
             load_table();
         }
         });
+    });
+
+    $(document).on("reset", function (e) {
+        $("#usersTableContents tr").attr('bgcolor','white');
+        $('.disabled-overlay').hide();
     });
 });
 

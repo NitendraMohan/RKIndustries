@@ -35,7 +35,7 @@ $products = $db->readData($sql);
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
                                 <input type="hidden" id="purchaseHiddenId" name="purchaseHiddenName" value='<?= $_SESSION['purchaseId'] ?>'>
-                                <h3 class="box-title">PURCHASE ITEMS</h3>
+                                <h3 class="box-title"><a class="nav-link" href="purchaseView.php" style="display:contents;"> Purchase </a> >>Purchase Items</h3>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>
@@ -115,6 +115,7 @@ $products = $db->readData($sql);
                                 <input class="form-control" type="number" readonly placeholder="Total Cost" id="totalCostId" name="totalCostName" step="any" style="width: 150px;">
                               
                                 <button type="submit" class="btn btn-primary modalsubmit" id="btnSave" data-id="save"><i class="fa fa-plus"></i></button>
+                                <button type="reset" class="btn btn-danger modalsubmit" id="btnCancel" data-id="cancel" title="reset" value="reset"><i class="fa fa-refresh"></i></button>
                             </div>
                         </div>
 
@@ -152,7 +153,7 @@ $products = $db->readData($sql);
 
                                 </tbody>
                             </table>
-
+                            <div class="disabled-overlay"></div>
                         </div>
                     </div>
                 </div>

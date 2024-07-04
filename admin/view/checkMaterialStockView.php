@@ -34,7 +34,7 @@ $units = $db->readData($sql);
                                 <input type="hidden" id="bomid" name="bomid" value='<?= $_SESSION['bomid'] ?>'>
                                 <input type="hidden" id="product_id" name="product_id" value='<?= $_SESSION['product_id'] ?>'>
                                 <input type="hidden" id="saleorder_id" name="saleorder_id" value='<?= $_SESSION['saleorder_id'] ?>'>
-                                <h3 class="box-title module-head"><<&nbsp;&nbsp; Check Material Stock &nbsp;&nbsp;>></h3>
+                                <h3 class="box-title module-head"><a class="nav-link" href="saleOrderProductsView.php" style="display:contents;"> Sale Order Product </a> >>Check Material Stock</h3>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>
