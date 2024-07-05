@@ -156,13 +156,18 @@ jQuery(document).ready(function ($) {
                 $("#subcategoryInput").data("id",arr['subcategory_id']);
                 $("#productname").val(arr['product_name']);
                 $("#productCodeId").val(arr['product_code']);
-                $("#departmentId").val(arr['dept_id']);
+                $("#departmentId").val(arr['deptId']);
+               
                 $("#qtyId").val(arr['qty']);
+               
                 $("#unit").val(arr['unit_id']);
                 $("#minLimitId").val(arr['min_limit']);
                 $("#maxLimitId").val(arr['max_limit']);
                 $("#price").val(arr['price']);
                 $("#myModal").modal('show');
+
+                $("#departmentId").prop('disabled', true);
+                $("#qtyId").attr('readonly', true);
             }
         });
     });

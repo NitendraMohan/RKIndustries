@@ -25,8 +25,6 @@ if ($_POST['action'] == "load") {
         JOIN tbl_vendors v ON p.vendorid = v.id
         JOIN tbl_purchase_item pi on p.id = pi.purchase_id
         where p.id = {$_POST['purchaseId']} and pi.status = 1";
-        
-        
         $purchaseData = $db->readSingleRecord($sql);
         // print_r($purchaseData);
         // die();
@@ -35,10 +33,11 @@ if ($_POST['action'] == "load") {
         $params = ['userid'=>$_SESSION['userid'],'moduleid'=>$_SESSION['moduleid']];
         $permissions = $db->get_buttons_permissions($params);
         $sr = 1;
-        $sql = "SELECT pi.*,pr.product_name 
+        $sql = "SELECT pi.*,pr.product_name, u.unit 
         FROM tbl_purchase_item pi
         JOIN tbl_purchase p ON pi.purchase_id = p.id
         JOIN tbl_products pr ON pi.prod_id = pr.id
+        JOIN tbl_unit u ON pi.unit_id = u.id
         where pi.purchase_id = {$_POST['purchaseId']} ;";
         $purchaseItems = $db->readData($sql);
         
@@ -50,7 +49,7 @@ if ($_POST['action'] == "load") {
                         <td>{$sr}</td>
                         <td>{$row["product_name"]}</td>
                         <td>{$row["price"]}</td>
-                        <td>{$row["unit_id"]}</td>
+                        <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
                         <td>{$row["cost"]}</td>
                         <td>{$row["tax_perc"]}</td>
