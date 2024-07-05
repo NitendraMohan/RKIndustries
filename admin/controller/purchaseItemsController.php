@@ -150,13 +150,13 @@ if ($_POST['action'] == "insert") {
             if ($newRecordId) {
                 
             //update query for tbl_puchase on the basis to tbl_purchase_item    
-                $sql = "UPDATE tbl_purchase SET 
-                cost = cost + :costAmount, 
-                tax_amount = tax_amount + :taxAmount, 
-                total_cost = total_cost + :totalCost 
-                WHERE id = :purchaseId";
-                $params = ['costAmount' => $cost, 'taxAmount' => $taxAmt, 'totalCost' =>  $totalCost, 'purchaseId' => $purchaseId];
-                $db->ManageData($sql,$params);
+                // $sql = "UPDATE tbl_purchase SET 
+                // cost = cost + :costAmount, 
+                // tax_amount = tax_amount + :taxAmount, 
+                // total_cost = total_cost + :totalCost 
+                // WHERE id = :purchaseId";
+                // $params = ['costAmount' => $cost, 'taxAmount' => $taxAmt, 'totalCost' =>  $totalCost, 'purchaseId' => $purchaseId];
+                // $db->ManageData($sql,$params);
                 //end
                 // echo $productId;
                 // die();
@@ -218,13 +218,13 @@ if ($_POST['action'] == "delete") {
             //end
 
             //purchase table update
-            $sql = "UPDATE tbl_purchase SET 
-            cost = cost - :costAmount, 
-            tax_amount = tax_amount - :taxAmount, 
-            total_cost = total_cost - :totalCost 
-            WHERE id = :purchaseId";
-            $params = ['costAmount' => $cost, 'taxAmount' => $taxAmt, 'totalCost' =>  $totalCost, 'purchaseId' => $purchaseId];
-            $db->ManageData($sql,$params);
+            // $sql = "UPDATE tbl_purchase SET 
+            // cost = cost - :costAmount, 
+            // tax_amount = tax_amount - :taxAmount, 
+            // total_cost = total_cost - :totalCost 
+            // WHERE id = :purchaseId";
+            // $params = ['costAmount' => $cost, 'taxAmount' => $taxAmt, 'totalCost' =>  $totalCost, 'purchaseId' => $purchaseId];
+            // $db->ManageData($sql,$params);
             //end
 
             //delete from purchase item

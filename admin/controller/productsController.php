@@ -102,8 +102,8 @@ if ($_POST['action'] == "insert") {
         if (isset($result)) {
             echo json_encode(array('duplicate' => true));
         } else {
-            $sql = "insert into tbl_products(compid,brand_id,category_id,subcategory_id,product_name,product_code,department_id,qty,unit_id,price,min_limit,max_limit,image,status) values((select id from company_master),:brandId,:category,:subcategory,:productname,:productCode,:departmentId,:qty,:unit,:price,:minLimit,:maxLimit,:image,:status)";
-            $params = ['brandId' => $brandId, 'category' => $categoryid, 'subcategory' => $subcategoryid, 'productname' => $productname, 'productCode' => $productCode, 'departmentId' => $departmentId, 'qty' => $qty,   'unit' => $unitid, 'price' => $price, 'minLimit' => $minLimit, 'maxLimit' => $maxLimit, 'status' => $_POST['status'], 'image' => $targetFile ?? '../images/favicon.png'];
+            $sql = "insert into tbl_products(compid,brand_id,category_id,subcategory_id,product_name,product_code,unit_id,price,min_limit,max_limit,image,status) values((select id from company_master),:brandId,:category,:subcategory,:productname,:productCode,:unit,:price,:minLimit,:maxLimit,:image,:status)";
+            $params = ['brandId' => $brandId, 'category' => $categoryid, 'subcategory' => $subcategoryid, 'productname' => $productname, 'productCode' => $productCode, 'unit' => $unitid, 'price' => $price, 'minLimit' => $minLimit, 'maxLimit' => $maxLimit, 'status' => $_POST['status'], 'image' => $targetFile ?? '../images/favicon.png'];
             $newRecordId = $db->insertData($sql, $params);
 
             //fetch product id for stock
@@ -163,10 +163,19 @@ if ($_POST['action'] == "edit") {
     try {
         $output1 = '';
         $id = $_POST['id'];
-        $sql = "select p.*,c.category_name,s.subcategory_name from tbl_products as p
-        JOIN tbl_category as c ON p.category_id = c.id 
-        JOIN tbl_subcategory as s ON p.subcategory_id = s.id 
-        where p.id = {$id}";
+        $sql = "SELECT 
+    p.*, 
+    c.category_name,
+    s.subcategory_name,
+    d.dept_name,
+    sk.qty
+FROM 
+    tbl_products AS p
+    JOIN tbl_category AS c ON p.category_id = c.id 
+    JOIN tbl_subcategory AS s ON p.subcategory_id = s.id
+    JOIN tbl_stock AS sk ON p.id = sk.prod_id
+    JOIN tbl_deparment AS d ON d.id = sk.dept_id 
+    WHERE  p.id = {$id}";
         $row = $db->readSingleRecord($sql);
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();

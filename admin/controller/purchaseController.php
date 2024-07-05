@@ -11,10 +11,20 @@ $username = checkUserSession();
 
 if ($_POST['action'] == "load") {
     try {
-        $sql = "SELECT p.*,v.vendor_name,d.dept_name
-                FROM tbl_purchase p
-                JOIN tbl_vendors v ON p.vendorid = v.id
-                JOIN tbl_deparment d ON p.departmentid = d.id;";
+        $sql = "SELECT 
+    p.*, 
+    v.vendor_name, 
+    d.dept_name, 
+    COALESCE(SUM(pi.cost), 0) as cost, 
+    COALESCE(SUM(pi.tax_amt), 0) as tax_amount, 
+    COALESCE(SUM(pi.total_cost), 0) as total_cost
+FROM 
+    tbl_purchase p
+    JOIN tbl_vendors v ON p.vendorid = v.id
+    JOIN tbl_deparment d ON p.departmentid = d.id
+    LEFT JOIN tbl_purchase_item pi ON pi.purchase_id = p.id
+GROUP BY 
+    p.id, v.vendor_name, d.dept_name;";
         $result = $db->readData($sql);
         if (isset($result)) {
             $rowCounts = count($result);
@@ -184,10 +194,20 @@ if ($_POST['action'] == "search") {
             $statusSearch = 0;
         }
         // $conn = new PDO($this->dsn, $this->productname, $this->password);
-        $sql = "SELECT p.*,v.vendor_name,d.dept_name
-                FROM tbl_purchase p
-                JOIN tbl_vendors v ON p.vendorid = v.id
-                JOIN tbl_deparment d ON p.departmentid = d.id
+        $sql = "SELECT 
+    p.*, 
+    v.vendor_name, 
+    d.dept_name, 
+    COALESCE(SUM(pi.cost), 0) as cost, 
+    COALESCE(SUM(pi.tax_amt), 0) as tax_amount, 
+    COALESCE(SUM(pi.total_cost), 0) as total_cost
+FROM 
+    tbl_purchase p
+    JOIN tbl_vendors v ON p.vendorid = v.id
+    JOIN tbl_deparment d ON p.departmentid = d.id
+    LEFT JOIN tbl_purchase_item pi ON pi.purchase_id = p.id
+GROUP BY 
+    p.id, v.vendor_name, d.dept_name
                         where p.billno like '%{$search_value}%' or v.vendor_name like '%{$search_value}%' or p.cost like '%{$search_value}%'";
         if ($statusSearch != '') {
             $sql .= "or status={$statusSearch}";
