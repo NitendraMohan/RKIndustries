@@ -36,13 +36,14 @@ if ($_POST['action'] == "load") {
         foreach ($materialdata as $row) {
             $required_qty = $row["qty"] * $salaorderdata['qty'];
             $required_qty = number_format((float)$required_qty, 2, '.', '');
-            $balance_qty = $row["stock_qty"]< $required_qty ? $required_qty-$row["stock_qty"]: 0.00; 
+            // $balance_qty = $row["stock_qty"]< $required_qty ? $required_qty-$row["stock_qty"]: $row["stock_qty"] - $required_qty; 
+            $balance_qty = $row["stock_qty"] - $required_qty; 
             $balance_qty = number_format((float)$balance_qty, 2, '.', '');
-            $balance_str = $balance_qty>0 ? "<td style='color:red;'>{$balance_qty}</td>":"<td style='color:green;'>{$balance_qty}</td>";
+            $balance_str = $balance_qty <= 0 ? "<td style='color:red;'>{$balance_qty}</td>":"<td style='color:green;'>+{$balance_qty}</td>";
             $output .= "<tr>
                         <td>{$sr}</td>
                         <td>{$row["product_name"]}</td>
-                        <td>{$row["rate"]}</td>
+                        <td>₹ {$row["rate"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
                         <td>{$required_qty}</td>

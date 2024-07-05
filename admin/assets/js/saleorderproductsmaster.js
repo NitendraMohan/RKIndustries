@@ -18,7 +18,7 @@ jQuery(document).ready(function ($) {
                 $('#bill_no').text(sale_order['bill_no']);
                 $('#order_date').text(sale_order['order_date']);
                 $('#delivery_date').text(sale_order['delivery_date']);
-                $('#title_total_cost').text('Rs. '+sale_order['total_cost']);
+                $('#title_total_cost').text('₹ '+sale_order['total_cost']);
                 $("#saleOrderProductsTableContents").html(data['sale_products']);
                 var total_records = $("#saleOrderProductsTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);

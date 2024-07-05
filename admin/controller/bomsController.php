@@ -50,9 +50,9 @@ if ($_POST['action'] == "load") {
                         <td>{$row["brand_name"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
-                        <td>{$row["mcost"]}</td>
-                        <td>{$row["ocost"]}</td>
-                        <td>{$row["total_cost"]}</td>
+                        <td>₹ {$row["mcost"]}</td>
+                        <td>₹ {$row["ocost"]}</td>
+                        <td>₹ {$row["total_cost"]}</td>
                         <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_bom_product' style='width:70px;'>Active</button>" 
@@ -265,18 +265,32 @@ if ($_POST['action'] == "search") {
         elseif( $search_value == 'inactive' ){
             $statusSearch = 0;
         }
-        // $conn = new PDO($this->dsn, $this->productname, $this->password);
-        $sql = "select b.id, b.bom_name, p.product_name, br.brand_name, u.unit, b.qty,COALESCE(sum(bm.cost),0) as mcost,b.detail,b.image,b.status 
-        from tbl_bom_product b 
-        inner join tbl_products p 
-        on b.product_id=p.id
-        inner join tbl_unit u
-        on b.unit_id=u.id
-        inner join tbl_brand br
-        on b.brand_id=br.id
-        left join tbl_bom_material bm
-        on b.id=bm.bom_id
-        where p.product_name like '%{$search_value}%' or b.bom_name like '%{$search_value}%' or br.brand_name like '%{$search_value}%' group by b.id order by p.product_name";        if($statusSearch!=''){
+        $sql = "SELECT 
+                    b.id, 
+                    p.product_name, 
+                    br.brand_name,
+                    COALESCE(bm.total_cost, 0) AS mcost,
+                    COALESCE(oc.total_charge, 0) AS ocost, 
+                    (COALESCE(bm.total_cost, 0) + COALESCE(oc.total_charge, 0)) AS total_cost,
+                    u.unit, 
+                    b.qty,
+                    b.image, 
+                    b.status
+                FROM 
+                    tbl_bom_product b
+                INNER JOIN 
+                    tbl_products p ON b.product_id = p.id
+                INNER JOIN 
+                    tbl_unit u ON b.unit_id = u.id
+                INNER JOIN 
+                    tbl_brand br ON b.brand_id = br.id
+                LEFT JOIN 
+                    (SELECT bom_id,status, SUM(cost) AS total_cost FROM tbl_bom_material GROUP BY bom_id,status having status=1) bm ON b.id = bm.bom_id
+                LEFT JOIN 
+                    (SELECT bom_id,status, SUM(charge_value) AS total_charge FROM bom_other_charges GROUP BY bom_id,status having status=1) oc ON b.id = oc.bom_id
+                WHERE p.product_name like '%{$search_value}%' or b.bom_name like '%{$search_value}%' or br.brand_name like '%{$search_value}%' group by b.id order by p.product_name";
+        
+        if($statusSearch!=''){
             $sql.="or status={$statusSearch}";
         }
         $result = $db->readData($sql);
@@ -292,9 +306,9 @@ if ($_POST['action'] == "search") {
                         <td>{$row["brand_name"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
-                        <td>{$row["mcost"]}</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td>₹ {$row["mcost"]}</td>
+                        <td>₹ {$row["ocost"]}</td>
+                        <td>₹ {$row["total_cost"]}</td>
                         <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='bom_product' style='width:70px;'>Active</button>" 

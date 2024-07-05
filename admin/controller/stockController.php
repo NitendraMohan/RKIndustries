@@ -37,10 +37,10 @@ if ($_POST['action'] == "load") {
                         <td>{$sr}</td>
                         <td>{$row["dept_name"]}</td>
                         <td>{$row["product_name"]}</td>
-                        <td>{$row["rate"]}</td>
+                        <td>₹ {$row["rate"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
-                        <td>{$row["cost"]}</td>
+                        <td>₹ {$row["cost"]}</td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_stock' style='width:70px;'>Active</button>" 
                         : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_stock' style='width:70px;'>Deactive</button>") . "</td>
@@ -261,10 +261,10 @@ if ($_POST['action'] == "search") {
                         <td>{$sr}</td>
                         <td>{$row["dept_name"]}</td>
                         <td>{$row["product_name"]}</td>
-                        <td>{$row["rate"]}</td>
+                        <td>₹ {$row["rate"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
-                        <td>{$row["cost"]}</td>
+                        <td>₹ {$row["cost"]}</td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_stock' style='width:70px;'>Active</button>" 
                         : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_stock' style='width:70px;'>Deactive</button>") . "</td>

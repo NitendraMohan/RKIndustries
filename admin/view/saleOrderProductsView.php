@@ -36,7 +36,11 @@ $units = $db->readData($sql);
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
                                 <input type="hidden" id="saleorder_id" name="saleorder_id" value='<?= $_SESSION['saleorder_id'] ?>'>
-                                <h3 class="box-title"><a class="nav-link" href="saleOrderView.php" style="display:contents;"> Sale Order </a> >>Sale Order Products</h3>
+                                <h3 class="box-title">
+                                    <a class="nav-link" href="saleOrderView.php" style="display:contents;"> Sale Order </a>
+                                    <i class="fa fa-angle-double-right"></i> 
+                                    Sale Order Products
+                                </h3>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>
@@ -86,7 +90,7 @@ $units = $db->readData($sql);
 
                         <input type="hidden" id="modalid" name="modalid" value="" />
                         <div class="form-row  border border-primary bg-light p-2">
-                            <h5 style="color:blue;">Add Sale Order Product</h5>
+                            <h5 style="color:blue;">Add/Update Sale Order Product</h5>
                             <div class="form-group col-md">
                             <select class="form-control modalyearstatus" name="brand" id="brand" style="width: 150px;">
                                     <option value="" selected>Brand..</option>
