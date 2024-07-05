@@ -29,7 +29,11 @@ jQuery(document).ready(function ($) {
    }
 
    $("#costId, #taxId").blur(handelBlur);
-      
+
+    $("#addPurchase").on("click",function(e){
+        e.preventDefault;
+        $("#billNumberId").removeAttr("readonly");
+    })      
     /**
      * Code for submit model form data
      */
@@ -131,6 +135,7 @@ jQuery(document).ready(function ($) {
                 $("#taxId").val(arr['tax_amount']);
                 $("#totalCostId").val(arr['total_cost']);
                 $("#myModal").modal('show');
+                $("#billNumberId").attr("readonly",true);
             }
         });
     });
