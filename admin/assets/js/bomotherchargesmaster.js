@@ -17,9 +17,9 @@ jQuery(document).ready(function ($) {
                 $('#bomname').text(bomdata['product_name']);
                 $('#brandname').text(bomdata['brand_name']);
                 // $('#product_image').attr('src',bomdata['image']); //mcost
-                $('#materialcost').text(bomdata['mcost']);
-                $('#othercost').text(bomdata['ocost']);
-                $('#totalcost').text(bomdata['total_cost']);
+                $('#materialcost').text("₹ "+bomdata['mcost']);
+                $('#othercost').text("₹ "+bomdata['ocost']);
+                $('#totalcost').text("₹ "+bomdata['total_cost']);
                 $("#usersTableContents").html(data['charges_data']);
                 var total_records = $("#usersTableContents tr").length;
                 $('#total_records').html("<h6><b style='font-size: 18px;'>Total Records: <span style='color: red;'>" + total_records + "</span></b></h6>");

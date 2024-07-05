@@ -35,7 +35,10 @@ $products = $db->readData($sql);
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
                                 <input type="hidden" id="purchaseHiddenId" name="purchaseHiddenName" value='<?= $_SESSION['purchaseId'] ?>'>
-                                <h3 class="box-title"><a class="nav-link" href="purchaseView.php" style="display:contents;"> Purchase </a> >>Purchase Items</h3>
+                                <h3 class="box-title"><a class="nav-link" href="purchaseView.php" style="display:contents;"> Purchase </a>
+                                <i class="fa fa-angle-double-right"></i> 
+                                Purchase Items
+                            </h3>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>

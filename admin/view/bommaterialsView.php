@@ -30,7 +30,11 @@ $units = $db->readData($sql);
                         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
                                 <input type="hidden" id="bomid" name="bomid" value='<?= $_SESSION['bomid'] ?>'>
-                                <h3 class="box-title"><a class="nav-link" href="bomView.php" style="display:contents;"> BOM Master </a> >> BOM Material</h3>
+                                <h3 class="box-title">
+                                    <a class="nav-link" href="bomView.php" style="display:contents;"> BOM Master </a> 
+                                    <i class="fa fa-angle-double-right"></i> 
+                                    BOM Material
+                                </h3>
                                 <!-- <h3 class="font-weight-bold">UNIT MASTER</h3> -->
                             </div>
                         </div>

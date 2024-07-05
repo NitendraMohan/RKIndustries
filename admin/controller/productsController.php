@@ -28,7 +28,7 @@ if ($_POST['action'] == "load") {
                         <td>{$row["product_name"]}</td>
                         <td>{$row["brand_name"]}</td>
                         <td>{$row["unit"]}</td>
-                        <td>{$row["price"]}</td>
+                        <td>₹ {$row["price"]}</td>
                         <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_products' style='width:70px;'>Active</button>" 
@@ -299,7 +299,7 @@ if ($_POST['action'] == "search") {
                         <td>{$row["product_name"]}</td>
                         <td>{$row["brand_name"]}</td>
                         <td>{$row["unit"]}</td>
-                        <td>{$row["price"]}</td>
+                        <td>₹ {$row["price"]}</td>
                         <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_products' style='width:70px;'>Active</button>" 

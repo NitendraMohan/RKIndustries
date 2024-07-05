@@ -51,12 +51,12 @@ if ($_POST['action'] == "load") {
                         <td>{$sr}</td>
                         <td>{$row["brand_name"]}</td>
                         <td>{$row["product_name"]}</td>
-                        <td>Rs. {$row["rate"]}</td>
+                        <td>₹ {$row["rate"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
-                        <td>Rs. {$row["cost"]}</td>
-                        <td>Rs. {$row["tax_amt"]}</td>
-                        <td>Rs. {$row["total_cost"]}</td>
+                        <td>₹ {$row["cost"]}</td>
+                        <td>₹ {$row["tax_amt"]}</td>
+                        <td>₹ {$row["total_cost"]}</td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_sale_order_products' style='width:70px;'>Active</button>" 
                         : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_sale_order_products' style='width:70px;'>Deactive</button>") . "</td>
@@ -277,12 +277,12 @@ if ($_POST['action'] == "search") {
                         <td>{$sr}</td>
                         <td>{$row["brand_name"]}</td>
                         <td>{$row["product_name"]}</td>
-                        <td>Rs. {$row["rate"]}</td>
+                        <td>₹ {$row["rate"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
-                        <td>Rs. {$row["cost"]}</td>
-                        <td>Rs. {$row["tax_amt"]}</td>
-                        <td>Rs. {$row["total_cost"]}</td>
+                        <td>₹ {$row["cost"]}</td>
+                        <td>₹ {$row["tax_amt"]}</td>
+                        <td>₹ {$row["total_cost"]}</td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_sale_order_products' style='width:70px;'>Active</button>" 
                         : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_sale_order_products' style='width:70px;'>Deactive</button>") . "</td>
