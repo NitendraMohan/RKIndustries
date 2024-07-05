@@ -52,6 +52,14 @@ jQuery(document).ready(function ($) {
     /**
      * Code for submit model form data
      */
+
+    $("#addBtn").on("click", function(e){
+        e.preventDefault;
+        $("#departmentId").prop('disabled', false);
+        $("#qtyId").removeAttr('readonly');
+        $("#dqmsg").text("");
+    });
+
     $("#userForm").on("submit", function (e) {
         e.preventDefault();
         var action = "";
@@ -156,13 +164,18 @@ jQuery(document).ready(function ($) {
                 $("#subcategoryInput").data("id",arr['subcategory_id']);
                 $("#productname").val(arr['product_name']);
                 $("#productCodeId").val(arr['product_code']);
-                $("#departmentId").val(arr['dept_id']);
+                $("#departmentId").val(arr['deptId']);
                 $("#qtyId").val(arr['qty']);
                 $("#unit").val(arr['unit_id']);
                 $("#minLimitId").val(arr['min_limit']);
                 $("#maxLimitId").val(arr['max_limit']);
                 $("#price").val(arr['price']);
                 $("#myModal").modal('show');
+                $("#departmentId").prop('disabled', true);
+                $("#qtyId").attr('readonly', true);
+                $("#dqmsg").text("Please update department and quantity information from the stock.");
+               
+
             }
         });
     });

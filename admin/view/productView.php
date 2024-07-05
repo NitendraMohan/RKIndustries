@@ -34,7 +34,7 @@ $deparments = $db->readData($sql);
                         </div>
                         <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
                             <div class="card-body">
-                                <button type="button" class="btn btn-sm btn-info add-button" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert'] ?>>
+                                <button type="button" class="btn btn-sm btn-info add-button" id = "addBtn" style="align-items: center;" data-toggle="modal" data-target="#myModal" <?php echo $permissions['insert'] ?>>
                                     Create New
                                 </button>
                             </div>
@@ -119,6 +119,7 @@ $deparments = $db->readData($sql);
                                             <label for="qty">Enter Qty</label>
                                             <input class="form-control" type="number" placeholder="Enter Qty" id="qtyId" name="qtyName" step="any">
                                         </div>
+                                        <label for="dqmsg" id="dqmsg" style="color: red;"></label>        
                                     </div>
 
                                     <div class="form-row">

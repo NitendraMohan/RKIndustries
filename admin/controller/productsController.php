@@ -28,7 +28,7 @@ if ($_POST['action'] == "load") {
                         <td>{$row["product_name"]}</td>
                         <td>{$row["brand_name"]}</td>
                         <td>{$row["unit"]}</td>
-                        <td>₹ {$row["price"]}</td>
+                        <td>{$row["price"]}</td>
                         <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_products' style='width:70px;'>Active</button>" 
@@ -163,18 +163,16 @@ if ($_POST['action'] == "edit") {
     try {
         $output1 = '';
         $id = $_POST['id'];
-        $sql = "SELECT 
-    p.*, 
+        $sql = "SELECT p.*, 
     c.category_name,
     s.subcategory_name,
-    d.dept_name,
+    sk.dept_id as deptId,
     sk.qty
 FROM 
     tbl_products AS p
     JOIN tbl_category AS c ON p.category_id = c.id 
     JOIN tbl_subcategory AS s ON p.subcategory_id = s.id
     JOIN tbl_stock AS sk ON p.id = sk.prod_id
-    JOIN tbl_deparment AS d ON d.id = sk.dept_id 
     WHERE  p.id = {$id}";
         $row = $db->readSingleRecord($sql);
     } catch (PDOException $e) {
@@ -299,7 +297,7 @@ if ($_POST['action'] == "search") {
                         <td>{$row["product_name"]}</td>
                         <td>{$row["brand_name"]}</td>
                         <td>{$row["unit"]}</td>
-                        <td>₹ {$row["price"]}</td>
+                        <td>{$row["price"]}</td>
                         <td><img src='{$row["image"]}' class='img-circle' height='40px' width='auto' /></td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_products' style='width:70px;'>Active</button>" 
