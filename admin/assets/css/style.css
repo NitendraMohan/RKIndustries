@@ -812,11 +812,12 @@ aside.left-panel:hover {
 .navbar .navbar-nav li>a {
     background: 0 0!important;
     display: inline-block;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 26px;
     padding: 10px 0;
     position: relative;
-    width: 100%
+    width: 100%;
+    font-weight: bolder
 }
 
 .navbar .navbar-nav li>a:hover,
@@ -3072,7 +3073,7 @@ footer.site-footer .footer-inner a {
     aside.left-panel.open-menu .navbar .navbar-nav li>a {
         width: 100%;
         max-width: 100%;
-        font-size: 14px
+        font-size: 16px
     }
     aside.left-panel.open-menu .navbar .navbar-nav li>a .menu-icon {
         width: 55px;

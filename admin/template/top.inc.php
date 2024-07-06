@@ -57,18 +57,18 @@ if (!isset($username)) {
 
 <body>
    <aside id="left-panel" class="left-panel">
-      <nav class="sidebar navbar navbar-expand-sm navbar-default">
+      <nav class="navbar navbar-expand-sm navbar-default sidebar">
          <div id="main-menu" class="main-menu collapse navbar-collapse">
             <ul class="nav flex-column navbar-nav">
                <li class="menu-title">Menu</li>
                <div class="" btn-group-vertical>
                   <?php if(isset($menu)){
                      foreach ($menu as $key =>$records) {
-                        echo "<li class='nav-item menu-title has-submenu'>
+                        echo "<li class='menu-item-has-children dropdown'>
                         <a class='nav-link' href='#'> {$key}  </a>
                         <ul class='submenu collapse'>";
                         foreach($records as $row){
-                           echo "<li><a class='nav-link' onclick='senddata({$row['id']}, \"{$row['module_name']}\", \"{$row['file_path']}\")' style='width:220px; margin-bottom:1px; border-radius:4px'>{$row['module_name']} </a></li>";   
+                           echo "<li><a class=' nav-link ' onclick='senddata({$row['id']}, \"{$row['module_name']}\", \"{$row['file_path']}\")' style='width:220px; margin-bottom:1px; border-radius:4px; cursor:pointer;'>{$row['module_name']} </a></li>";   
                         }
                         echo "</ul>";
                      }

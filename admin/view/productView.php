@@ -118,8 +118,10 @@ $deparments = $db->readData($sql);
                                         <div class="form-group col-md-6">
                                             <label for="qty">Enter Qty</label>
                                             <input class="form-control" type="number" placeholder="Enter Qty" id="qtyId" name="qtyName" step="any">
+                                           
                                         </div>
                                         <label for="dqmsg" id="dqmsg" style="color: red;"></label>        
+                                        <!-- <small id="dqmsg" class="form-text text-muted">Please enter a valid email address (e.g., example@example.com).</small> -->
                                     </div>
 
                                     <div class="form-row">
