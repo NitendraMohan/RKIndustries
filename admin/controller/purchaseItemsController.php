@@ -51,10 +51,10 @@ if ($_POST['action'] == "load") {
                         <td>{$row["price"]}</td>
                         <td>{$row["unit"]}</td>
                         <td>{$row["qty"]}</td>
-                        <td>{$row["cost"]}</td>
+                        <td>₹ {$row["cost"]}</td>
                         <td>{$row["tax_perc"]}</td>
-                        <td>{$row["tax_amt"]}</td>
-                        <td>{$row["total_cost"]}</td>
+                        <td>₹ {$row["tax_amt"]}</td>
+                        <td>₹ {$row["total_cost"]}</td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' data-id={$row['id']} data-status='active' data-dbtable='tbl_purchase_item' style='width:70px;'>Active</button>" 
                         : "<button class='btn btn-secondary btn-sm btn_toggle' data-id={$row['id']} data-status='deactive' data-dbtable='tbl_purchase_item' style='width:70px;'>Deactive</button>") . "</td>

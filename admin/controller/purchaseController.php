@@ -38,9 +38,9 @@ GROUP BY
                         <td>{$row["dept_name"]}</td>
                         <td>{$row["billno"]}</td>
                         <td>{$row["vendor_name"]}</td>
-                        <td>{$row["cost"]}</td>
-                        <td>{$row["tax_amount"]}</td>
-                        <td>{$row["total_cost"]}</td>
+                        <td>₹ {$row["cost"]}</td>
+                        <td>₹ {$row["tax_amount"]}</td>
+                        <td>₹ {$row["total_cost"]}</td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='tbl_purchase' style='width:70px;'>Active</button>" 
                         : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='tbl_purchase' style='width:70px;'>Deactive</button>") . "</td>
@@ -224,9 +224,9 @@ GROUP BY
                         <td>{$row["dept_name"]}</td>
                         <td>{$row["billno"]}</td>
                         <td>{$row["vendor_name"]}</td>
-                        <td>{$row["cost"]}</td>
-                        <td>{$row["tax_amount"]}</td>
-                        <td>{$row["total_cost"]}</td>
+                        <td>₹ {$row["cost"]}</td>
+                        <td>₹ {$row["tax_amount"]}</td>
+                        <td>₹ {$row["total_cost"]}</td>
                         <td>" . ($row['status'] == 1 
                         ? "<button class='btn btn-success btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='active' data-dbtable='bom_product' style='width:70px;'>Active</button>" 
                         : "<button class='btn btn-secondary btn-sm btn_toggle' {$permissions['status']} data-id={$row['id']} data-status='deactive' data-dbtable='bom_product' style='width:70px;'>Deactive</button>") . "</td>

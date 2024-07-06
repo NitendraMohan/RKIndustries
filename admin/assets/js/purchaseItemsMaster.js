@@ -16,9 +16,9 @@ jQuery(document).ready(function ($) {
                 var purchaseData = data['purchaseData'];
                 $('#vendorId').text(purchaseData['vname']);
                 $('#billNoId').text(purchaseData['billno']);
-                $('#itemCostId').text(purchaseData['cost']);
-                $('#taxAmountId').text(purchaseData['taxamt']) //mcost
-                $('#totalcostId').text(purchaseData['totalcost']);
+                $('#itemCostId').text("₹ "+ purchaseData['cost']);
+                $('#taxAmountId').text("₹ "+ purchaseData['taxamt']) //mcost
+                $('#totalcostId').text("₹ "+ purchaseData['totalcost']);
                 $("#bommaterialsTableContents").html(data['purchaseItem']);
                 var total_records = $("#bommaterialsTableContents tr").length;
                 // $('#total_records').html("Total Records: "+total_records);
