@@ -3525,3 +3525,20 @@ footer.site-footer .footer-inner a {
     z-index: 9999;
     display: none;
 }
+
+.scrollable-table {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+  }
+  
+  .scrollable-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .scrollable-table th, .scrollable-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }

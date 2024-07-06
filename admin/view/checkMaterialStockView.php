@@ -59,7 +59,13 @@ $units = $db->readData($sql);
                                     <input type="text" placeholder="Search here" id="search" autocomplete="off">
                                     <!-- <button type="submit">Search</button> -->
                                     <img src="../images/icon/search.png" alt="Lance Icon" style="height: 5%; width:5%; margin-right: 10px;">
+                                    
                                 </div>
+                                <div class="text-center mt-3">
+                                    <button class="btn btn-primary btn-sm" id="btnPrint" name="btnPrint">Print</button>
+                                    <button class="btn btn-primary btn-sm" id="btnDownload" name="btnDownload">Download Excel</button>
+                                </div>  
+                                
                             </div>
                         </div>
                     </div>
@@ -78,7 +84,7 @@ $units = $db->readData($sql);
 
                     <div class="card-body--">
                         <div class="table-responsive table-container">
-                            <table class="table">
+                            <table class="table ">
                                 <thead class="thead">
                                     <tr>
                                         <th class="serial">#</th>
@@ -112,6 +118,8 @@ $units = $db->readData($sql);
 <?php require('../template/footer.inc.php') ?>
 
 <script src="../assets/js/checkmaterialstock.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
 </body>
 
 </html>

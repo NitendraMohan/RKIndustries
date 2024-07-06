@@ -33,6 +33,64 @@ jQuery(document).ready(function ($) {
         load_table();
     });
 
+    $("#btnPrint").on("click", function(e) {
+        // Call the print function
+        var tableClone = $('.table-container').clone();
+        var printWindow = window.open('', '_blank');
+        printWindow.document.open();
+        printWindow.document.write('<html><head><title>Print Table</title></head><body>');
+        printWindow.document.write('<h2>Printed Table</h2>');
+        printWindow.document.write(tableClone.html());
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+
+
+
+        var table = $('.table-container')[0];
+    
+        // Convert table to workbook
+        var wb = XLSX.utils.table_to_book(table, {sheet: "Sheet1"});
+        
+        // Convert workbook to binary XLSX
+        var wbout = XLSX.write(wb, {bookType:'xlsx', type:'binary'});
+        
+        // Function to create a Blob object from binary data and create a download link
+        function s2ab(s) {
+          var buf = new ArrayBuffer(s.length);
+          var view = new Uint8Array(buf);
+          for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+          return buf;
+        }
+        
+        // Save workbook to file
+        var blob = new Blob([s2ab(wbout)], {type:"application/octet-stream"});
+        var fileName = "table_data.xlsx";
+        saveAs(blob, fileName);
+      });
+    $("#btnDownload").on("click", function(e) {
+        var table = $('.table-container')[0];
+    
+        // Convert table to workbook
+        var wb = XLSX.utils.table_to_book(table, {sheet: "Sheet1"});
+        
+        // Convert workbook to binary XLSX
+        var wbout = XLSX.write(wb, {bookType:'xlsx', type:'binary'});
+        
+        // Function to create a Blob object from binary data and create a download link
+        function s2ab(s) {
+          var buf = new ArrayBuffer(s.length);
+          var view = new Uint8Array(buf);
+          for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+          return buf;
+        }
+        
+        // Save workbook to file
+        var blob = new Blob([s2ab(wbout)], {type:"application/octet-stream"});
+        var fileName = "table_data.xlsx";
+        saveAs(blob, fileName);
+      });
+
     $("#category").on("change", function(e){
         e.preventDefault();
         var category = $(this).val();
